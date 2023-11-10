@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component } from "react";
 import {
   Box,
   Button,
@@ -9,25 +9,23 @@ import {
   Grid,
   Text,
   ResponsiveContext,
-} from 'grommet';
-import { FormClose, Notification } from 'grommet-icons';
-import { hpe } from 'grommet-theme-hpe'
-import AppHeader from './components/UI/AppHeader';
-import AppFooter from './components/UI/AppFooter';
-import AppRouting from './routes/AppRouting';
-
-
+} from "grommet";
+import { FormClose, Notification } from "grommet-icons";
+import { hpe } from "grommet-theme-hpe";
+import AppHeader from "./components/UI/AppHeader";
+import AppFooter from "./components/UI/AppFooter";
+import AppRouting from "./routes/AppRouting";
 
 const AppBar = (props) => (
   <Box
-    tag='header'
-    direction='row'
-    align='center'
-    justify='between'
-    background='brand'
-    pad={{ left: 'medium', right: 'small', vertical: 'small' }}
-    elevation='medium'
-    style={{ zIndex: '1' }}
+    tag="header"
+    direction="row"
+    align="center"
+    justify="between"
+    background="brand"
+    pad={{ left: "medium", right: "small", vertical: "small" }}
+    elevation="medium"
+    style={{ zIndex: "1" }}
     {...props}
   />
 );
@@ -35,25 +33,23 @@ const AppBar = (props) => (
 class App extends Component {
   state = {
     showSidebar: false,
-  }
+  };
   render() {
     const { showSidebar } = this.state;
     return (
       <Grommet theme={hpe} full>
         <ResponsiveContext.Consumer>
-          {size => (
-            <Box fill pad={'small'}>
+          {(size) => (
+            <Box pad={"small"}>
               <AppHeader />
-              <Box direction='row' flex overflow={{ vertical: 'scroll' }}>
-                <Box flex align='left' justify='start'>
+              <Box direction="row">
+                <Box fill align="start" justify="start">
                   <AppRouting />
                 </Box>
               </Box>
               <AppFooter />
-
             </Box>
           )}
-
         </ResponsiveContext.Consumer>
       </Grommet>
     );
