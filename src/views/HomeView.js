@@ -1,4 +1,4 @@
-import { Menu, Text, Box } from "grommet";
+import { Menu, Text, Box, Select } from "grommet";
 import { useState } from "react";
 import { OpenMPIForm } from "../components/MPIForms/OpenMPIForm";
 import { MPICHForm } from "../components/MPIForms/MPICHForm";
@@ -6,31 +6,19 @@ import { IntelMPIForm } from "../components/MPIForms/IntelMPIForm";
 const HomeView = (props) => {
   const [selectedMPI, setSelectedMPI] = useState("OpenMPI");
 
-  const items = [
-    {
-      label: "OpenMPI",
-      onClick: () => {
-        setSelectedMPI(items[0].label);
-      },
-    },
-    {
-      label: "MPICH",
-      onClick: () => {
-        setSelectedMPI(items[1].label);
-      },
-    },
-    {
-      label: "IntelMPI",
-      onClick: () => {
-        setSelectedMPI(items[2].label);
-      },
-    },
-  ];
+  const items = ["OpenMPI", "MPICH", "IntelMPI"];
   return (
     <Box fill="horizontal">
-      <Box align="center">
+      <Box width="300px">
         <Text>Choose the MPI </Text>
-        <Menu label="MPI Options" items={items} />
+        <Select
+          id="select-example"
+          name="select-example"
+          placeholder="Select item"
+          options={items}
+          value={selectedMPI}
+          onChange={({ option }) => setSelectedMPI(option)}
+        />
       </Box>
       <Box alignSelf="center" margin={{ top: "50px" }}>
         {selectedMPI === "OpenMPI" ? (

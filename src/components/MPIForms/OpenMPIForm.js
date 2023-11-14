@@ -148,6 +148,10 @@ export const OpenMPIForm = () => {
               ></FormField>
             </Box>
           </Box>
+          <Text>
+            Create mpi-test folder at location where dockerfile will be
+            downloaded/created and include required files in the test directory
+          </Text>
           <Box direction="row-responsive" gap="medium" pad={{ top: "medium" }}>
             <Button label="Submit" primary type="submit" />
             <Button label="Reset" type="reset" />
