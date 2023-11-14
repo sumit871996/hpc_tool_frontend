@@ -10,6 +10,10 @@ import "prismjs/themes/prism.css";
 import { Copy, Download } from "grommet-icons";
 
 const ConsoleView = (props) => {
+  const [code, setCode] = React.useState(
+    props.dockerfile.toString().replaceAll(",", "\n")
+  );
+
   const copyToClipboard = () => {
     const modifiedData = props.dockerfile.join("\n").toString();
     navigator.clipboard.writeText(modifiedData);
@@ -83,18 +87,24 @@ const ConsoleView = (props) => {
           }}
           id="dockerfile"
         >
-          {props.dockerfile.map((layer, index) => (
-            <Text
-              key={index}
+          <Text
+            style={{
+              color: "white",
+              fontSize: "14px",
+              margin: "3px 15px 2px",
+            }}
+          >
+            <Editor
+              value={code}
+              // onValueChange={code => setCode(code)}
+              highlight={(code) => highlight(code, languages.dockerfile)}
+              padding={10}
               style={{
-                color: "white",
-                fontSize: "14px",
-                margin: "3px 15px 2px",
+                fontFamily: '"Fira code", "Fira Mono", monospace',
+                fontSize: 12,
               }}
-            >
-              {layer}
-            </Text>
-          ))}
+            />
+          </Text>
         </Box>
       </Box>
 

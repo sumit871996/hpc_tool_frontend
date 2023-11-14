@@ -1,4 +1,4 @@
-import { Menu, Text, Box, Select } from "grommet";
+import { Text, Box, Select } from "grommet";
 import { useState } from "react";
 import { OpenMPIForm } from "../components/MPIForms/OpenMPIForm";
 import { MPICHForm } from "../components/MPIForms/MPICHForm";
