@@ -11,6 +11,7 @@ import {
   Heading,
   Select,
   TextInput,
+  TextArea,
 } from "grommet";
 import { useNavigate } from "react-router-dom";
 
@@ -32,6 +33,8 @@ const open_mpi_version = {
 };
 
 export const OpenMPIForm = () => {
+  const [finalfile, setFinalFile] = useState("");
+
   const navigate = useNavigate();
   const [selectedMajorVersion, setSelectedMajorVersion] = useState("v4.0");
   const [formValues, setFormValues] = React.useState({
@@ -43,7 +46,10 @@ export const OpenMPIForm = () => {
     workdir: "/project",
     imagename: "openmpi",
     imagetag: `${open_mpi_version[selectedMajorVersion][0]}`,
-    singularityimagename: "openmpi",
+    singularityimagename: "",
+    finalimagename: "",
+    finalimagetag: "",
+    dockercommands: finalfile,
   });
 
   const applyFilters = () => {
@@ -86,6 +92,8 @@ export const OpenMPIForm = () => {
           <Box direction="row" justify="between">
             <Box>
               <FormField
+                error="required"
+                required
                 htmlFor="openMPI_Major_Version"
                 name="openMPI_Major_Version"
                 label="OpenMPI Major Version"
@@ -99,10 +107,12 @@ export const OpenMPIForm = () => {
                 />
               </FormField>
               <FormField
+                error="required"
+                required
                 htmlFor="openMPI_Version"
                 name="openMPI_Version"
                 label="OpenMPI Version"
-                defaultValue={open_mpi_version[selectedMajorVersion][0]}
+                // defaultValue={open_mpi_version[selectedMajorVersion][0]}
               >
                 <Select
                   id="openMPI_Version"
@@ -123,8 +133,16 @@ export const OpenMPIForm = () => {
               ></FormField>
             </Box>
             <Box>
-              <FormField htmlFor="user" name="user" label="User"></FormField>
               <FormField
+                error="required"
+                required
+                htmlFor="user"
+                name="user"
+                label="User"
+              ></FormField>
+              <FormField
+                error="required"
+                required
                 htmlFor="workdir"
                 name="workdir"
                 label="Working Directory"
@@ -132,22 +150,84 @@ export const OpenMPIForm = () => {
             </Box>
             <Box>
               <FormField
+                error="required"
+                required
                 htmlFor="imagename"
                 name="imagename"
                 label="Image Name"
               ></FormField>
               <FormField
+                error="required"
+                required
                 htmlFor="imagetag"
                 name="imagetag"
                 label="Image Tag"
               ></FormField>
-              <FormField
-                htmlFor="singularityimagename"
-                name="singularityimagename"
-                label="Singularity Image Name"
-              ></FormField>
             </Box>
           </Box>
+          <Text>Write docker commands for running the applications</Text>
+          <TextArea
+            error="required"
+            required
+            htmlFor="dockercommands"
+            name="dockercommands"
+            label="Docker commands"
+            defaultValue=""
+          ></TextArea>
+
+          {/* <Box
+            width="100%"
+            border="all"
+            style={{
+              maxHeight: "350px",
+              overflow: "auto",
+              backgroundColor: "black",
+              minWidth: "550px",
+            }}
+            id="dockerfile"
+          >
+            <FormField htmlFor="dockercommands" name="dockercommands">
+              <Editor
+                id="dockercommands"
+                name="dockercommands"
+                value={finalfile}
+                onValueChange={(code) => setFinalFile(code)}
+                highlight={(code) => highlight(code, languages.dockerfile)}
+                padding={10}
+                style={{
+                  fontFamily: '"Fira code", "Fira Mono", monospace',
+                  fontSize: 12,
+                }}
+              />
+            </FormField>
+          </Box> */}
+          <Box>
+            {finalfile}
+            <FormField
+              error="required"
+              required
+              htmlFor="finalimagename"
+              name="finalimagename"
+              label="Application Image Name"
+              defaultValue=""
+            ></FormField>
+            <FormField
+              error="required"
+              required
+              htmlFor="finalimagetag"
+              name="finalimagetag"
+              label="Application Image Tag"
+              defaultValue=""
+            ></FormField>
+          </Box>
+          <FormField
+            error="required"
+            required
+            htmlFor="singularityimagename"
+            name="singularityimagename"
+            label="Application Singularity Image Name"
+            defaultValue=""
+          ></FormField>
           <Text>
             Create mpi-test folder at location where dockerfile will be
             downloaded/created and include required files in the test directory

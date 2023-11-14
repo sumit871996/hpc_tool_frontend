@@ -9,18 +9,18 @@ const HomeView = (props) => {
   const items = ["OpenMPI", "MPICH", "IntelMPI"];
   return (
     <Box fill="horizontal">
-      <Box width="300px">
-        <Text>Choose the MPI </Text>
-        <Select
-          id="select-example"
-          name="select-example"
-          placeholder="Select item"
-          options={items}
-          value={selectedMPI}
-          onChange={({ option }) => setSelectedMPI(option)}
-        />
-      </Box>
       <Box alignSelf="center" margin={{ top: "50px" }}>
+        <Box width="300px" margin={{ bottom: "30px" }}>
+          <Text>MPI Selection </Text>
+          <Select
+            id="select-example"
+            name="select-example"
+            placeholder="Select item"
+            options={items}
+            value={selectedMPI}
+            onChange={({ option }) => setSelectedMPI(option)}
+          />
+        </Box>
         {selectedMPI === "OpenMPI" ? (
           <OpenMPIForm />
         ) : selectedMPI === "MPICH" ? (

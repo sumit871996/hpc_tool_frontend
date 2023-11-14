@@ -1,4 +1,4 @@
-import { Box } from "grommet";
+import { Box, Text } from "grommet";
 import { useState } from "react";
 import { useLocation } from "react-router-dom";
 import ConsoleView from "./ConsoleView";
@@ -6,8 +6,13 @@ import ConsoleView from "./ConsoleView";
 const FinaldockerfileIntelMPI = (props) => {
   const location = useLocation();
   const inputdata = location.state.data.value;
-
+  const elementsArray = inputdata.dockercommands.split("\n");
+  const finaldockerfile = [
+    `FROM ${inputdata.imagename}:${inputdata.imagetag}`,
+    ...elementsArray,
+  ];
   const dockerfilename = "DockerfileIntelMPI";
+  const finaldockerfilename = `DockerFile${inputdata.finalimagename}`;
   const [dockerfile, setDockerfile] = useState([
     "FROM centos:8.4.2105 AS base",
     "    ",
@@ -67,17 +72,22 @@ const FinaldockerfileIntelMPI = (props) => {
   ]);
 
   const buildcommand = `docker image build -t ${inputdata.imagename}:${inputdata.imagetag} --build-arg MPI_VERSION=${inputdata.intel_mpi_devel_version} --build-arg ICC_VERSION="${inputdata.intel_icc_version}" --build-arg MKL_VERSION=${inputdata.intel_mkl_version} --build-arg TBB_VERSION=${inputdata.intel_tbb_version} . -f ${dockerfilename}`;
+  const buildappcommand = `docker image build -t ${inputdata.finalimagename}:${inputdata.finalimagetag} . -f ${finaldockerfilename}`;
   const singularitycommands = [
-    `singularity build ${inputdata.singularityimagename}.sif docker-daemon://${inputdata.imagename}:${inputdata.imagetag} `,
+    `singularity build ${inputdata.singularityimagename}.sif docker-daemon://${inputdata.finalimagename}:${inputdata.finalimagetag}`,
     `singularity shell ${inputdata.singularityimagename}.sif`,
   ];
   return (
     <Box margin={{ left: "5%", right: "5%", top: "5%" }}>
+      {/* {JSON.stringify(inputdata)} */}
       <ConsoleView
-        singularitycommands={singularitycommands}
-        dockerfilename={dockerfilename}
-        buildcommand={buildcommand}
         dockerfile={dockerfile}
+        dockerfilename={dockerfilename}
+        finaldockerfile={finaldockerfile}
+        finaldockerfilename={finaldockerfilename}
+        buildcommand={buildcommand}
+        buildappcommand={buildappcommand}
+        singularitycommands={singularitycommands}
       ></ConsoleView>
     </Box>
   );

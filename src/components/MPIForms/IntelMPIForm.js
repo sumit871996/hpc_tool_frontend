@@ -1,5 +1,11 @@
 // FilterExample.js
 import React, { useState } from "react";
+import Editor from "react-simple-code-editor";
+import { highlight, languages } from "prismjs/components/prism-core";
+import "prismjs/components/prism-clike";
+import "prismjs/components/prism-javascript";
+import "prismjs/components/prism-docker";
+import "prismjs/themes/prism.css";
 import {
   Box,
   Button,
@@ -10,6 +16,7 @@ import {
   Heading,
   Select,
   Text,
+  TextArea,
   TextInput,
 } from "grommet";
 import { useNavigate } from "react-router-dom";
@@ -77,6 +84,7 @@ const intel_mpi_devel_versions = [
 ];
 
 export const IntelMPIForm = () => {
+  const [finalfile, setFinalFile] = useState("");
   const navigate = useNavigate();
 
   const navigatefunction = (data) => {
@@ -88,9 +96,12 @@ export const IntelMPIForm = () => {
     intel_mkl_version: "2021.4.0",
     intel_icc_version: "2021.4.0",
     intel_tbb_version: "2021.4.0",
-    singularityimagename: "intelmpi",
+    singularityimagename: "",
     imagename: "intelmpi",
     imagetag: "2021.4.0",
+    finalimagename: "",
+    finalimagetag: "",
+    dockercommands: finalfile,
   });
 
   const applyFilters = () => {
@@ -126,17 +137,23 @@ export const IntelMPIForm = () => {
           <Box direction="row" justify="between">
             <Box>
               <FormField
+                error="required"
+                required
                 htmlFor="intel_mpi_devel_version"
                 name="intel_mpi_devel_version"
                 label="MPI devel version"
               >
                 <Select
+                  error="required"
+                  required
                   id="intel_mpi_devel_version"
                   name="intel_mpi_devel_version"
                   options={intel_mpi_devel_versions}
                 />
               </FormField>
               <FormField
+                error="required"
+                required
                 htmlFor="intel_mkl_version"
                 name="intel_mkl_version"
                 label="Intel MKL version"
@@ -150,6 +167,8 @@ export const IntelMPIForm = () => {
               </FormField>
 
               <FormField
+                error="required"
+                required
                 htmlFor="intel_icc_version"
                 name="intel_icc_version"
                 label="Intel ICC version"
@@ -163,6 +182,8 @@ export const IntelMPIForm = () => {
               </FormField>
 
               <FormField
+                error="required"
+                required
                 htmlFor="intel_tbb_version"
                 name="intel_tbb_version"
                 label="Intel TBB version"
@@ -177,30 +198,92 @@ export const IntelMPIForm = () => {
             </Box>
             <Box>
               <FormField
+                error="required"
+                required
                 htmlFor="imagename"
                 name="imagename"
-                label="Image Name"
+                label="Base Image Name"
                 defaultValue="intelmpi"
               ></FormField>
               <FormField
+                error="required"
+                required
                 htmlFor="imagetag"
                 name="imagetag"
-                label="Image Tag"
+                label="Base Image Tag"
                 defaultValue="2021.4.0"
-              ></FormField>
-              <FormField
-                htmlFor="singularityimagename"
-                name="singularityimagename"
-                label="Singularity Image Name"
-                defaultValue="intelmpi"
               ></FormField>
             </Box>
           </Box>
+
+          <Text>Write docker commands for running the applications</Text>
+          <TextArea
+            error="required"
+            required
+            htmlFor="dockercommands"
+            name="dockercommands"
+            label="Docker commands"
+            defaultValue=""
+          ></TextArea>
+
+          {/* <Box
+            width="100%"
+            border="all"
+            style={{
+              maxHeight: "350px",
+              overflow: "auto",
+              backgroundColor: "black",
+              minWidth: "550px",
+            }}
+            id="dockerfile"
+          >
+            <FormField htmlFor="dockercommands" name="dockercommands">
+              <Editor
+                id="dockercommands"
+                name="dockercommands"
+                value={finalfile}
+                onValueChange={(code) => setFinalFile(code)}
+                highlight={(code) => highlight(code, languages.dockerfile)}
+                padding={10}
+                style={{
+                  fontFamily: '"Fira code", "Fira Mono", monospace',
+                  fontSize: 12,
+                }}
+              />
+            </FormField>
+          </Box> */}
+          <Box>
+            {finalfile}
+            <FormField
+              error="required"
+              required
+              htmlFor="finalimagename"
+              name="finalimagename"
+              label="Application Image Name"
+              defaultValue=""
+            ></FormField>
+            <FormField
+              error="required"
+              required
+              htmlFor="finalimagetag"
+              name="finalimagetag"
+              label="Application Image Tag"
+              defaultValue=""
+            ></FormField>
+          </Box>
+          <FormField
+            error="required"
+            required
+            htmlFor="singularityimagename"
+            name="singularityimagename"
+            label="Application Singularity Image Name"
+            defaultValue=""
+          ></FormField>
+
           <Text>
             Copy oneAPI.repo.sh and build_env_cpu.sh at location where
             dockerfile will be downloaded/created
           </Text>
-
           <Box direction="row-responsive" gap="medium" pad={{ top: "medium" }}>
             <Button label="Submit" type="submit" primary />
             <Button label="Cancel" type="reset" />

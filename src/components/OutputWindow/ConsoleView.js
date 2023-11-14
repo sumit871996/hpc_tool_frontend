@@ -1,6 +1,6 @@
 import { Box, Button, Text } from "grommet";
 import "./ConsoleView.css";
-import React from "react";
+import React, { useState } from "react";
 import Editor from "react-simple-code-editor";
 import { highlight, languages } from "prismjs/components/prism-core";
 import "prismjs/components/prism-clike";
@@ -12,6 +12,10 @@ import { Copy, Download } from "grommet-icons";
 const ConsoleView = (props) => {
   const [code, setCode] = React.useState(
     props.dockerfile.toString().replaceAll(",", "\n")
+  );
+
+  const [finalfile, setFinalFile] = useState(
+    props.finaldockerfile.toString().replaceAll(",", "\n")
   );
 
   const copyToClipboard = () => {
@@ -38,6 +42,23 @@ const ConsoleView = (props) => {
     link.click();
     link.remove();
   };
+
+  const downloadDocker = () => {
+    const modifiedData = props.finaldockerfile.toString().replaceAll(",", "\n");
+    JSON.stringify(modifiedData);
+    const txtFile = new Blob([modifiedData], { type: "text/file" });
+    const url = URL.createObjectURL(txtFile);
+    const link = document.createElement("a");
+    link.download = props.finaldockerfilename;
+    link.href = url;
+    link.click();
+    link.remove();
+  };
+
+  const copyToClipboardDocker = () => {
+    const modifiedData = props.finaldockerfile.join("\n").toString();
+    navigator.clipboard.writeText(modifiedData);
+  };
   return (
     <Box>
       <Box>
@@ -60,7 +81,7 @@ const ConsoleView = (props) => {
               fontWeight: "bold",
             }}
           >
-            Final Dockerfile
+            Base Image Dockerfile
           </h5>
           <Box direction="row">
             <Button
@@ -132,7 +153,7 @@ const ConsoleView = (props) => {
               fontWeight: "bold",
             }}
           >
-            Docker image build command
+            Build Base Image
           </Box>
           <Box direction="row">
             <Button
@@ -162,6 +183,129 @@ const ConsoleView = (props) => {
             }}
           >
             {props.buildcommand}
+          </Text>
+        </Box>
+      </Box>
+
+      <Box margin={{ top: "20px" }}>
+        <Box
+          direction="row"
+          style={{
+            maxHeight: "40px",
+            minHeight: "40px",
+            backgroundColor: "grey",
+            minWidth: "550px",
+            justifyContent: "space-between",
+            borderBottom: "1px solid white",
+          }}
+        >
+          <h5
+            style={{
+              color: "white",
+              fontSize: "16px",
+              margin: "10px 15px 4px",
+              fontWeight: "bold",
+            }}
+          >
+            Application Dockerfile
+          </h5>
+          <Box direction="row">
+            <Button
+              icon={<Download color="white" />}
+              onClick={downloadDocker}
+              tip={"Download"}
+            />
+            <Button
+              icon={<Copy color="white" />}
+              onClick={copyToClipboardDocker}
+              tip={"Copy"}
+            />
+          </Box>
+        </Box>
+        <Box
+          width="100%"
+          border="all"
+          style={{
+            maxHeight: "350px",
+            overflow: "auto",
+            backgroundColor: "black",
+            minWidth: "550px",
+            zIndex: "1",
+          }}
+          id="dockerfile"
+        >
+          <Text
+            style={{
+              color: "white",
+              fontSize: "14px",
+              margin: "3px 15px 2px",
+            }}
+          >
+            <Editor
+              value={finalfile}
+              // onValueChange={code => setCode(code)}
+              highlight={(code) => highlight(code, languages.dockerfile)}
+              padding={10}
+              style={{
+                fontFamily: '"Fira code", "Fira Mono", monospace',
+                fontSize: 12,
+              }}
+            />
+          </Text>
+        </Box>
+      </Box>
+
+      <Box direction="column" margin={{ top: "20px" }}>
+        <Box
+          direction="row"
+          style={{
+            backgroundColor: "grey",
+            minWidth: "550px",
+            height: "40px",
+            justifyContent: "space-between",
+            borderBottom: "1px solid white",
+            zIndex: "1",
+          }}
+        >
+          <Box
+            style={{
+              color: "white",
+              fontSize: "16px",
+              margin: "10px 15px 4px",
+              fontWeight: "bold",
+            }}
+          >
+            Build Application Docker Image
+          </Box>
+          <Box direction="row">
+            <Button
+              icon={<Copy color="white" />}
+              onClick={copyToClipboardCommand}
+              tip={"Copy"}
+            />
+          </Box>
+        </Box>
+
+        <Box
+          width="100%"
+          border="all"
+          style={{
+            overflow: "auto",
+            maxHeight: "60px",
+            backgroundColor: "black",
+            minWidth: "550px",
+          }}
+          id="dockerfile"
+        >
+          <Text
+            id="buildcommand"
+            style={{
+              color: "white",
+              fontSize: "14px",
+              margin: "3px 15px 2px",
+            }}
+          >
+            {props.buildappcommand}
           </Text>
         </Box>
       </Box>
