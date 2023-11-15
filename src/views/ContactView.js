@@ -16,7 +16,28 @@ const ContactView = (props) => {
         <Heading>Team</Heading>
         <Accordion width="large">
           <AccordionPanel label="Members">
-            <Box pad={pad}>Yuvaraja A. +91-9916992929 yuvaraja.a@hpe.com</Box>
+            <Box>
+              <Box pad={pad} justify="between" direction="row">
+                <Text>Yuvaraja A. </Text>
+                <Text>yuvaraja.a@hpe.com</Text>
+              </Box>
+              <Box pad={pad} justify="between" direction="row">
+                <Text>Kattupunathil Nishith </Text>
+                <Text>nishith.kp@hpe.com</Text>
+              </Box>
+              <Box pad={pad} justify="between" direction="row">
+                <Text>Priyank Rupareliya </Text>
+                <Text>priyank.rupareliya@hpe.com</Text>
+              </Box>
+              <Box pad={pad} justify="between" direction="row">
+                <Text>Sumit Mandlik </Text>
+                <Text>sumit-bharat.mandlik@hpe.com</Text>
+              </Box>
+              <Box pad={pad} justify="between" direction="row">
+                <Text>Ashishkumar Chourasia </Text>
+                <Text>ashishkumar-mangaldas.chourasia@hpe.com</Text>
+              </Box>
+            </Box>
           </AccordionPanel>
           {/* <AccordionPanel label="Our history">
             <Box pad={pad}>

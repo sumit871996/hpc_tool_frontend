@@ -86,8 +86,8 @@ const FinaldockerfileMPICH = (props) => {
     <Box margin={{ left: "5%", right: "5%", top: "5%" }}>
       <Text weight="bold">Note: </Text>
       <Text margin={{ bottom: "20px" }}>
-        Clone <a>https://github.com/sumit871996/mpich-test.git</a> in your
-        directory where dockerfile exists
+        Clone <a>https://github.hpe.com/sumit-bharat-mandlik/mpich-test.git</a>{" "}
+        in your directory where dockerfile exists
       </Text>
       <ConsoleView
         buildcommand={buildcommand}

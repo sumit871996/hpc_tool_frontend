@@ -81,8 +81,8 @@ const FinaldockerfileIntelMPI = (props) => {
     <Box margin={{ left: "5%", right: "5%", top: "5%" }}>
       <Text weight="bold">Note: </Text>
       <Text margin={{ bottom: "20px" }}>
-        Clone <a>https://github.com/sumit871996/intelfiles.git</a> in your
-        directory where dockerfile exists to test the image
+        Clone <a>https://github.hpe.com/sumit-bharat-mandlik/intelfiles.git</a>{" "}
+        in your directory where dockerfile exists to test the image
       </Text>
       <ConsoleView
         dockerfile={dockerfile}
