@@ -79,7 +79,7 @@ const FinaldockerfileMPICH = (props) => {
     <Box margin={{ left: "5%", right: "5%", top: "5%" }}>
       <Text weight="bold">Note: </Text>
       <Text margin={{ bottom: "20px" }}>
-        Clone <a>git@github.hpe.com:sumit-bharat-mandlik/mpi-test.git</a> in
+        Clone <a>https://github.hpe.com/sumit-bharat-mandlik/mpi-test.git</a> in
         your directory where dockerfile exists to test the image
       </Text>
       <ConsoleView
