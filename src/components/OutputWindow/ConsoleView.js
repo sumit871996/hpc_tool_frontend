@@ -10,9 +10,7 @@ import "prismjs/themes/prism.css";
 import { Copy, Download } from "grommet-icons";
 
 const ConsoleView = (props) => {
-  const [code, setCode] = React.useState(
-    props.dockerfile.toString().replaceAll(",", "\n")
-  );
+  const [code, setCode] = React.useState(props.dockerfile.join("\n"));
 
   const [finalfile, setFinalFile] = useState(
     props.finaldockerfile.toString().replaceAll(",", "\n")
@@ -129,10 +127,6 @@ const ConsoleView = (props) => {
         </Box>
       </Box>
 
-      <Box>
-        <Text>Build commands:</Text>
-      </Box>
-
       <Box direction="column" margin={{ top: "20px" }}>
         <Box
           direction="row"
@@ -153,7 +147,7 @@ const ConsoleView = (props) => {
               fontWeight: "bold",
             }}
           >
-            Build Base Image
+            {"1) Build Base Image"}
           </Box>
           <Box direction="row">
             <Button
@@ -207,7 +201,7 @@ const ConsoleView = (props) => {
               fontWeight: "bold",
             }}
           >
-            Application Dockerfile
+            {"2) Create Application Dockerfile"}
           </h5>
           <Box direction="row">
             <Button
@@ -275,7 +269,7 @@ const ConsoleView = (props) => {
               fontWeight: "bold",
             }}
           >
-            Build Application Docker Image
+            {"3) Build Application Docker Image"}
           </Box>
           <Box direction="row">
             <Button
@@ -331,7 +325,7 @@ const ConsoleView = (props) => {
               fontWeight: "bold",
             }}
           >
-            Singularity container build commands
+            {"4) Singularity container build & run commands (Optional)"}
           </Box>
           <Box direction="row">
             <Button

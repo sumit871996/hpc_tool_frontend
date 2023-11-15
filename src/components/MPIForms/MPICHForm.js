@@ -13,6 +13,12 @@ import {
   TextArea,
   TextInput,
 } from "grommet";
+import Editor from "react-simple-code-editor";
+import { highlight, languages } from "prismjs/components/prism-core";
+import "prismjs/components/prism-clike";
+import "prismjs/components/prism-javascript";
+import "prismjs/components/prism-docker";
+import "prismjs/themes/prism.css";
 import { useNavigate } from "react-router-dom";
 
 const mpich_version = ["4.1.2"];
@@ -23,7 +29,9 @@ export const MPICHForm = () => {
   const navigate = useNavigate();
   const navigatefunction = (data) => {
     console.log(data);
-    navigate("/dockerfileMPICH/show", { state: { data: data } });
+    navigate("/dockerfileMPICH/show", {
+      state: { data: { ...data, dockercommands: finalfile } },
+    });
   };
 
   const [formValues, setFormValues] = React.useState({
@@ -37,7 +45,7 @@ export const MPICHForm = () => {
     singularityimagename: "",
     finalimagename: "",
     finalimagetag: "",
-    dockercommands: finalfile,
+    // dockercommands: finalfile,
   });
 
   const applyFilters = () => {
@@ -74,7 +82,7 @@ export const MPICHForm = () => {
           <Box direction="row" justify="between">
             <Box>
               <FormField
-                error="required"
+                // error="required"
                 required
                 htmlFor="mpich_Version"
                 name="mpich_Version"
@@ -88,14 +96,14 @@ export const MPICHForm = () => {
                 />
               </FormField>
               <FormField
-                error="required"
+                // error="required"
                 required
                 htmlFor="mpi_configure_options"
                 name="mpi_configure_options"
                 label="MPI configure options"
               ></FormField>
               <FormField
-                error="required"
+                // error="required"
                 required
                 htmlFor="mpi_make_options"
                 name="mpi_make_options"
@@ -104,14 +112,14 @@ export const MPICHForm = () => {
             </Box>
             <Box>
               <FormField
-                error="required"
+                // error="required"
                 required
                 htmlFor="user"
                 name="user"
                 label="User"
               ></FormField>
               <FormField
-                error="required"
+                // error="required"
                 required
                 htmlFor="workdir"
                 name="workdir"
@@ -120,14 +128,14 @@ export const MPICHForm = () => {
             </Box>
             <Box>
               <FormField
-                error="required"
+                // error="required"
                 required
                 htmlFor="imagename"
                 name="imagename"
                 label="Base Image Name"
               ></FormField>
               <FormField
-                error="required"
+                // error="required"
                 required
                 htmlFor="imagetag"
                 name="imagetag"
@@ -137,28 +145,21 @@ export const MPICHForm = () => {
           </Box>
 
           <Text>Write docker commands for running the applications</Text>
-          <TextArea
-            error="required"
-            required
-            htmlFor="dockercommands"
-            name="dockercommands"
-            label="Docker commands"
-            defaultValue=""
-          ></TextArea>
 
-          {/* <Box
+          <Box
             width="100%"
-            border="all"
+            // border="all"
             style={{
               maxHeight: "350px",
               overflow: "auto",
-              backgroundColor: "black",
+              backgroundColor: "white",
               minWidth: "550px",
             }}
             id="dockerfile"
           >
-            <FormField htmlFor="dockercommands" name="dockercommands">
+            <FormField>
               <Editor
+                required
                 id="dockercommands"
                 name="dockercommands"
                 value={finalfile}
@@ -171,11 +172,10 @@ export const MPICHForm = () => {
                 }}
               />
             </FormField>
-          </Box> */}
+          </Box>
           <Box>
-            {finalfile}
             <FormField
-              error="required"
+              // error="required"
               required
               htmlFor="finalimagename"
               name="finalimagename"
@@ -183,7 +183,7 @@ export const MPICHForm = () => {
               defaultValue=""
             ></FormField>
             <FormField
-              error="required"
+              // error="required"
               required
               htmlFor="finalimagetag"
               name="finalimagetag"
@@ -192,17 +192,14 @@ export const MPICHForm = () => {
             ></FormField>
           </Box>
           <FormField
-            error="required"
+            // error="required"
             required
             htmlFor="singularityimagename"
             name="singularityimagename"
             label="Application Singularity Image Name"
             defaultValue=""
           ></FormField>
-          <Text>
-            Create mpi-test folder at location where dockerfile will be
-            downloaded/created and include required files in the test directory
-          </Text>
+
           <Box direction="row-responsive" gap="medium" pad={{ top: "medium" }}>
             <Button label="Submit" primary type="submit" />
             <Button label="Cancel" type="reset" />

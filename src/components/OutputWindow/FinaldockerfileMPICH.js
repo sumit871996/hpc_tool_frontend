@@ -1,4 +1,4 @@
-import { Box } from "grommet";
+import { Box, Text } from "grommet";
 import { useState } from "react";
 import { useLocation } from "react-router-dom";
 import ConsoleView from "./ConsoleView";
@@ -6,7 +6,7 @@ import ConsoleView from "./ConsoleView";
 const FinaldockerfileMPICH = (props) => {
   const location = useLocation();
   const inputdata = location.state.data.value;
-  const elementsArray = inputdata.dockercommands.split("\n");
+  const elementsArray = location.state.data.dockercommands.split("\n");
   const finaldockerfile = [
     `FROM ${inputdata.imagename}:${inputdata.imagetag}`,
     ...elementsArray,
@@ -84,6 +84,11 @@ const FinaldockerfileMPICH = (props) => {
   ];
   return (
     <Box margin={{ left: "5%", right: "5%", top: "5%" }}>
+      <Text weight="bold">Note: </Text>
+      <Text margin={{ bottom: "20px" }}>
+        Clone <a>https://github.com/sumit871996/mpich-test.git</a> in your
+        directory where dockerfile exists
+      </Text>
       <ConsoleView
         buildcommand={buildcommand}
         dockerfile={dockerfile}

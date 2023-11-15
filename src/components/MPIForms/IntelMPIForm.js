@@ -89,7 +89,9 @@ export const IntelMPIForm = () => {
 
   const navigatefunction = (data) => {
     console.log(data);
-    navigate("/dockerfileIntelMPI/show", { state: { data: data } });
+    navigate("/dockerfileIntelMPI/show", {
+      state: { data: { ...data, dockercommands: finalfile } },
+    });
   };
   const [formValues, setFormValues] = React.useState({
     intel_mpi_devel_version: "2021.4.0",
@@ -101,7 +103,7 @@ export const IntelMPIForm = () => {
     imagetag: "2021.4.0",
     finalimagename: "",
     finalimagetag: "",
-    dockercommands: finalfile,
+    // dockercommands: finalfile,
   });
 
   const applyFilters = () => {
@@ -137,14 +139,14 @@ export const IntelMPIForm = () => {
           <Box direction="row" justify="between">
             <Box>
               <FormField
-                error="required"
+                // // error="required"
                 required
                 htmlFor="intel_mpi_devel_version"
                 name="intel_mpi_devel_version"
                 label="MPI devel version"
               >
                 <Select
-                  error="required"
+                  // error="required"
                   required
                   id="intel_mpi_devel_version"
                   name="intel_mpi_devel_version"
@@ -152,7 +154,7 @@ export const IntelMPIForm = () => {
                 />
               </FormField>
               <FormField
-                error="required"
+                // error="required"
                 required
                 htmlFor="intel_mkl_version"
                 name="intel_mkl_version"
@@ -167,7 +169,7 @@ export const IntelMPIForm = () => {
               </FormField>
 
               <FormField
-                error="required"
+                // error="required"
                 required
                 htmlFor="intel_icc_version"
                 name="intel_icc_version"
@@ -182,7 +184,7 @@ export const IntelMPIForm = () => {
               </FormField>
 
               <FormField
-                error="required"
+                // error="required"
                 required
                 htmlFor="intel_tbb_version"
                 name="intel_tbb_version"
@@ -198,7 +200,7 @@ export const IntelMPIForm = () => {
             </Box>
             <Box>
               <FormField
-                error="required"
+                // error="required"
                 required
                 htmlFor="imagename"
                 name="imagename"
@@ -206,7 +208,7 @@ export const IntelMPIForm = () => {
                 defaultValue="intelmpi"
               ></FormField>
               <FormField
-                error="required"
+                // error="required"
                 required
                 htmlFor="imagetag"
                 name="imagetag"
@@ -217,28 +219,29 @@ export const IntelMPIForm = () => {
           </Box>
 
           <Text>Write docker commands for running the applications</Text>
-          <TextArea
-            error="required"
+          {/* <TextArea
+            // error="required"
             required
             htmlFor="dockercommands"
             name="dockercommands"
             label="Docker commands"
             defaultValue=""
-          ></TextArea>
+          ></TextArea> */}
 
-          {/* <Box
+          <Box
             width="100%"
-            border="all"
+            // border="all"
             style={{
               maxHeight: "350px",
               overflow: "auto",
-              backgroundColor: "black",
+              backgroundColor: "white",
               minWidth: "550px",
             }}
             id="dockerfile"
           >
-            <FormField htmlFor="dockercommands" name="dockercommands">
+            <FormField>
               <Editor
+                required
                 id="dockercommands"
                 name="dockercommands"
                 value={finalfile}
@@ -251,11 +254,10 @@ export const IntelMPIForm = () => {
                 }}
               />
             </FormField>
-          </Box> */}
+          </Box>
           <Box>
-            {finalfile}
             <FormField
-              error="required"
+              // error="required"
               required
               htmlFor="finalimagename"
               name="finalimagename"
@@ -263,7 +265,7 @@ export const IntelMPIForm = () => {
               defaultValue=""
             ></FormField>
             <FormField
-              error="required"
+              // error="required"
               required
               htmlFor="finalimagetag"
               name="finalimagetag"
@@ -272,7 +274,7 @@ export const IntelMPIForm = () => {
             ></FormField>
           </Box>
           <FormField
-            error="required"
+            // error="required"
             required
             htmlFor="singularityimagename"
             name="singularityimagename"
@@ -280,10 +282,6 @@ export const IntelMPIForm = () => {
             defaultValue=""
           ></FormField>
 
-          <Text>
-            Copy oneAPI.repo.sh and build_env_cpu.sh at location where
-            dockerfile will be downloaded/created
-          </Text>
           <Box direction="row-responsive" gap="medium" pad={{ top: "medium" }}>
             <Button label="Submit" type="submit" primary />
             <Button label="Cancel" type="reset" />

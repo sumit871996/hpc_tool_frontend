@@ -6,7 +6,7 @@ import ConsoleView from "./ConsoleView";
 const FinaldockerfileIntelMPI = (props) => {
   const location = useLocation();
   const inputdata = location.state.data.value;
-  const elementsArray = inputdata.dockercommands.split("\n");
+  const elementsArray = location.state.data.dockercommands.split("\n");
   const finaldockerfile = [
     `FROM ${inputdata.imagename}:${inputdata.imagetag}`,
     ...elementsArray,
@@ -19,7 +19,7 @@ const FinaldockerfileIntelMPI = (props) => {
     "RUN sed -i 's/mirrorlist/#mirrorlist/g' /etc/yum.repos.d/CentOS-Linux-* && \\",
     "    sed -i 's|#baseurl=http://mirror.centos.org|baseurl=http://vault.centos.org|g' /etc/yum.repos.d/CentOS-Linux-*",
     "RUN yum install -y ca-certificates",
-    "COPY ./oneAPI.repo.sh /oneAPI.repo.sh",
+    "COPY intelfiles/oneAPI.repo.sh /oneAPI.repo.sh",
     "RUN /oneAPI.repo.sh",
     "RUN yum install -y which glibc-langpack-en \\",
     "    procps findutils gcc-c++ gcc \\",
@@ -42,7 +42,7 @@ const FinaldockerfileIntelMPI = (props) => {
     "    sha512sum -c osu-micro-benchmarks-5.8.tgz.sha512sum && \\",
     "    tar -C /tmp -zxf osu-micro-benchmarks-5.8.tgz && \\",
     "    rm -rf osu-micro-benchmarks-5.8.tgz*",
-    "COPY ./build_env_cpu.sh /build_env_cpu.sh",
+    "COPY intelfiles/build_env_cpu.sh /build_env_cpu.sh",
     "RUN sed -i \\",
     '    -e "s/MPI_VERSION/${MPI_VERSION}/" \\',
     '    -e "s/ICC_VERSION/${ICC_VERSION}/" \\',
@@ -79,7 +79,11 @@ const FinaldockerfileIntelMPI = (props) => {
   ];
   return (
     <Box margin={{ left: "5%", right: "5%", top: "5%" }}>
-      {/* {JSON.stringify(inputdata)} */}
+      <Text weight="bold">Note: </Text>
+      <Text margin={{ bottom: "20px" }}>
+        Clone <a>https://github.com/sumit871996/intelfiles.git</a> in your
+        directory where dockerfile exists to test the image
+      </Text>
       <ConsoleView
         dockerfile={dockerfile}
         dockerfilename={dockerfilename}
