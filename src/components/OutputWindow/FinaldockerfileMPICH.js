@@ -97,6 +97,8 @@ const FinaldockerfileMPICH = (props) => {
         finaldockerfilename={finaldockerfilename}
         buildappcommand={buildappcommand}
         singularitycommands={singularitycommands}
+        imagename={inputdata.imagename}
+        imagetag={inputdata.imagetag}
       ></ConsoleView>
     </Box>
   );

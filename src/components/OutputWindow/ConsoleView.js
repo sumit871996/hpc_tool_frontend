@@ -8,10 +8,22 @@ import "prismjs/components/prism-javascript";
 import "prismjs/components/prism-docker";
 import "prismjs/themes/prism.css";
 import { Copy, Download } from "grommet-icons";
+import { useNavigate } from "react-router-dom";
 
 const ConsoleView = (props) => {
+  const navigate = useNavigate();
+
   const [code, setCode] = React.useState(props.dockerfile.join("\n"));
 
+  const navigateToForm = () => {
+    navigate("/imagePage", {
+      state: {
+        imagename: props.imagename,
+        imagetag: props.imagetag,
+        dockerfile: props.finaldockerfile,
+      },
+    });
+  };
   const [finalfile, setFinalFile] = useState(
     props.finaldockerfile.toString().replaceAll(",", "\n")
   );
@@ -360,6 +372,13 @@ const ConsoleView = (props) => {
             })}
           </Text>
         </Box>
+      </Box>
+      <Box margin={{ top: "30px" }} align="center">
+        <Button
+          primary
+          label="Create Image and Push to Dockerhub"
+          onClick={navigateToForm}
+        />
       </Box>
     </Box>
   );

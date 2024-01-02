@@ -92,6 +92,8 @@ const FinaldockerfileIntelMPI = (props) => {
         buildcommand={buildcommand}
         buildappcommand={buildappcommand}
         singularitycommands={singularitycommands}
+        imagename={inputdata.imagename}
+        imagetag={inputdata.imagetag}
       ></ConsoleView>
     </Box>
   );
