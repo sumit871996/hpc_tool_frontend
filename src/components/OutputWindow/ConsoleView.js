@@ -21,6 +21,9 @@ const ConsoleView = (props) => {
         imagename: props.imagename,
         imagetag: props.imagetag,
         dockerfile: props.finaldockerfile,
+        dockerbuildcommand: props.buildcommand,
+        dockerfilename: props.dockerfilename,
+        dockerpushbuildcommand: props.dockerpushbuildcommand,
       },
     });
   };

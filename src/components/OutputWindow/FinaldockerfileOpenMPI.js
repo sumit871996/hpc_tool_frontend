@@ -69,6 +69,7 @@ const FinaldockerfileMPICH = (props) => {
     "WORKDIR ${WORKDIR}",
     "USER ${USER}",
   ]);
+  const dockerpushbuildcommand = `docker image build -t ${inputdata.imagename}:${inputdata.imagetag} --build-arg MPI_MAJOR_VERSION=${inputdata.openMPI_Major_Version}  --build-arg MPI_VERSION=${inputdata.openMPI_Version} --build-arg MPI_CONFIGURE_OPTIONS="${inputdata.mpi_configure_options}" --build-arg MPI_MAKE_OPTIONS=${inputdata.mpi_make_options} --build-arg USER=${inputdata.user} --build-arg WORKDIR=${inputdata.workdir}`;
   const buildcommand = `docker image build -t ${inputdata.imagename}:${inputdata.imagetag} --build-arg MPI_MAJOR_VERSION=${inputdata.openMPI_Major_Version}  --build-arg MPI_VERSION=${inputdata.openMPI_Version} --build-arg MPI_CONFIGURE_OPTIONS="${inputdata.mpi_configure_options}" --build-arg MPI_MAKE_OPTIONS=${inputdata.mpi_make_options} --build-arg USER=${inputdata.user} --build-arg WORKDIR=${inputdata.workdir} . -f ${dockerfilename}`;
   const buildappcommand = `docker image build -t ${inputdata.finalimagename}:${inputdata.finalimagetag} . -f ${finaldockerfilename}`;
   const singularitycommands = [
@@ -92,6 +93,7 @@ const FinaldockerfileMPICH = (props) => {
         singularitycommands={singularitycommands}
         imagename={inputdata.imagename}
         imagetag={inputdata.imagetag}
+        dockerpushbuildcommand={dockerpushbuildcommand}
       ></ConsoleView>
     </Box>
   );

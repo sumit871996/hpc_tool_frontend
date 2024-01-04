@@ -27,7 +27,8 @@ export const ImageForm = (props) => {
 
   const navigate = useNavigate();
   const navigatefunction = (data) => {
-    axios.post("/home/buildandpush", data);
+    console.log(data);
+    axios.post("http://localhost:8081/home/buildandpush", data);
   };
   const onFormChange = (value) => {
     setFormValues(value);
@@ -36,27 +37,58 @@ export const ImageForm = (props) => {
   const applyFilters = () => {
     // Mock function to demonstrate implementation
   };
+  const handleFileChange = (e) => {
+    const file = e.target.files[0];
+    setFormValues((prevValues) => ({
+      ...prevValues,
+      zipFile: file,
+    }));
+    setFilename(file.name);
+  };
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFormValues((prevValues) => ({
+      ...prevValues,
+      [name]: value,
+    }));
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    // const formData = new FormData();
+
+    // formData.append("dockerhubusername", formValues.dockerhubusername);
+    // formData.append("dockerhubpassword", formValues.dockerhubpassword);
+    // formData.append("zipFile", formValues.zipFile);
+    // Handle form submission here, including the zip file
+    console.log(formValues);
+  };
+
+  const [filename, setFilename] = useState("");
   const [data, setData] = useState({
     imagename: location.state.imagename,
     imagetag: location.state.imagetag,
     dockerfile: location.state.dockerfile,
+    buildcommand: location.state.dockerbuildcommand,
     dockeruser: "",
     dockerpassword: "",
+    dockerfilename: location.state.dockerfilename,
   });
 
   const sendData = (data) => {
     setData({
       imagename: location.state.imagename,
       imagetag: location.state.imagetag,
+      buildcommand: location.state.dockerpushbuildcommand,
       dockerfile: location.state.dockerfile,
       dockeruser: formValues.dockerhubusername,
       dockerpassword: formValues.dockerhubpassword,
+      dockerfilename: location.state.dockerfilename,
     });
   };
 
   const [formValues, setFormValues] = React.useState({
-    finalimagename: "",
-    finalimagetag: "",
     dockerhubusername: "",
     dockerhubpassword: "",
   });
@@ -95,6 +127,18 @@ export const ImageForm = (props) => {
             htmlFor="dockerhubpassword"
             name="dockerhubpassword"
             label="Dockerhub Password"
+            defaultValue=""
+          ></FormField>
+
+          <FormField
+            // error="required"
+            type="file"
+            accept=".zip"
+            onChange={handleFileChange}
+            required
+            htmlFor="zipFile"
+            name="zipFile"
+            label="Application Source Code"
             defaultValue=""
           ></FormField>
 

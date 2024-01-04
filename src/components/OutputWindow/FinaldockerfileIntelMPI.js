@@ -70,7 +70,7 @@ const FinaldockerfileIntelMPI = (props) => {
     "RUN cd /usr/bin && \\",
     "    ln -s /opt/osu/libexec/osu-micro-benchmarks/mpi/*/* .",
   ]);
-
+  const dockerpushbuildcommand = `docker image build -t ${inputdata.imagename}:${inputdata.imagetag} --build-arg MPI_VERSION=${inputdata.intel_mpi_devel_version} --build-arg ICC_VERSION="${inputdata.intel_icc_version}" --build-arg MKL_VERSION=${inputdata.intel_mkl_version} --build-arg TBB_VERSION=${inputdata.intel_tbb_version}`;
   const buildcommand = `docker image build -t ${inputdata.imagename}:${inputdata.imagetag} --build-arg MPI_VERSION=${inputdata.intel_mpi_devel_version} --build-arg ICC_VERSION="${inputdata.intel_icc_version}" --build-arg MKL_VERSION=${inputdata.intel_mkl_version} --build-arg TBB_VERSION=${inputdata.intel_tbb_version} . -f ${dockerfilename}`;
   const buildappcommand = `docker image build -t ${inputdata.finalimagename}:${inputdata.finalimagetag} . -f ${finaldockerfilename}`;
   const singularitycommands = [
@@ -94,6 +94,7 @@ const FinaldockerfileIntelMPI = (props) => {
         singularitycommands={singularitycommands}
         imagename={inputdata.imagename}
         imagetag={inputdata.imagetag}
+        dockerpushbuildcommand={dockerpushbuildcommand}
       ></ConsoleView>
     </Box>
   );

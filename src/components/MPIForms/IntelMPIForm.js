@@ -103,6 +103,7 @@ export const IntelMPIForm = () => {
     imagetag: "2021.4.0",
     finalimagename: "",
     finalimagetag: "",
+    sourcecode: null,
     // dockercommands: finalfile,
   });
 
