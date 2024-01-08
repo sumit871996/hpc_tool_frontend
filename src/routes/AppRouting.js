@@ -8,10 +8,11 @@ import FinaldockerfileMPICH from "../components/OutputWindow/FinaldockerfileMPIC
 import ConsoleViewV2 from "../components/OutputWindow/ConsoleView_v2";
 import ContactView from "../views/ContactView";
 import { ImageForm } from "../components/ImageForm";
+import HomePageView from "../views/HomePageView";
 const AppRouting = () => {
   return (
-    <Routes>
-      <Route path="/" element={<HomeView />} />
+    <Routes >
+      <Route path="/form" element={<HomeView />} />
       <Route path="/test" element={<ConsoleViewV2 />} />
       <Route path="/about" element={<AboutView />} />
       <Route path="/signup" element={<SignupView />} />
@@ -27,6 +28,7 @@ const AppRouting = () => {
         path="/dockerfileIntelMPI/show"
         element={<FinaldockerfileIntelMPI />}
       />
+      <Route path="/" element={<HomePageView/>}/>
     </Routes>
   );
 };

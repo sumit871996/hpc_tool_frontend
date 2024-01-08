@@ -12,7 +12,8 @@ const AppFooter = () => {
     { label: 'Feedback' },
   ];
   return (
-    <Footer
+    <Footer 
+    
       background="background-front"
       direction={!['xsmall', 'small'].includes(size) ? 'row' : 'column'}
       align={!['xsmall', 'small'].includes(size) ? 'center' : undefined}

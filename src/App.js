@@ -40,12 +40,10 @@ class App extends Component {
       <Grommet theme={hpe} full>
         <ResponsiveContext.Consumer>
           {(size) => (
-            <Box pad={"small"}>
+            <Box background={"rgb(247, 247, 247)"}>
               <AppHeader />
-              <Box direction="row">
-                <Box fill align="start" justify="start">
-                  <AppRouting />
-                </Box>
+              <Box fill align="start" justify="start">
+                <AppRouting />
               </Box>
               <AppFooter />
             </Box>
