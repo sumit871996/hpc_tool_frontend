@@ -9,7 +9,7 @@ import ConsoleViewV2 from "../components/OutputWindow/ConsoleView_v2";
 import ContactView from "../views/ContactView";
 import { ImageForm } from "../components/ImageForm";
 import HomePageView from "../views/HomePageView";
-import { MultiStepFormView } from "../views/multistepform/MultiStepFormView";
+
 const AppRouting = () => {
   return (
     <Routes >
@@ -19,7 +19,6 @@ const AppRouting = () => {
       <Route path="/signup" element={<SignupView />} />
       <Route path="/contact" element={<ContactView />} />
       <Route path="/ImagePage" element={<ImageForm />} />
-      <Route path="/multiStep" element={<MultiStepFormView/>}/>
       <Route
         path="/dockerfileOpenMPI/show"
         element={<FinaldockerfileOpenMPI />}
