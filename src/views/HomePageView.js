@@ -244,10 +244,10 @@ function HomePageView() {
               containers for efficient deployment and management in complex
               computing environments.
             </Text>
-            <Box direction="row" gap="medium">
+            {/* <Box direction="row" gap="medium">
               <Button primary label="Contact" />
               <Button primary label="Explore" />
-            </Box>
+            </Box> */}
           </CardBody>
         </Card>
         {/* </Box> */}

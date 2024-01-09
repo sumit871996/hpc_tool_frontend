@@ -78,7 +78,7 @@ const FinaldockerfileIntelMPI = (props) => {
     `singularity shell ${inputdata.singularityimagename}.sif`,
   ];
   return (
-    <Box margin={{ left: "5%", right: "5%", top: "5%" }}>
+    <Box margin={{ left: "5%", right: "5%", top: "5%" }} pad={{bottom:"small"}}>
       <Text weight="bold">Note: </Text>
       <Text margin={{ bottom: "20px" }}>
         Clone <a>https://github.hpe.com/sumit-bharat-mandlik/intelfiles.git</a>{" "}
