@@ -1,19 +1,30 @@
-import { Box, Text } from "grommet";
 import { useState } from "react";
-import { useLocation } from "react-router-dom";
-import ConsoleView from "./ConsoleView";
+import ConsoleView from "../../components/OutputWindow/ConsoleView";
 
-const FinaldockerfileIntelMPI = (props) => {
-  const location = useLocation();
-  const inputdata = location.state.data;
-  const elementsArray = location.state.data.dockercommands.split("\n");
-  const finaldockerfile = [
+export const DockerFileView = (e) => {
+  const dockercommands="ps"
+  const elementsArray = dockercommands.split("\n");
+  const inputdata = {
+    finalimagename: "AIN",
+    finalimagetag: "AIT",
+    imagename: "intelmpi",
+    imagetag: "2021.2.0",
+    intel_icc_version: "2021.1.2",
+    intel_mkl_version: "2021.2.0",
+    intel_mpi_devel_version: "2021.2.0",
+    intel_tbb_version: "2021.2.0",
+    singularityimagename: "AIN",
+    sourcecode: null,
+  };
+  const finaldockerfile=[
     `FROM ${inputdata.imagename}:${inputdata.imagetag}`,
     ...elementsArray,
   ];
+
   const dockerfilename = "DockerfileIntelMPI";
   const finaldockerfilename = `DockerFile${inputdata.finalimagename}`;
-  const [dockerfile, setDockerfile] = useState([
+
+  const [intelDockerFile, setIntelDockerFile] = useState([
     "FROM centos:8.4.2105 AS base",
     "    ",
     "RUN sed -i 's/mirrorlist/#mirrorlist/g' /etc/yum.repos.d/CentOS-Linux-* && \\",
@@ -70,6 +81,7 @@ const FinaldockerfileIntelMPI = (props) => {
     "RUN cd /usr/bin && \\",
     "    ln -s /opt/osu/libexec/osu-micro-benchmarks/mpi/*/* .",
   ]);
+
   const dockerpushbuildcommand = `docker image build -t ${inputdata.imagename}:${inputdata.imagetag} --build-arg MPI_VERSION=${inputdata.intel_mpi_devel_version} --build-arg ICC_VERSION="${inputdata.intel_icc_version}" --build-arg MKL_VERSION=${inputdata.intel_mkl_version} --build-arg TBB_VERSION=${inputdata.intel_tbb_version}`;
   const buildcommand = `docker image build -t ${inputdata.imagename}:${inputdata.imagetag} --build-arg MPI_VERSION=${inputdata.intel_mpi_devel_version} --build-arg ICC_VERSION="${inputdata.intel_icc_version}" --build-arg MKL_VERSION=${inputdata.intel_mkl_version} --build-arg TBB_VERSION=${inputdata.intel_tbb_version} . -f ${dockerfilename}`;
   const buildappcommand = `docker image build -t ${inputdata.finalimagename}:${inputdata.finalimagetag} . -f ${finaldockerfilename}`;
@@ -78,26 +90,27 @@ const FinaldockerfileIntelMPI = (props) => {
     `singularity shell ${inputdata.singularityimagename}.sif`,
   ];
   return (
-      <Box margin={{ left: "5%", right: "5%", top: "5%" }} pad={{bottom:"small"}}>
-        <Text weight="bold">Note: </Text>
-        <Text margin={{ bottom: "20px" }}>
-          Clone <a>https://github.hpe.com/sumit-bharat-mandlik/intelfiles.git</a>{" "}
-          in your directory where dockerfile exists to test the image
-        </Text>
-        <ConsoleView
-          dockerfile={dockerfile}
-          dockerfilename={dockerfilename}
-          finaldockerfile={finaldockerfile}
-          finaldockerfilename={finaldockerfilename}
-          buildcommand={buildcommand}
-          buildappcommand={buildappcommand}
-          singularitycommands={singularitycommands}
-          imagename={inputdata.imagename}
-          imagetag={inputdata.imagetag}
-          dockerpushbuildcommand={dockerpushbuildcommand}
-        ></ConsoleView>
-      </Box>
+    <Box
+      margin={{ left: "5%", right: "5%", top: "5%" }}
+      pad={{ bottom: "small" }}
+    >
+      <Text weight="bold">Note: </Text>
+      <Text margin={{ bottom: "20px" }}>
+        Clone <a>https://github.hpe.com/sumit-bharat-mandlik/intelfiles.git</a>{" "}
+        in your directory where dockerfile exists to test the image
+      </Text>
+      <ConsoleView
+        dockerfile={intelDockerFile}
+        dockerfilename={dockerfilename}
+        finaldockerfile={finaldockerfile}
+        finaldockerfilename={finaldockerfilename}
+        buildcommand={buildcommand}
+        buildappcommand={buildappcommand}
+        singularitycommands={singularitycommands}
+        imagename={inputdata.imagename}
+        imagetag={inputdata.imagetag}
+        dockerpushbuildcommand={dockerpushbuildcommand}
+      ></ConsoleView>
+    </Box>
   );
 };
-
-export default FinaldockerfileIntelMPI;

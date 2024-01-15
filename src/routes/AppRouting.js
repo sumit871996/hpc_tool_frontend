@@ -9,6 +9,7 @@ import ConsoleViewV2 from "../components/OutputWindow/ConsoleView_v2";
 import ContactView from "../views/ContactView";
 import { ImageForm } from "../components/ImageForm";
 import HomePageView from "../views/HomePageView";
+import { ContainerizationFormView } from "../views/multistepform/ContainerizationFormView";
 
 const AppRouting = () => {
   return (
@@ -29,6 +30,7 @@ const AppRouting = () => {
         element={<FinaldockerfileIntelMPI />}
       />
       <Route path="/" element={<HomePageView/>}/>
+      <Route path="/formPage" element={<ContainerizationFormView/>} />
     </Routes>
   );
 };
