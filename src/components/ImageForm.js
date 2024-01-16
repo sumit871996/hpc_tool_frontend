@@ -29,13 +29,15 @@ export const ImageForm = (props) => {
 
   const navigate = useNavigate();
   const navigatefunction = (dataip) => {
-    console.log(data);
+    // console.log(data);
     const formData = new FormData();
 
     formData.append("inputData", JSON.stringify(data));
     formData.append("file", fileZip);
 
-    axios.post("http://localhost:8081/home/buildandpush", formData);
+    console.log(data);
+
+    // axios.post("http://localhost:8081/home/buildandpush", formData);
   };
   const onFormChange = (value) => {
     setFormValues(value);
@@ -73,24 +75,50 @@ export const ImageForm = (props) => {
 
   const [filename, setFilename] = useState("");
   const [data, setData] = useState({
+    dockeruser: "",
+    dockerpassword: "",
+
     imagename: location.state.imagename,
     imagetag: location.state.imagetag,
     dockerfile: location.state.dockerfile,
     buildcommand: location.state.dockerbuildcommand,
-    dockeruser: "",
-    dockerpassword: "",
     dockerfilename: location.state.dockerfilename,
+
+    baseimagename: location.state.baseimagename,
+    baseimagetag: location.state.baseimagetag,
+    basedockerfile: location.state.basedockerfile,
+    basebuildcommand: location.state.basedockerbuildcommand,
+    basedockerfilename: location.state.basedockerfilename,
   });
 
   const sendData = (data) => {
     setData({
       imagename: location.state.imagename,
       imagetag: location.state.imagetag,
-      buildcommand: location.state.dockerpushbuildcommand,
-      dockerfile: location.state.dockerfile,
+      buildcommand: location.state.dockerbuildcommand.replace(
+        `-t ${location.state.imagename}`,
+        `-t ${formValues.dockerhubusername}/${location.state.imagename}`
+      ),
+      dockerfile: (() => {
+        const finaldockerfile = location.state.dockerfile;
+        finaldockerfile[0] = location.state.dockerfile[0].replace(
+          `FROM ${location.state.imagename}`,
+          `FROM ${formValues.dockerhubusername}/${location.state.imagename}`
+        );
+        return finaldockerfile;
+      })(),
       dockeruser: formValues.dockerhubusername,
       dockerpassword: formValues.dockerhubpassword,
       dockerfilename: location.state.dockerfilename,
+
+      baseimagename: location.state.baseimagename,
+      baseimagetag: location.state.baseimagetag,
+      basedockerfile: location.state.basedockerfile,
+      basebuildcommand: location.state.basedockerbuildcommand.replace(
+        `-t ${location.state.baseimagename}`,
+        `-t ${formValues.dockerhubusername}/${location.state.baseimagename}`
+      ),
+      basedockerfilename: location.state.basedockerfilename,
     });
   };
 
@@ -101,8 +129,9 @@ export const ImageForm = (props) => {
   });
 
   return (
-    <Box gap="medium" width="large" pad={{bottom:"small"}}>
+    <Box gap="medium" width="large" pad={{ bottom: "small" }}>
       <Box>{JSON.stringify(data)}</Box>
+      {JSON.stringify(data)}
       <Header
         direction="column"
         align="start"
