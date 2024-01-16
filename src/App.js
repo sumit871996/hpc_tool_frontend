@@ -37,12 +37,12 @@ class App extends Component {
   render() {
     const { showSidebar } = this.state;
     return (
-      <Grommet theme={hpe} full>
+      <Grommet theme={hpe} >
         <ResponsiveContext.Consumer>
           {(size) => (
             <Box background={"rgb(247, 247, 247)"}>
               <AppHeader />
-              <Box fill align="start" justify="start">
+              <Box fill align="start" justify="start" >
                 <AppRouting />
               </Box>
               <AppFooter />

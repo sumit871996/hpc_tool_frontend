@@ -101,7 +101,7 @@ export const ImageForm = (props) => {
   });
 
   return (
-    <Box gap="medium" width="large">
+    <Box gap="medium" width="large" pad={{bottom:"small"}}>
       <Box>{JSON.stringify(data)}</Box>
       <Header
         direction="column"

@@ -17,8 +17,8 @@ const items = [
   // { label: 'About', path: '/about' },
   // { label: 'Signup', path: '/signup' },
   // { label: 'Products', path: '/products' },
-  { label: "Solution", path: "/solution" },
-  { label: "Technologies", path: "/technologies" },
+  // { label: "Solution", path: "/solution" },
+  // { label: "Technologies", path: "/technologies" },
 ];
 
 const endItems = [

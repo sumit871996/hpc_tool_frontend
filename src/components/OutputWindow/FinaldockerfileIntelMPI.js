@@ -78,25 +78,25 @@ const FinaldockerfileIntelMPI = (props) => {
     `singularity shell ${inputdata.singularityimagename}.sif`,
   ];
   return (
-    <Box margin={{ left: "5%", right: "5%", top: "5%" }}>
-      <Text weight="bold">Note: </Text>
-      <Text margin={{ bottom: "20px" }}>
-        Clone <a>https://github.hpe.com/sumit-bharat-mandlik/intelfiles.git</a>{" "}
-        in your directory where dockerfile exists to test the image
-      </Text>
-      <ConsoleView
-        dockerfile={dockerfile}
-        dockerfilename={dockerfilename}
-        finaldockerfile={finaldockerfile}
-        finaldockerfilename={finaldockerfilename}
-        buildcommand={buildcommand}
-        buildappcommand={buildappcommand}
-        singularitycommands={singularitycommands}
-        imagename={inputdata.imagename}
-        imagetag={inputdata.imagetag}
-        dockerpushbuildcommand={dockerpushbuildcommand}
-      ></ConsoleView>
-    </Box>
+      <Box margin={{ left: "5%", right: "5%", top: "5%" }} pad={{bottom:"small"}}>
+        <Text weight="bold">Note: </Text>
+        <Text margin={{ bottom: "20px" }}>
+          Clone <a>https://github.hpe.com/sumit-bharat-mandlik/intelfiles.git</a>{" "}
+          in your directory where dockerfile exists to test the image
+        </Text>
+        <ConsoleView
+          dockerfile={dockerfile}
+          dockerfilename={dockerfilename}
+          finaldockerfile={finaldockerfile}
+          finaldockerfilename={finaldockerfilename}
+          buildcommand={buildcommand}
+          buildappcommand={buildappcommand}
+          singularitycommands={singularitycommands}
+          imagename={inputdata.imagename}
+          imagetag={inputdata.imagetag}
+          dockerpushbuildcommand={dockerpushbuildcommand}
+        ></ConsoleView>
+      </Box>
   );
 };
 
