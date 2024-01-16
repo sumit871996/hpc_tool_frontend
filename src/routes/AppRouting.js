@@ -10,6 +10,7 @@ import ContactView from "../views/ContactView";
 import { ImageForm } from "../components/ImageForm";
 import HomePageView from "../views/HomePageView";
 import { ContainerizationFormView } from "../views/multistepform/ContainerizationFormView";
+import { DockerFileView } from "../views/multistepform/DockerFileView";
 
 const AppRouting = () => {
   return (
@@ -31,6 +32,7 @@ const AppRouting = () => {
       />
       <Route path="/" element={<HomePageView/>}/>
       <Route path="/formPage" element={<ContainerizationFormView/>} />
+      <Route path="/displayDockerFile" element={<DockerFileView/>}/>
     </Routes>
   );
 };

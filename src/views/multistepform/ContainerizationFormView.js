@@ -46,7 +46,7 @@ export const ContainerizationFormView = () => {
   });
 
   const [MPIchFormData, setMPIchFormData] = useState({
-    mpich_Version: "",
+    mpi_ch_Version: "",
     mpi_configure_options: "",
     mpi_make_options: "",
   });
@@ -157,13 +157,18 @@ export const ContainerizationFormView = () => {
 
   const handleMPIChange = (e) => {
     const { name, value } = e.target;
-    setIntelMPIFormData({ ...MPIchFormData, [name]: value });
+    setMPIchFormData({ ...MPIchFormData, [name]: value });
   };
 
   const handleOpenMPIChange = (e) => {
     const { name, value } = e.target;
     setOpenMPIFormData({ ...openMPIFormData, [name]: value });
   };
+
+  const handleCommonFieldChnage = (e)=>{
+    const {name, value} =e.target;
+    setCommonData({...commonData,[name]:value});
+  }
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -172,6 +177,7 @@ export const ContainerizationFormView = () => {
     let data = {};
     if (formData.mpi_type === "IntelMPI") {
       data = {
+        mpi_type: formData.mpi_type,
         intel_mpi_devel_version: intelMPIFormData.intel_mpi_devel_version,
         intel_mkl_version: intelMPIFormData.intel_mkl_version,
         intel_icc_version: intelMPIFormData.intel_icc_version,
@@ -185,7 +191,8 @@ export const ContainerizationFormView = () => {
       };
     } else if (formData.mpi_type === "MPICH") {
       data = {
-        mpi_ch_version: MPIchFormData.mpich_Version,
+        mpi_type: formData.mpi_type,
+        mpi_ch_version: MPIchFormData.mpi_ch_Version,
         mpi_configure_options: MPIchFormData.mpi_configure_options,
         mpi_make_options: MPIchFormData.mpi_make_options,
         user: commonData.user,
@@ -198,10 +205,11 @@ export const ContainerizationFormView = () => {
       };
     } else if (formData.mpi_type === "OpenMPI") {
       data = {
+        mpi_type: formData.mpi_type,
         openMPI_Major_Version: openMPIFormData.openMPI_Major_Version,
         openMPI_Version: openMPIFormData.openMPI_Version,
         mpi_configure_options: openMPIFormData.mpi_configure_options,
-        mpi_make_options: openMPIFormData.mpi_configure_options,
+        mpi_make_options: openMPIFormData.mpi_make_options,
         user: commonData.user,
         workdir: commonData.workdir,
         imagename: formData.imagename,
@@ -384,14 +392,14 @@ export const ContainerizationFormView = () => {
                   <Box gap="medium">
                     <FormField
                       // required
-                      htmlFor="mpich_Version"
-                      name="mpich_Version"
+                      htmlFor="mpi_ch_Version"
+                      name="mpi_ch_Version"
                       label="MPICH Version"
                       required={formData.mpi_type === "MPICH"}
                     >
                       <Select
-                        id="mpich_Version"
-                        name="mpich_Version"
+                        id="mpi_ch_Version"
+                        name="mpi_ch_Version"
                         options={mpi_ch_version}
                         defaultValue={mpi_ch_version[0]}
                         onChange={handleMPIChange}
@@ -438,7 +446,8 @@ export const ContainerizationFormView = () => {
                       id="user"
                       name="user"
                       placeholder="Enter a user name"
-                      required={formData.mpi_type !== "intelMPI"}
+                      required={formData.mpi_type !== "intelMPI"} 
+                      onChange={handleCommonFieldChnage}
                     />
                   </FormField>
                   <FormField
@@ -452,6 +461,7 @@ export const ContainerizationFormView = () => {
                       name="workdir"
                       placeholder=" Please Enter "
                       required={formData.mpi_type !== "intelMPI"}
+                      onChange={handleCommonFieldChnage}
                     />
                   </FormField>
                 </Box>
