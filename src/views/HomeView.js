@@ -8,7 +8,7 @@ const HomeView = (props) => {
 
   const items = ["OpenMPI", "MPICH", "IntelMPI"];
   return (
-    <Box fill="horizontal">
+    <Box fill="horizontal" pad={{bottom:"small"}}>
       <Box alignSelf="center" margin={{ top: "50px" }}>
         <Box width="300px" margin={{ bottom: "30px" }}>
           <Text>MPI Selection </Text>
