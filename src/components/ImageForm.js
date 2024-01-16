@@ -25,10 +25,17 @@ import { useLocation, useNavigate } from "react-router-dom";
 export const ImageForm = (props) => {
   const location = useLocation();
 
+  const [fileZip, setFileZip] = useState(null);
+
   const navigate = useNavigate();
-  const navigatefunction = (data) => {
+  const navigatefunction = (dataip) => {
     console.log(data);
-    axios.post("http://localhost:8081/home/buildandpush", data);
+    const formData = new FormData();
+
+    formData.append("inputData", JSON.stringify(data));
+    formData.append("file", fileZip);
+
+    axios.post("http://localhost:8081/home/buildandpush", formData);
   };
   const onFormChange = (value) => {
     setFormValues(value);
@@ -39,10 +46,13 @@ export const ImageForm = (props) => {
   };
   const handleFileChange = (e) => {
     const file = e.target.files[0];
-    setFormValues((prevValues) => ({
-      ...prevValues,
-      zipFile: file,
-    }));
+    // setFormValues((prevValues) => ({
+    //   ...prevValues,
+    //   zipFile: file,
+    // }));
+
+    setFileZip(file);
+
     setFilename(file.name);
   };
 
@@ -56,11 +66,7 @@ export const ImageForm = (props) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // const formData = new FormData();
 
-    // formData.append("dockerhubusername", formValues.dockerhubusername);
-    // formData.append("dockerhubpassword", formValues.dockerhubpassword);
-    // formData.append("zipFile", formValues.zipFile);
     // Handle form submission here, including the zip file
     console.log(formValues);
   };
@@ -91,6 +97,7 @@ export const ImageForm = (props) => {
   const [formValues, setFormValues] = React.useState({
     dockerhubusername: "",
     dockerhubpassword: "",
+    // zipFile: null,
   });
 
   return (
