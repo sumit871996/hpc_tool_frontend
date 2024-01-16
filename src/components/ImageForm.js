@@ -19,16 +19,41 @@ import {
   Select,
   TextInput,
   TextArea,
+  Spinner,
+  Layer,
+  Notification,
 } from "grommet";
 import { useLocation, useNavigate } from "react-router-dom";
 
 export const ImageForm = (props) => {
   const location = useLocation();
-
+  const [showLoading, setShowLoading]=useState(false);
+  const [showNotification,setShowNotification]=useState(true);
+  const [notificationTitle,setNotificationTitle]=useState("Error");
+  const [notificationMessage,setNotificationMessage]=useState("Error Message");
+  const [notificationStatus,setNotificationStatus]=useState("critical")
   const navigate = useNavigate();
   const navigatefunction = (data) => {
+    setShowLoading(true)
     console.log(data);
-    axios.post("http://localhost:8081/home/buildandpush", data);
+    axios.post("http://localhost:8081/home/buildandpush", data).then((res)=>{
+      if(res.status==200){
+        setNotificationTitle("Successful")
+        setNotificationMessage("SucessFully Stored to docker file")
+        setNotificationStatus("normal")
+        setShowLoading(false)
+        setShowNotification(true)
+        console.log(res.data)
+      }
+    }).catch((error)=>{
+      setNotificationTitle("Error")
+      setNotificationMessage("Failed to store docker file")
+      setNotificationStatus("critical")
+      setShowLoading(false)
+      setShowNotification(true)
+      console.log(error)
+
+    });
   };
   const onFormChange = (value) => {
     setFormValues(value);
@@ -94,7 +119,7 @@ export const ImageForm = (props) => {
   });
 
   return (
-    <Box gap="medium" width="large" pad={{bottom:"small"}}>
+    <Box gap="medium" width="large" pad={{bottom:"small"}} style={{minHeight:"80vh"}}>
       <Box>{JSON.stringify(data)}</Box>
       <Header
         direction="column"
@@ -148,6 +173,22 @@ export const ImageForm = (props) => {
           </Box>
         </Form>
       </Box>
+      {showLoading && 
+      <Layer>
+        <Box style={{justifyContent:"center"}}>
+          <Box fill style={{justifyContent:"center"}}><Spinner/></Box>
+        <Text>Pushing Image To Docker</Text></Box>
+      </Layer>
+      }
+      {showNotification && 
+      <Notification 
+      toast
+      title={notificationTitle}
+      message={notificationMessage}
+      status={notificationStatus}
+      onClose={()=>setShowNotification(false)}
+      time={5000}
+      />}
     </Box>
   );
 };
