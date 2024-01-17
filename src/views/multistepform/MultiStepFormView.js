@@ -8,6 +8,7 @@ import FinaldockerfileIntelMPI from "../../components/OutputWindow/Finaldockerfi
 import { ImageForm } from "../../components/ImageForm";
 import { ContainerizationFormView } from "./ContainerizationFormView";
 import { DockerFileView } from "./DockerFileView";
+import { defaultFormValues } from "./defaultValues";
 
 export const steps = [
     {
@@ -30,7 +31,7 @@ export const steps = [
 export const MultiStepFormView =()=>{
     const [activeIndex, setActiveIndex] =useState(0);
     const [activeStep, setActiveStep] =useState(1);
-    const [formInfo,setFormInfo] =useState();
+    const [formValues,setFormValues] =useState(defaultFormValues);
     useEffect(()=>{
         setActiveStep(activeIndex+1);
     },[activeIndex])
@@ -47,9 +48,9 @@ export const MultiStepFormView =()=>{
             activeStep,
             setActiveStep,
             steps,
-            formInfo,
-            setFormInfo,
-        })
+            formValues,
+            setFormValues,
+        }),[activeIndex,activeStep,formValues]
     )
 
     const handleRequest =()=>{

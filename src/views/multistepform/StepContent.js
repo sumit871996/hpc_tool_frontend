@@ -10,7 +10,9 @@ export const StepContent =({ onSubmit })=>{
         activeIndex,
         setActiveIndex,
         id,
-        steps
+        steps,
+        formValues,
+        setFormValues
     } =useContext(WizardContext);
 
     const handleSubmit = event => {
