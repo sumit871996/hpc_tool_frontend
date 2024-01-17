@@ -11,6 +11,7 @@ import { ImageForm } from "../components/ImageForm";
 import HomePageView from "../views/HomePageView";
 import { ContainerizationFormView } from "../views/multistepform/ContainerizationFormView";
 import { DockerFileView } from "../views/multistepform/DockerFileView";
+import { MultiStepFormView } from "../views/multistepform/MultiStepFormView";
 
 const AppRouting = () => {
   return (
@@ -33,6 +34,7 @@ const AppRouting = () => {
       <Route path="/" element={<HomePageView/>}/>
       <Route path="/formPage" element={<ContainerizationFormView/>} />
       <Route path="/displayDockerFile" element={<DockerFileView/>}/>
+      <Route path="/multistage" element={<MultiStepFormView/>}/>
     </Routes>
   );
 };

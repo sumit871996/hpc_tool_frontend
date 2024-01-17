@@ -21,7 +21,7 @@ import { OpenMPIForm } from "../../components/MPIForms/OpenMPIForm";
 
 export const ContainerizationFormView = () => {
   const navigate = useNavigate();
-
+  const [formValues,setFormValues]=useState();
   const [finalfile, setFinalFile] = useState("");
   const [selectedMajorVersion, setSelectedMajorVersion] = useState("v4.0")
   const [formData, setFormData] = useState({
@@ -189,6 +189,7 @@ export const ContainerizationFormView = () => {
         finalimagetag: formData.finalimagetag,
         sourcecode: null,
       };
+      setFormValues(...data);
     } else if (formData.mpi_type === "MPICH") {
       data = {
         mpi_type: formData.mpi_type,
@@ -203,6 +204,7 @@ export const ContainerizationFormView = () => {
         finalimagename: formData.finalimagename,
         finalimagetag: formData.finalimagetag,
       };
+      setFormValues(...data);
     } else if (formData.mpi_type === "OpenMPI") {
       data = {
         mpi_type: formData.mpi_type,
@@ -218,6 +220,7 @@ export const ContainerizationFormView = () => {
         finalimagename: formData.finalimagename,
         finalimagetag: formData.finalimagetag,
       };
+      setFormValues(...data);
     }
     console.log(data);
     console.log(typeof(finalfile));

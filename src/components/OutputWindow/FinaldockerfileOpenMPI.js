@@ -5,7 +5,7 @@ import ConsoleView from "./ConsoleView";
 
 const FinaldockerfileMPICH = (props) => {
   const location = useLocation();
-  const inputdata = location.state.data.value;
+  const inputdata = location.state.data;
 
   const elementsArray = location.state.data.dockercommands.split("\n");
   const finaldockerfile = [
