@@ -14,7 +14,7 @@ import "prismjs/components/prism-clike";
 import "prismjs/components/prism-javascript";
 import "prismjs/components/prism-docker";
 import "prismjs/themes/prism.css";
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import Editor from "react-simple-code-editor";
 import { useNavigate } from "react-router-dom";
 import { OpenMPIForm } from "../../components/MPIForms/OpenMPIForm";
@@ -22,7 +22,7 @@ import { defaultFormValues } from "./defaultValues";
 import { WizardContext } from "./WizardContext";
 
 export const ContainerizationFormView = () => {
-  const {formValues, setFormValues} = useContext(WizardContext);
+  const {formValues, setFormValues,dockerCommands,setDockerCommands} = useContext(WizardContext);
   const navigate = useNavigate();
   // const [formValues,setFormValues]=useState(defaultFormValues);
   const [finalfile, setFinalFile] = useState("");
@@ -148,6 +148,10 @@ export const ContainerizationFormView = () => {
     const {name,value} = e.target;
     setFormValues({...formValues, [name]:value});
   }
+
+  useEffect(()=>{
+    setDockerCommands(finalfile)
+  },[finalfile])
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -482,16 +486,18 @@ export const ContainerizationFormView = () => {
 
             <Box gap="medium">
               <FormField
-                htmlFor="dockercommands"
-                name="dockercommands"
+                htmlFor="dockerCommands"
+                name="dockerCommands"
                 label="Write docker commands for running the applications"
               >
                 <Editor
-                  required
-                  id="dockercommands"
-                  name="dockercommands"
+                  // required
+                  id="dockerCommands"
+                  name="dockerCommands"
                   value={finalfile}
+                  // onChange={handleFormValueChange}
                   onValueChange={(code) => setFinalFile(code)}
+                  // onValueChange={handleFormValueChange}
                   placeholder="Enter docker commands"
                   highlight={(code) => highlight(code, languages.dockerfile)}
                   padding={10}

@@ -9,6 +9,7 @@ import { ImageForm } from "../../components/ImageForm";
 import { ContainerizationFormView } from "./ContainerizationFormView";
 import { DockerFileView } from "./DockerFileView";
 import { defaultFormValues } from "./defaultValues";
+import { PushToHubForm } from "./PushToHubForm";
 
 export const steps = [
     {
@@ -19,12 +20,12 @@ export const steps = [
     {
       description: `In this we check the connection and fetch information about database`,
       input: <DockerFileView/>,
-      title: "Validate Connection",
+      title: "Docker File View",
     },
     {
-      description: `Please select database. which you wanted to load`,
-      input: <ImageForm/>,
-      title: "Database Details",
+      description: `Please `,
+      input: <PushToHubForm/>,
+      title: "Upload to Docker",
     },
   ];
 
@@ -32,6 +33,7 @@ export const MultiStepFormView =()=>{
     const [activeIndex, setActiveIndex] =useState(0);
     const [activeStep, setActiveStep] =useState(1);
     const [formValues,setFormValues] =useState(defaultFormValues);
+    const [dockerCommands, setDockerCommands]= useState("");
     useEffect(()=>{
         setActiveStep(activeIndex+1);
     },[activeIndex])
@@ -50,6 +52,8 @@ export const MultiStepFormView =()=>{
             steps,
             formValues,
             setFormValues,
+            dockerCommands,
+            setDockerCommands
         }),[activeIndex,activeStep,formValues]
     )
 

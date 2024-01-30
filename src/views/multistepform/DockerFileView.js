@@ -1,25 +1,16 @@
-import { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import ConsoleView from "../../components/OutputWindow/ConsoleView";
-import { Anchor, Box, Text } from "grommet";
+import { Anchor, Box,Button, Text } from "grommet";
+import { Copy, Download } from "grommet-icons";
 import { WizardContext } from "./WizardContext";
+import Editor from "react-simple-code-editor";
+import { highlight, languages } from "prismjs/components/prism-core";
 
 export const DockerFileView = (e) => {
-  const dockercommands = "ps";
-  const {formValues, setFormValues}= useContext(WizardContext)
-  const elementsArray = dockercommands.split("\n");
-//   const inputdata = {
-//     finalimagename: "AIN",
-//     finalimagetag: "AIT",
-//     imagename: "mpich",
-//     imagetag: "4.1.0",
-//     mpi_ch_version: "4.1.2",
-//     mpi_configure_options: "--disable-fortran",
-//     mpi_make_options: "-j4",
-//     mpi_type: "MPICH",
-//     singularityimagename: "ASIN",
-//     user: "mpi",
-//     workdir: "/project",
-//   };
+  const {formValues, setFormValues,setDockerCommands,dockerCommands}= useContext(WizardContext)
+  const docker_commands = dockerCommands;
+  const elementsArray = docker_commands.split("\n");
+  
 
   useEffect(() => {
     dataForDockerfile(formValues);
@@ -206,6 +197,7 @@ export const DockerFileView = (e) => {
   const [dockerBuildAppCommand, setDockerBuildAppCommand] = useState();
   const [buildCommand, setBuildCommand] = useState();
   const [singularityCommands, setSingularityCommands] = useState([]);
+  const [code, setCode] = React.useState(dockerIntelMPIFile.join("\n"));
   const dataForDockerfile = (data) => {
     let docfilename;
     let fdockerfilename;
@@ -265,6 +257,53 @@ export const DockerFileView = (e) => {
     }
   };
 
+  const [finalfile, setFinalFile] = useState(
+    finaldockerfile.toString().replaceAll(",", "\n")
+  );
+
+  const copyToClipboard = () => {
+    const modifiedData = dockerIntelMPIFile.join("\n").toString();
+    navigator.clipboard.writeText(modifiedData);
+  };
+
+  const copyToClipboardCommand = () => {
+    const modifiedData = buildCommand;
+    navigator.clipboard.writeText(modifiedData);
+  };
+
+  const copyToClipboardRunCommand = () => {
+    const modifiedData = singularityCommands.join("\n").toString();
+    navigator.clipboard.writeText(modifiedData);
+  };
+
+  const downloadLogs = () => {
+    const modifiedData = dockerIntelMPIFile.toString().replaceAll(",", "\n");
+    JSON.stringify(modifiedData);
+    const txtFile = new Blob([modifiedData], { type: "text/file" });
+    const url = URL.createObjectURL(txtFile);
+    const link = document.createElement("a");
+    link.download = dockerfilename;
+    link.href = url;
+    link.click();
+    link.remove();
+  };
+
+  const downloadDocker = () => {
+    const modifiedData = finaldockerfile.toString().replaceAll(",", "\n");
+    JSON.stringify(modifiedData);
+    const txtFile = new Blob([modifiedData], { type: "text/file" });
+    const url = URL.createObjectURL(txtFile);
+    const link = document.createElement("a");
+    link.download = finalDockerfilename;
+    link.href = url;
+    link.click();
+    link.remove();
+  };
+
+  const copyToClipboardDocker = () => {
+    const modifiedData = finaldockerfile.join("\n").toString();
+    navigator.clipboard.writeText(modifiedData);
+  };
 
   return (
     <Box
@@ -279,7 +318,320 @@ export const DockerFileView = (e) => {
         </Anchor>{" "}
         in your directory where dockerfile exists to test the image
       </Text>
-      {formValues.mpi_type === "IntelMPI" && (
+    {/* Console View Data Style */}
+    <Box>
+      <Box>
+        <Box
+          direction="row"
+          style={{
+            maxHeight: "40px",
+            minHeight: "40px",
+            backgroundColor: "grey",
+            minWidth: "550px",
+            justifyContent: "space-between",
+            borderBottom: "1px solid white",
+          }}
+        >
+          <h5
+            style={{
+              color: "white",
+              fontSize: "16px",
+              margin: "10px 15px 4px",
+              fontWeight: "bold",
+            }}
+          >
+            Base Image Dockerfile
+          </h5>
+          <Box direction="row">
+            <Button
+              icon={<Download color="white" />}
+              onClick={downloadLogs}
+              tip={"Download"}
+            />
+            <Button
+              icon={<Copy color="white" />}
+              onClick={copyToClipboard}
+              tip={"Copy"}
+            />
+          </Box>
+        </Box>
+        <Box
+          width="100%"
+          border="all"
+          style={{
+            maxHeight: "350px",
+            overflow: "auto",
+            backgroundColor: "black",
+            minWidth: "550px",
+            zIndex: "1",
+          }}
+          id="dockerfile"
+        >
+          <Text
+            style={{
+              color: "white",
+              fontSize: "14px",
+              margin: "3px 15px 2px",
+            }}
+          >
+            <Editor
+              value={code}
+              // onValueChange={code => setCode(code)}
+              highlight={(code) => highlight(code, languages.dockerfile)}
+              padding={10}
+              style={{
+                fontFamily: '"Fira code", "Fira Mono", monospace',
+                fontSize: 12,
+              }}
+            />
+          </Text>
+        </Box>
+      </Box>
+
+      <Box direction="column" margin={{ top: "20px" }}>
+        <Box
+          direction="row"
+          style={{
+            backgroundColor: "grey",
+            minWidth: "550px",
+            height: "40px",
+            justifyContent: "space-between",
+            borderBottom: "1px solid white",
+            zIndex: "1",
+          }}
+        >
+          <Box
+            style={{
+              color: "white",
+              fontSize: "16px",
+              margin: "10px 15px 4px",
+              fontWeight: "bold",
+            }}
+          >
+            {"1) Build Base Image"}
+          </Box>
+          <Box direction="row">
+            <Button
+              icon={<Copy color="white" />}
+              onClick={copyToClipboardCommand}
+              tip={"Copy"}
+            />
+          </Box>
+        </Box>
+        <Box
+          width="100%"
+          border="all"
+          style={{
+            overflow: "auto",
+            maxHeight: "60px",
+            backgroundColor: "black",
+            minWidth: "550px",
+          }}
+          id="dockerfile"
+        >
+          <Text
+            id="buildcommand"
+            style={{
+              color: "white",
+              fontSize: "14px",
+              margin: "3px 15px 2px",
+            }}
+          >
+            {buildCommand}
+          </Text>
+        </Box>
+      </Box>
+
+      <Box margin={{ top: "20px" }}>
+        <Box
+          direction="row"
+          style={{
+            maxHeight: "40px",
+            minHeight: "40px",
+            backgroundColor: "grey",
+            minWidth: "550px",
+            justifyContent: "space-between",
+            borderBottom: "1px solid white",
+          }}
+        >
+          <h5
+            style={{
+              color: "white",
+              fontSize: "16px",
+              margin: "10px 15px 4px",
+              fontWeight: "bold",
+            }}
+          >
+            {"2) Create Application Dockerfile"}
+          </h5>
+          <Box direction="row">
+            <Button
+              icon={<Download color="white" />}
+              onClick={downloadDocker}
+              tip={"Download"}
+            />
+            <Button
+              icon={<Copy color="white" />}
+              onClick={copyToClipboardDocker}
+              tip={"Copy"}
+            />
+          </Box>
+        </Box>
+        <Box
+          width="100%"
+          border="all"
+          style={{
+            maxHeight: "350px",
+            overflow: "auto",
+            backgroundColor: "black",
+            minWidth: "550px",
+            zIndex: "1",
+          }}
+          id="dockerfile"
+        >
+          <Text
+            style={{
+              color: "white",
+              fontSize: "14px",
+              margin: "3px 15px 2px",
+            }}
+          >
+            <Editor
+              value={finalfile}
+              // onValueChange={code => setCode(code)}
+              highlight={(code) => highlight(code, languages.dockerfile)}
+              padding={10}
+              style={{
+                fontFamily: '"Fira code", "Fira Mono", monospace',
+                fontSize: 12,
+              }}
+            />
+          </Text>
+        </Box>
+      </Box>
+
+      <Box direction="column" margin={{ top: "20px" }}>
+        <Box
+          direction="row"
+          style={{
+            backgroundColor: "grey",
+            minWidth: "550px",
+            height: "40px",
+            justifyContent: "space-between",
+            borderBottom: "1px solid white",
+            zIndex: "1",
+          }}
+        >
+          <Box
+            style={{
+              color: "white",
+              fontSize: "16px",
+              margin: "10px 15px 4px",
+              fontWeight: "bold",
+            }}
+          >
+            {"3) Build Application Docker Image"}
+          </Box>
+          <Box direction="row">
+            <Button
+              icon={<Copy color="white" />}
+              onClick={copyToClipboardCommand}
+              tip={"Copy"}
+            />
+          </Box>
+        </Box>
+
+        <Box
+          width="100%"
+          border="all"
+          style={{
+            overflow: "auto",
+            maxHeight: "60px",
+            backgroundColor: "black",
+            minWidth: "550px",
+          }}
+          id="dockerfile"
+        >
+          <Text
+            id="buildcommand"
+            style={{
+              color: "white",
+              fontSize: "14px",
+              margin: "3px 15px 2px",
+            }}
+          >
+            {dockerBuildAppCommand}
+          </Text>
+        </Box>
+      </Box>
+
+      <Box direction="column" margin={{ top: "20px" }}>
+        <Box
+          direction="row"
+          style={{
+            height: "40px",
+            // maxHeight: "40px",
+            // minHeight: "40px",
+            backgroundColor: "grey",
+            minWidth: "550px",
+            justifyContent: "space-between",
+            borderBottom: "1px solid white",
+          }}
+        >
+          <Box
+            style={{
+              color: "white",
+              fontSize: "16px",
+              margin: "10px 15px 4px",
+              fontWeight: "bold",
+            }}
+          >
+            {"4) Singularity container build & run commands (Optional)"}
+          </Box>
+          <Box direction="row">
+            <Button
+              icon={<Copy color="white" />}
+              onClick={copyToClipboardRunCommand}
+              tip={"Copy"}
+            />
+          </Box>
+        </Box>
+        <Box
+          width="100%"
+          border="all"
+          style={{
+            maxHeight: "250px",
+            overflow: "auto",
+            minHeight: "6px",
+            backgroundColor: "black",
+            minWidth: "550px",
+          }}
+          id="dockerfile"
+        >
+          <Text
+            id="singularitycommands"
+            style={{
+              color: "white",
+              fontSize: "14px",
+              margin: "3px 15px 2px",
+            }}
+          >
+            {singularityCommands.map((elem, index) => {
+              return <Box key={index}>{elem}</Box>;
+            })}
+          </Text>
+        </Box>
+      </Box>
+      {/* <Box margin={{ top: "30px" }} align="center">
+        <Button
+          primary
+          label="Create Image and Push to Dockerhub"
+          onClick={navigateToForm}
+        />
+      </Box> */}
+    </Box>
+
+      {/* {formValues.mpi_type === "IntelMPI" && (
         <ConsoleView
           dockerfile={dockerIntelMPIFile}
           dockerfilename={dockerfilename}
@@ -322,7 +674,8 @@ export const DockerFileView = (e) => {
           imagetag={formValues.imagetag}
           dockerpushbuildcommand={dockerPushBuildCommand}
         ></ConsoleView>
-      )}
+      )} */}
+
     </Box>
   );
 };

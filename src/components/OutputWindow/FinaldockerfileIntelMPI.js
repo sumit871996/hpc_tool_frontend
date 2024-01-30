@@ -5,7 +5,7 @@ import ConsoleView from "./ConsoleView";
 
 const FinaldockerfileIntelMPI = (props) => {
   const location = useLocation();
-  const inputdata = location.state.data;
+  const inputdata = location.state.data.value;
   const elementsArray = location.state.data.dockercommands.split("\n");
   const finaldockerfile = [
     `FROM ${inputdata.imagename}:${inputdata.imagetag}`,

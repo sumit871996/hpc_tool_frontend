@@ -12,6 +12,7 @@ import HomePageView from "../views/HomePageView";
 import { ContainerizationFormView } from "../views/multistepform/ContainerizationFormView";
 import { DockerFileView } from "../views/multistepform/DockerFileView";
 import { MultiStepFormView } from "../views/multistepform/MultiStepFormView";
+import { PushToHubForm } from "../views/multistepform/PushToHubForm";
 
 const AppRouting = () => {
   return (
@@ -35,6 +36,7 @@ const AppRouting = () => {
       <Route path="/formPage" element={<ContainerizationFormView/>} />
       <Route path="/displayDockerFile" element={<DockerFileView/>}/>
       <Route path="/multistage" element={<MultiStepFormView/>}/>
+      <Route path="/dockerlogin" element={<PushToHubForm />}/>
     </Routes>
   );
 };
