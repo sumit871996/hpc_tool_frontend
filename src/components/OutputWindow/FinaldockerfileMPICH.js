@@ -93,25 +93,21 @@ const FinaldockerfileMPICH = (props) => {
         in your directory where dockerfile exists
       </Text>
       <ConsoleView
+        buildcommand={buildappcommand}
+        dockerfile={dockerfile}
+        dockerfilename={finaldockerfilename}
         finaldockerfile={finaldockerfile}
         finaldockerfilename={finaldockerfilename}
-        singularitycommands={singularitycommands}
-
-        
-        buildcommand={buildappcommand}
         buildappcommand={buildappcommand}
-        dockerfile={dockerfile}
-        dockerfilename={dockerfilename}
-        imagename={inputdata.imagename}
-        imagetag={inputdata.imagetag}
-        dockerpushbuildcommand={dockerpushbuildcommand}
-
-
-        baseimagename={props.baseimagename}
-        baseimagetag={props.baseimagetag}
-        basedockerfile={props.basedockerfile}
-        basedockerbuildcommand={props.basedockerbuildcommand}
-        basedockerfilename={props.basedockerfilename}
+        singularitycommands={singularitycommands}
+        imagename={inputdata.finalimagename}
+        imagetag={inputdata.finalimagetag}
+        dockerpushbuildcommand={buildappcommand}
+        baseimagename={inputdata.imagename}
+        baseimagetag={inputdata.imagetag}
+        basedockerfile={dockerfile}
+        basedockerbuildcommand={buildcommand}
+        basedockerfilename={dockerfilename}
       ></ConsoleView>
     </Box>
   );

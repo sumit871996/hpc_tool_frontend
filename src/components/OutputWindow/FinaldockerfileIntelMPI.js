@@ -88,21 +88,21 @@ const FinaldockerfileIntelMPI = (props) => {
         in your directory where dockerfile exists to test the image
       </Text>
       <ConsoleView
+        buildcommand={buildappcommand}
         dockerfile={dockerfile}
-        dockerfilename={dockerfilename}
+        dockerfilename={finaldockerfilename}
         finaldockerfile={finaldockerfile}
         finaldockerfilename={finaldockerfilename}
-        buildcommand={buildcommand}
         buildappcommand={buildappcommand}
         singularitycommands={singularitycommands}
-        imagename={inputdata.imagename}
-        imagetag={inputdata.imagetag}
-        dockerpushbuildcommand={dockerpushbuildcommand}
-        baseimagename={props.baseimagename}
-        baseimagetag={props.baseimagetag}
-        basedockerfile={props.basedockerfile}
-        basedockerbuildcommand={props.basedockerbuildcommand}
-        basedockerfilename={props.basedockerfilename}
+        imagename={inputdata.finalimagename}
+        imagetag={inputdata.finalimagetag}
+        dockerpushbuildcommand={buildappcommand}
+        baseimagename={inputdata.imagename}
+        baseimagetag={inputdata.imagetag}
+        basedockerfile={dockerfile}
+        basedockerbuildcommand={buildcommand}
+        basedockerfilename={dockerfilename}
       ></ConsoleView>
     </Box>
   );

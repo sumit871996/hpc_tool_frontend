@@ -21,7 +21,7 @@ const FinaldockerfileMPICH = (props) => {
     "   ",
     "# Install packages",
     "RUN apk update \\",
-    "    && apk add --no-cache build-base libatomic gfortran git valgrind perl linux-headers openssh",
+    "&& apk add --no-cache build-base libatomic gfortran git valgrind perl linux-headers openssh",
     "   ",
     "#### INSTALL OPENMPI ####",
     "# Source is available at https://www.open-mpi.org/software/ompi/",
@@ -89,7 +89,7 @@ const FinaldockerfileMPICH = (props) => {
       <ConsoleView
         buildcommand={buildappcommand}
         dockerfile={dockerfile}
-        dockerfilename={dockerfilename}
+        dockerfilename={finaldockerfilename}
         finaldockerfile={finaldockerfile}
         finaldockerfilename={finaldockerfilename}
         buildappcommand={buildappcommand}

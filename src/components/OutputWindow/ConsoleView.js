@@ -81,7 +81,7 @@ const ConsoleView = (props) => {
   return (
     <Box>
       <Box>
-        {JSON.stringify(props)}
+        {/* {JSON.stringify(props)} */}
         <Box
           direction="row"
           style={{
