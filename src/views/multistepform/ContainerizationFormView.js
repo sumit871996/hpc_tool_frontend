@@ -21,8 +21,21 @@ import { OpenMPIForm } from "../../components/MPIForms/OpenMPIForm";
 import { defaultFormValues } from "./defaultValues";
 import { WizardContext } from "./WizardContext";
 
+
 export const ContainerizationFormView = () => {
-  const {formValues, setFormValues,dockerCommands,setDockerCommands} = useContext(WizardContext);
+  const {formValues, setFormValues,dockerCommands,setDockerCommands, 
+    errorMPIVersion,setErrorMPIVersion,
+    errorICCVersion, setErrorICCVersion,
+    errorTBBVersion,setErrorTBBVersion,
+
+    errorUser,setErrorUser,
+    errorWorkDir,setErrorWorkDir,
+
+    errorImageName,setErrorImageName,
+    errorImageTag, setErrorImageTag,
+    errorAIN,setErrorAIN,
+    errorAIT,setErrorAIT,
+    errorASIN, setErrorASIN} = useContext(WizardContext);
   const navigate = useNavigate();
   // const [formValues,setFormValues]=useState(defaultFormValues);
   const [finalfile, setFinalFile] = useState("");
@@ -223,9 +236,10 @@ export const ContainerizationFormView = () => {
   };
 
   return (
-    <Box fill>
+    <Box fill gap="medium">
       <Box align="center" gap="medium">
-        <label>MPI Selection</label>
+        <Header>
+          <Heading weight={"bold"} level={3}>MPI Selection</Heading></Header>
         <Select
           required
           id="mpi_type"
@@ -235,10 +249,6 @@ export const ContainerizationFormView = () => {
           onChange={handleFormValueChange}
         />
       </Box>
-
-      <Header>
-        <Heading>Form Page</Heading>
-      </Header>
       <Box pad={"small"} fill align="center">
         {/* <Form onSubmit={handleSubmit}> */}
           <Box gap="medium">
@@ -318,6 +328,7 @@ export const ContainerizationFormView = () => {
                       name="openMPI_Major_Version"
                       label="OpenMPI Major Version"
                       required={formValues.mpi_type === "OpenMPI"}
+                      // error={"This Field is required"}
                     >
                       <Select
                         id="openMPI_Major_Version"
@@ -509,6 +520,7 @@ export const ContainerizationFormView = () => {
                 name="finalimagename"
                 label="Application Image Name*"
                 required
+                
               >
                 <TextInput
                   required
@@ -538,6 +550,7 @@ export const ContainerizationFormView = () => {
                 htmlFor="singularityimagename"
                 name="singularityimagename"
                 label="Application Singularity Image Name"
+                
                 required
               >
                 <TextInput

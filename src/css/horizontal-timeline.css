@@ -1,0 +1,145 @@
+/* @font-face {
+    font-family: "metrichpe";
+    src: url("MetricHPEXS-Bold.woff") format("woff");
+    src: url("MetricHPEXSMedium-Regular.woff") format("woff"),
+    }
+
+    @font-face {
+      font-family: "metrichperegular";
+      src: url("MetricHPEXS-Regular.woff") format("woff"),
+      } */
+
+*{
+  padding:0px;
+  margin:0px;
+  box-sizing:border-box;
+}
+
+:root {
+  --border: #d1d1d1;
+  --active: #17EBA0;
+  --text: #171616;
+  --white: #fff;
+  --inactive:#c9c9c9;
+}
+
+/* body{
+  display:flex;
+  justify-content:center;
+  align-items:center;
+} */
+
+.timeline{
+  max-width: 100%;
+  width: 100%;
+  color:var(--text);
+  padding:30px 40px;
+  border-radius: 6px;
+  position: relative;
+}
+
+ul{
+    list-style-type:none;
+}
+
+.timelinecheck{
+	display: flex;
+	justify-content: space-between;
+  align-items: center;
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 43%;
+  transform: translateY(-31%);
+}
+
+.line-default {
+    background: var(--border);
+    position: absolute;
+    display: inline;
+    top: 21px;
+    left: 50%;
+    transform: translate(-50%);
+    /* max-width: 42rem; */
+    width: 88%;
+    height: 2px;
+    z-index: 0;
+}
+
+.line-active-full {
+    background: var(--active);
+    position: absolute;
+    display: inline;
+    top: 21px;
+    left: 50%;
+    transform: translate(-50%);
+    max-width: 100rem;
+    width: 100%;
+    height: 2px;
+    z-index: 0;
+    
+}
+
+.line-active {
+    background: var(--active);
+    position: absolute;
+    display: inline;
+    top: 21px;
+    left: 2rem;
+    max-width: 21rem;
+    width: 100%;
+    height: 2px;
+    z-index: 0;
+}
+
+.timeline ul li{
+    cursor: pointer;
+	  display: inline-block
+}
+.timeline ul li p{
+    /* font-family: metrichpe; */
+    font-size: 14px;
+    font-weight:400;
+}
+
+
+.content ul li{
+    /* font-family: metrichpe; */
+    font-weight: medium;
+    font-size: 16px;
+    padding: 20px 20px 10px 40px;
+    color: var(--inactive);
+}
+
+.content ul li.liactive{
+    /* font-family: metrichpe; */
+    font-weight: medium;
+    font-size: 16px;
+    color: var(--text)
+}
+
+.content ul{
+  padding:5px 0px 0px 0px;
+  font-size:15px;
+}
+.checkCircle{
+    background: var(--white);
+    border-radius: 50%;
+    border: 2px solid var(--border);
+    width: 20px;
+    height: 20px;
+	margin: auto;
+}
+
+.checkActive{
+  background: var(--active);
+  border-radius: 50%;
+  border: 2px solid var(--active);
+  width: 20px;
+  height: 20px;
+  margin: auto;
+}
+
+.textdata{
+  font-family: Metric !important;
+}
