@@ -7,11 +7,22 @@ import "../../css/horizontal-timeline.css";
 export const StepContent = ({ onSubmit }) => {
   const size = useContext(ResponsiveContext);
 
-  const { activeIndex, setActiveIndex, id, steps, formValues, setFormValues } =
+  const { activeIndex, setActiveIndex, id, steps, formValues, setFormValues ,
+    errorMPIVersion,setErrorMPIVersion,
+    errorICCVersion, setErrorICCVersion,
+    errorTBBVersion,setErrorTBBVersion,
+
+    errorUser,setErrorUser,
+    errorWorkDir,setErrorWorkDir,
+
+    errorImageName,setErrorImageName,
+    errorImageTag, setErrorImageTag,
+    errorAIN,setErrorAIN,
+    errorAIT,setErrorAIT,
+    errorASIN, setErrorASIN } =
     useContext(WizardContext);
 
   const handleSubmit = (event) => {
-    console.log("Check Validation")
     if (activeIndex < steps.length - 1) {
       setActiveIndex(activeIndex + 1);
     } else if (onSubmit) {
@@ -55,7 +66,9 @@ export const StepContent = ({ onSubmit }) => {
       <Box>
         <StepHeader />
         <Box pad={"medium"}>
-          <Form id={`${id}-form`} onSubmit={handleSubmit}>
+          <Form id={`${id}-form`} onSubmit={handleSubmit} messages={{
+                        required: "This is a required field.",
+                      }}>
             {steps[activeIndex].input}
           </Form>
         </Box>

@@ -37,6 +37,10 @@ export const ContainerizationFormView = () => {
     errorAIT,setErrorAIT,
     errorASIN, setErrorASIN} = useContext(WizardContext);
   const navigate = useNavigate();
+
+  useEffect(()=>{
+
+  },[errorAIN])
   // const [formValues,setFormValues]=useState(defaultFormValues);
   const [finalfile, setFinalFile] = useState("");
   const [selectedMajorVersion, setSelectedMajorVersion] = useState("v4.0")
@@ -388,7 +392,6 @@ export const ContainerizationFormView = () => {
                 <Box>
                   <Box gap="medium">
                     <FormField
-                      // required
                       htmlFor="mpi_ch_Version"
                       name="mpi_ch_Version"
                       label="MPICH Version"
@@ -438,26 +441,26 @@ export const ContainerizationFormView = () => {
 
               {formValues.mpi_type !== "IntelMPI" && (
                 <Box gap="medium">
-                  <FormField required htmlFor="user" name="user" label="User">
+                  <FormField 
+                  htmlFor="user" name="user" label="User" required={formValues.mpi_type !== "intelMPI"} >
                     <TextInput
                       id="user"
                       name="user"
                       placeholder="Enter a user name"
-                      required={formValues.mpi_type !== "intelMPI"} 
+                      
                       onChange={handleFormValueChange}
                     />
                   </FormField>
                   <FormField
-                    required
                     htmlFor="workdir"
                     name="workdir"
                     label="Working Directory"
+                    required={formValues.mpi_type !== "intelMPI"}
                   >
                     <TextInput
                       id="workdir"
                       name="workdir"
                       placeholder=" Please Enter "
-                      required={formValues.mpi_type !== "intelMPI"}
                       onChange={handleFormValueChange}
                     />
                   </FormField>
@@ -520,10 +523,9 @@ export const ContainerizationFormView = () => {
                 name="finalimagename"
                 label="Application Image Name*"
                 required
-                
+                // error={errorAIN ?"This Field is required":""}
               >
                 <TextInput
-                  required
                   id="finalimagename"
                   name="finalimagename"
                   placeholder="Please Enter Application Image Name"
@@ -535,10 +537,12 @@ export const ContainerizationFormView = () => {
                 htmlFor="finalimagetag"
                 name="finalimagetag"
                 label="Application Image Tag"
+                messages={{
+                  required: "This is a required field.",
+                }}
                 required
               >
                 <TextInput
-                  required
                   id="finalimagetag"
                   name="finalimagetag"
                   placeholder="Please Enter Application Image Tag"
@@ -550,11 +554,9 @@ export const ContainerizationFormView = () => {
                 htmlFor="singularityimagename"
                 name="singularityimagename"
                 label="Application Singularity Image Name"
-                
                 required
               >
                 <TextInput
-                  required
                   id="singularityimagename"
                   name="singularityimagename"
                   placeholder="Please Enter Sigularity Image Name"
