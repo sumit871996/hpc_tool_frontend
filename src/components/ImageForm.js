@@ -51,6 +51,7 @@ export const ImageForm = (props) => {
     formData.append("file", fileZip);
 
     console.log(data);
+    console.log(data);
 
     axios
       .post("http://localhost:8081/home/buildandpush", formData)
