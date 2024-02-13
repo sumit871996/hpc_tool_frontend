@@ -57,7 +57,7 @@ export const ImageForm = (props) => {
       .then((response) => {
         console.log(response);
         // Handle the immediate response and extract the build ID
-        const buildId = response.data;
+        const buildId = response.data.buildId;
         sessionStorage.setItem("buildId", buildId);
         console.log(`Immediate Jenkins Build ID: ${buildId}`);
 
