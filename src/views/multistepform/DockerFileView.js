@@ -9,8 +9,6 @@ import "../../css//ConsoleView.css";
 export const DockerFileView = (e) => {
   const {
     formValues,
-    setFormValues,
-    setDockerCommands,
     dockerCommands,
     dockerIntelMPIFile,
     dockerMPICHFile,
@@ -81,6 +79,7 @@ export const DockerFileView = (e) => {
         `singularity build ${formValues.singularityimagename}.sif docker-daemon://${formValues.finalimagename}:${formValues.finalimagetag}`,
         `singularity shell ${formValues.singularityimagename}.sif`,
       ]);
+      setDockerFileName("DockerfileMPICH");
     } else if (data.mpi_type === "OpenMPI") {
       docfilename = "DockerfileOpenMPI";
       fdockerfilename = `DockerFile${formValues.finalimagename}`;
@@ -97,6 +96,7 @@ export const DockerFileView = (e) => {
         `singularity build ${formValues.singularityimagename}.sif docker-daemon://${formValues.finalimagename}:${formValues.finalimagetag}`,
         `singularity shell ${formValues.singularityimagename}.sif`,
       ]);
+      setDockerFileName("DockerfileOpenMPI");
     }
   };
 

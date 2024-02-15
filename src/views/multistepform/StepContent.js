@@ -59,7 +59,14 @@ export const StepContent = ({ onSubmit }) => {
                 ></div>
                 <p>Upload Docker Image</p>
               </li>
+              <li>
+                <div
+                  className={activeIndex >= 3 ? "checkActive" : "checkCircle"}
+                ></div>
+                <p>Review</p>
+              </li>
             </ul>
+            
           </div>
         </Box>
       </Box>

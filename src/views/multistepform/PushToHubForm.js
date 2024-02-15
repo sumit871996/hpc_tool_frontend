@@ -18,7 +18,7 @@ export const PushToHubForm = () => {
   const [notificationMessage,setNotificationMessage]=useState("");
   const [notificationStatus,setNotificationStatus]=useState("");
   const [showNotification,setShowNotification]=useState(false);
-  const { formValues, setFormValues, setDockerCommands, dockerCommands,dockerIntelMPIFile,dockerMPICHFile,dockerOpenMPIFile,buildcommand,dockerfilename,baseimagename,baseimagetag,basedockerfile,basebuildcommand,basedockerfilename  } =
+  const { formValues, setFormValues, setDockerCommands, dockerCommands,dockerIntelMPIFile,dockerMPICHFile,dockerOpenMPIFile,buildCommand,dockerfilename,baseimagename,baseimagetag,basedockerfile,basebuildcommand,basedockerfilename,dockerUser, setDockerUser,dockerPass,setDockerPass,buildId, setBuildId} =
     useContext(WizardContext); 
   const [filename, setFilename] = useState("");
   const [dockerData, setDockerData] = useState({
@@ -38,6 +38,8 @@ export const PushToHubForm = () => {
     e.preventDefault();
     console.log("Upload Image")
     let data;
+    setDockerUser(dockerData.docker_username)
+    setDockerPass(dockerData.docker_password)
     if (formValues.mpi_type == "IntelMPI") {
       data = {
         imagename: formValues.imagename,
@@ -45,7 +47,7 @@ export const PushToHubForm = () => {
         dockeruser: dockerData.docker_username,
         dockerpassword: dockerData.docker_password,
         dockefile: dockerIntelMPIFile,
-        buildcommand:buildcommand,
+        buildcommand:buildCommand,
         dockerfilename:dockerfilename,
 
         baseimagename:baseimagename,
@@ -62,7 +64,7 @@ export const PushToHubForm = () => {
         dockeruser: dockerData.docker_username,
         dockerpassword: dockerData.docker_password,
         dockefile: dockerMPICHFile,
-        buildcommand:buildcommand,
+        buildcommand:buildCommand,
         dockerfilename:dockerfilename,
 
         baseimagename:baseimagename,
@@ -79,7 +81,7 @@ export const PushToHubForm = () => {
         dockeruser: dockerData.docker_username,
         dockerpassword: dockerData.docker_password,
         dockefile: dockerOpenMPIFile,
-        buildcommand:buildcommand,
+        buildcommand:buildCommand,
         dockerfilename:dockerfilename,
 
         baseimagename:baseimagename,
@@ -117,6 +119,7 @@ export const PushToHubForm = () => {
       .post("http://localhost:8081/home/buildandpush",formData)
       .then((res) => {
         console.log(res.data)
+        setBuildId(res.data.buildId);
         setNotificationStatus("normal");
         setNotificationTitle("Upload To Docker");
         setNotificationMessage("Image is uploaded to docker successfully")

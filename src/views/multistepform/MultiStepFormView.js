@@ -10,6 +10,7 @@ import { ContainerizationFormView } from "./ContainerizationFormView";
 import { DockerFileView } from "./DockerFileView";
 import { defaultFormValues } from "./defaultValues";
 import { PushToHubForm } from "./PushToHubForm";
+import ReviewView from "./ReviewView";
 
 export const steps = [
     {
@@ -27,6 +28,11 @@ export const steps = [
       input: <PushToHubForm/>,
       title: "Upload to Docker",
     },
+    {
+      description: "Review the details of build details",
+      input: <ReviewView/>,
+      title: "Review Details"
+    }
   ];
 
 export const MultiStepFormView =()=>{
@@ -218,8 +224,6 @@ export const MultiStepFormView =()=>{
     const [errorICCVersion, setErrorICCVersion]=useState(false);
     const [errorTBBVersion,setErrorTBBVersion]=useState(false);
 
-
-    
     const [errorUser,setErrorUser] = useState(false)
     const [errorWorkDir,setErrorWorkDir]=useState(false);
 
@@ -229,6 +233,10 @@ export const MultiStepFormView =()=>{
     const [errorAIN,setErrorAIN]=useState(false);
     const [errorAIT,setErrorAIT]=useState(false);
     const [errorASIN, setErrorASIN]=useState(false);
+
+    const [dockerUser, setDockerUser]= useState("");
+    const [dockerPass, setDockerPass]= useState("");
+    const [buildId, setBuildId]= useState(0);
 
     useEffect(()=>{
         setActiveStep(activeIndex+1);
@@ -279,7 +287,10 @@ export const MultiStepFormView =()=>{
             errorImageTag, setErrorImageTag,
             errorAIN,setErrorAIN,
             errorAIT,setErrorAIT,
-            errorASIN, setErrorASIN
+            errorASIN, setErrorASIN,
+            dockerUser, setDockerUser,
+            dockerPass, setDockerPass,
+            buildId, setBuildId,
         }),[activeIndex,activeStep,formValues]
     )
 
@@ -294,13 +305,6 @@ export const MultiStepFormView =()=>{
                 <StepContent onSubmit={(e) => handleRequest(e)}/>
                 <StepFooter/>
             </Box>
-            {/* <Notification
-            toast
-            title=""
-            message=""
-            status=""
-            time={5000}
-            /> */}
         </WizardContext.Provider>
 
        
