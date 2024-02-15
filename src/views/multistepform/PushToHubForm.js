@@ -18,7 +18,7 @@ export const PushToHubForm = () => {
   const [notificationMessage,setNotificationMessage]=useState("");
   const [notificationStatus,setNotificationStatus]=useState("");
   const [showNotification,setShowNotification]=useState(false);
-  const { formValues, setFormValues, setDockerCommands, dockerCommands,dockerIntelMPIFile,dockerMPICHFile,dockerOpenMPIFile,buildCommand,dockerfilename,baseimagename,baseimagetag,basebuildcommand,basedockerfilename,dockerUser, setDockerUser,dockerPass,setDockerPass,buildId, setBuildId,finalDockerfile,setDockerfile,} =
+  const { formValues, setFormValues, setDockerCommands, dockerCommands,dockerIntelMPIFile,dockerMPICHFile,dockerOpenMPIFile,buildCommand,dockerfilename,baseimagename,baseimagetag,basebuildcommand,basedockerfilename,dockerUser, setDockerUser,dockerPass,setDockerPass,buildId, setBuildId,finalDockerfile,setDockerfile,dockerBuildAppCommand, setDockerBuildAppCommand} =
     useContext(WizardContext); 
   const [filename, setFilename] = useState("");
   const [dockerData, setDockerData] = useState({
@@ -46,15 +46,15 @@ export const PushToHubForm = () => {
         imagetag: formValues.finalimagetag,
         dockeruser: dockerData.docker_username,
         dockerpassword: dockerData.docker_password,
-        dockefile: finalDockerfile,
-        buildcommand:buildCommand,
+        dockefile: dockerfilename,
+        buildcommand:dockerBuildAppCommand,
         dockerfilename:`DockerFile${formValues.finalimagename}`,
 
         baseimagename:formValues.imagename,
         baseimagetag:formValues.imagetag,
         basedockerfile:dockerIntelMPIFile,
-        basebuildcommand:basebuildcommand,
-        basedockerfilename:dockerfilename
+        basebuildcommand:buildCommand,
+        basedockerfilename:basedockerfilename
       };
     }
     else if (formValues.mpi_type == "MPICH") {
@@ -63,15 +63,15 @@ export const PushToHubForm = () => {
         imagetag: formValues.finalimagetag,
         dockeruser: dockerData.docker_username,
         dockerpassword: dockerData.docker_password,
-        dockefile: finalDockerfile,
-        buildcommand:buildCommand,
+        dockefile: dockerfilename,
+        buildcommand:dockerBuildAppCommand,
         dockerfilename:`DockerFile${formValues.finalimagename}`,
 
         baseimagename:formValues.imagename,
         baseimagetag:formValues.imagetag,
         basedockerfile:dockerMPICHFile,
-        basebuildcommand:basebuildcommand,
-        basedockerfilename:dockerfilename
+        basebuildcommand:buildCommand,
+        basedockerfilename:basedockerfilename
       };
     }
     else if (formValues.mpi_type == "OpenMPI") {
@@ -80,41 +80,23 @@ export const PushToHubForm = () => {
         imagetag: formValues.finalimagetag,
         dockeruser: dockerData.docker_username,
         dockerpassword: dockerData.docker_password,
-        dockefile: finalDockerfile,
-        buildcommand:buildCommand,
+        dockefile: dockerfilename,
+        buildcommand:dockerBuildAppCommand,
         dockerfilename:`DockerFile${formValues.finalimagename}`,
 
         baseimagename:formValues.imagename,
         baseimagetag:formValues.imagetag,
         basedockerfile:dockerOpenMPIFile,
-        basebuildcommand:basebuildcommand,
-        basedockerfilename:dockerfilename
+        basebuildcommand:buildCommand,
+        basedockerfilename:basedockerfilename
       };
-    }
-
-    const pdata={
-      dockerhubpassword:dockerData.docker_password,
-      dockerhubusername:dockerData.docker_username,
-      // zipFile:dockerData.zipFile
-    }
-
-    const finaldata={
-      ...data,
-      ...pdata
     }
 
      const formData=new FormData();
      formData.append("inputData",JSON.stringify(data));
      formData.append("file",dockerData.zipFile);
 
-    // const Sfinal= JSON.stringify(finaldata);
-    // console.log(Sfinal)
-    // const ndata={
-    //   inputData:Sfinal,
-    //   file:dockerData.zipFile
-    // }
-    console.log(data)
-    console.log(pdata)
+   
     axios
       .post("http://localhost:8081/home/buildandpush",formData)
       .then((res) => {

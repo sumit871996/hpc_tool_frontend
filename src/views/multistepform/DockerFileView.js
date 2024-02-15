@@ -18,6 +18,8 @@ export const DockerFileView = (e) => {
     dockerfilename,
     setDockerFileName,
     finalDockerfile,setDockerfile,
+    basedockerfilename,setBasedockerfilename,
+    dockerBuildAppCommand, setDockerBuildAppCommand
   } = useContext(WizardContext);
   const docker_commands = dockerCommands;
   const elementsArray = docker_commands.split("\n");
@@ -36,7 +38,7 @@ export const DockerFileView = (e) => {
   // const [dockerfilename, setDockerFileName] = useState();
   const [finalDockerfilename, setFinalDockerfilename] = useState();
  const [dockerPushBuildCommand, setDockerPushBuildCommand] = useState();
-  const [dockerBuildAppCommand, setDockerBuildAppCommand] = useState();
+  
   // const [buildCommand, setBuildCommand] = useState();
   const [singularityCommands, setSingularityCommands] = useState([]);
   const [intelCode, setIntelCode] = React.useState(dockerIntelMPIFile.join("\n"));
@@ -47,9 +49,8 @@ export const DockerFileView = (e) => {
     let docfilename;
     let fdockerfilename;
     if (formValues.mpi_type == "IntelMPI") {
-      console.log(`Inside Intel`);
-
       docfilename = "DockerfileIntelMPI";
+      setBasedockerfilename(docfilename);
       fdockerfilename = `DockerFile${formValues.finalimagename}`;
       setDockerPushBuildCommand(
         `docker image build -t ${formValues.imagename}:${formValues.imagetag} --build-arg MPI_VERSION=${formValues.intel_mpi_devel_version} --build-arg ICC_VERSION="${formValues.intel_icc_version}" --build-arg MKL_VERSION=${formValues.intel_mkl_version} --build-arg TBB_VERSION=${formValues.intel_tbb_version}`
@@ -68,6 +69,7 @@ export const DockerFileView = (e) => {
       ]);
     } else if (data.mpi_type === "MPICH") {
       docfilename = "DockerfileMPICH";
+      setBasedockerfilename(docfilename);
       fdockerfilename = `DockerFile${formValues.finalimagename}`;
       setDockerPushBuildCommand(
         `docker image build -t ${formValues.imagename}:${formValues.imagetag} --build-arg MPI_VERSION=${formValues.mpich_Version} --build-arg MPI_CONFIGURE_OPTIONS="${formValues.mpi_configure_options}" --build-arg USER=${formValues.user} --build-arg WORKDIR=${formValues.workdir}`
@@ -85,6 +87,7 @@ export const DockerFileView = (e) => {
       setDockerFileName("DockerfileMPICH");
     } else if (data.mpi_type === "OpenMPI") {
       docfilename = "DockerfileOpenMPI";
+      setBasedockerfilename(docfilename);
       fdockerfilename = `DockerFile${formValues.finalimagename}`;
       setDockerPushBuildCommand(
         `docker image build -t ${formValues.imagename}:${formValues.imagetag} --build-arg MPI_MAJOR_VERSION=${formValues.openMPI_Major_Version}  --build-arg MPI_VERSION=${formValues.openMPI_Version} --build-arg MPI_CONFIGURE_OPTIONS="${formValues.mpi_configure_options}" --build-arg MPI_MAKE_OPTIONS=${formValues.mpi_make_options} --build-arg USER=${formValues.user} --build-arg WORKDIR=${formValues.workdir}`

@@ -237,6 +237,7 @@ export const MultiStepFormView =()=>{
     const [dockerUser, setDockerUser]= useState("");
     const [dockerPass, setDockerPass]= useState("");
     const [buildId, setBuildId]= useState(0);
+    const [dockerBuildAppCommand, setDockerBuildAppCommand] = useState("");
 
     useEffect(()=>{
         setActiveStep(activeIndex+1);
@@ -290,6 +291,7 @@ export const MultiStepFormView =()=>{
             dockerUser, setDockerUser,
             dockerPass, setDockerPass,
             buildId, setBuildId,
+            dockerBuildAppCommand, setDockerBuildAppCommand
         }),[activeIndex,activeStep,formValues]
     )
 
