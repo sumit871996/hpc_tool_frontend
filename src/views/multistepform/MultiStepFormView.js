@@ -216,7 +216,7 @@ export const MultiStepFormView =()=>{
 
     const [baseimagename,setBaseimagename]=useState("");
     const [baseimagetag,setBaseimagetag]=useState("");
-    const [basedockerfile,setBasedockerfile]=useState("");
+    const [finalDockerfile,setDockerfile]=useState("");
     const [basebuildcommand,setBasebuildcommand]=useState("");
     const [basedockerfilename,setBasedockerfilename]=useState("");
 
@@ -270,8 +270,7 @@ export const MultiStepFormView =()=>{
             setBaseimagename,
             baseimagetag,
             setBaseimagetag,
-            basedockerfile,
-            setBasedockerfile,
+            finalDockerfile,setDockerfile,
             basebuildcommand,
             setBasebuildcommand,
             basedockerfilename,

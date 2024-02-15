@@ -18,7 +18,7 @@ export const PushToHubForm = () => {
   const [notificationMessage,setNotificationMessage]=useState("");
   const [notificationStatus,setNotificationStatus]=useState("");
   const [showNotification,setShowNotification]=useState(false);
-  const { formValues, setFormValues, setDockerCommands, dockerCommands,dockerIntelMPIFile,dockerMPICHFile,dockerOpenMPIFile,buildCommand,dockerfilename,baseimagename,baseimagetag,basedockerfile,basebuildcommand,basedockerfilename,dockerUser, setDockerUser,dockerPass,setDockerPass,buildId, setBuildId} =
+  const { formValues, setFormValues, setDockerCommands, dockerCommands,dockerIntelMPIFile,dockerMPICHFile,dockerOpenMPIFile,buildCommand,dockerfilename,baseimagename,baseimagetag,basebuildcommand,basedockerfilename,dockerUser, setDockerUser,dockerPass,setDockerPass,buildId, setBuildId,finalDockerfile,setDockerfile,} =
     useContext(WizardContext); 
   const [filename, setFilename] = useState("");
   const [dockerData, setDockerData] = useState({
@@ -42,53 +42,53 @@ export const PushToHubForm = () => {
     setDockerPass(dockerData.docker_password)
     if (formValues.mpi_type == "IntelMPI") {
       data = {
-        imagename: formValues.imagename,
-        imagetag: formValues.imagetag,
+        imagename: formValues.finalimagename,
+        imagetag: formValues.finalimagetag,
         dockeruser: dockerData.docker_username,
         dockerpassword: dockerData.docker_password,
-        dockefile: dockerIntelMPIFile,
+        dockefile: finalDockerfile,
         buildcommand:buildCommand,
-        dockerfilename:dockerfilename,
+        dockerfilename:`DockerFile${formValues.finalimagename}`,
 
-        baseimagename:baseimagename,
-        baseimagetag:baseimagetag,
-        basedockerfile:basedockerfile,
+        baseimagename:formValues.imagename,
+        baseimagetag:formValues.imagetag,
+        basedockerfile:dockerIntelMPIFile,
         basebuildcommand:basebuildcommand,
-        basedockerfilename:basedockerfilename
+        basedockerfilename:dockerfilename
       };
     }
     else if (formValues.mpi_type == "MPICH") {
       data = {
-        imagename: formValues.imagename,
-        imagetag: formValues.imagetag,
+        imagename: formValues.finalimagename,
+        imagetag: formValues.finalimagetag,
         dockeruser: dockerData.docker_username,
         dockerpassword: dockerData.docker_password,
-        dockefile: dockerMPICHFile,
+        dockefile: finalDockerfile,
         buildcommand:buildCommand,
-        dockerfilename:dockerfilename,
+        dockerfilename:`DockerFile${formValues.finalimagename}`,
 
-        baseimagename:baseimagename,
-        baseimagetag:baseimagetag,
-        basedockerfile:basedockerfile,
+        baseimagename:formValues.imagename,
+        baseimagetag:formValues.imagetag,
+        basedockerfile:dockerMPICHFile,
         basebuildcommand:basebuildcommand,
-        basedockerfilename:basedockerfilename
+        basedockerfilename:dockerfilename
       };
     }
     else if (formValues.mpi_type == "OpenMPI") {
       data = {
-        imagename: formValues.imagename,
-        imagetag: formValues.imagetag,
+        imagename: formValues.finalimagename,
+        imagetag: formValues.finalimagetag,
         dockeruser: dockerData.docker_username,
         dockerpassword: dockerData.docker_password,
-        dockefile: dockerOpenMPIFile,
+        dockefile: finalDockerfile,
         buildcommand:buildCommand,
-        dockerfilename:dockerfilename,
+        dockerfilename:`DockerFile${formValues.finalimagename}`,
 
-        baseimagename:baseimagename,
-        baseimagetag:baseimagetag,
-        basedockerfile:basedockerfile,
+        baseimagename:formValues.imagename,
+        baseimagetag:formValues.imagetag,
+        basedockerfile:dockerOpenMPIFile,
         basebuildcommand:basebuildcommand,
-        basedockerfilename:basedockerfilename
+        basedockerfilename:dockerfilename
       };
     }
 

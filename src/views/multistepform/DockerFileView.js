@@ -16,7 +16,8 @@ export const DockerFileView = (e) => {
     buildCommand,
     setBuildCommand,
     dockerfilename,
-    setDockerFileName
+    setDockerFileName,
+    finalDockerfile,setDockerfile,
   } = useContext(WizardContext);
   const docker_commands = dockerCommands;
   const elementsArray = docker_commands.split("\n");
@@ -29,6 +30,8 @@ export const DockerFileView = (e) => {
     `FROM ${formValues.imagename}:${formValues.imagetag}`,
     ...elementsArray,
   ];
+  setDockerFileName(finaldockerfile);
+  
 
   // const [dockerfilename, setDockerFileName] = useState();
   const [finalDockerfilename, setFinalDockerfilename] = useState();
