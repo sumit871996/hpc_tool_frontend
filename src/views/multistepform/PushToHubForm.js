@@ -46,7 +46,7 @@ export const PushToHubForm = () => {
         imagetag: formValues.finalimagetag,
         dockeruser: dockerData.docker_username,
         dockerpassword: dockerData.docker_password,
-        dockefile: dockerfilename,
+        dockerfile: dockerfilename,
         buildcommand:dockerBuildAppCommand,
         dockerfilename:`DockerFile${formValues.finalimagename}`,
 
@@ -63,7 +63,7 @@ export const PushToHubForm = () => {
         imagetag: formValues.finalimagetag,
         dockeruser: dockerData.docker_username,
         dockerpassword: dockerData.docker_password,
-        dockefile: dockerfilename,
+        dockerfile: dockerfilename,
         buildcommand:dockerBuildAppCommand,
         dockerfilename:`DockerFile${formValues.finalimagename}`,
 
@@ -80,7 +80,7 @@ export const PushToHubForm = () => {
         imagetag: formValues.finalimagetag,
         dockeruser: dockerData.docker_username,
         dockerpassword: dockerData.docker_password,
-        dockefile: dockerfilename,
+        dockerfile: dockerfilename,
         buildcommand:dockerBuildAppCommand,
         dockerfilename:`DockerFile${formValues.finalimagename}`,
 
