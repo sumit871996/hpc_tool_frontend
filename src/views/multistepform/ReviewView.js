@@ -2,6 +2,7 @@ import { Box, FormField, Heading, List, Table, TableBody, TableCell, TableRow, T
 import { StatusCritical, StatusCriticalSmall, StatusGoodSmall } from "grommet-icons";
 import { useContext, useEffect, useState } from "react";
 import { WizardContext } from "./WizardContext";
+import axios from "axios";
 
 
 const ReviewView=()=>{
@@ -12,6 +13,16 @@ const ReviewView=()=>{
         console.log("Axios call for Status")
         setBuildStatus("Success")
     },[]);
+
+    const statusCall=()=>{
+        axios.get(`http://localhost:8081/home/getStatus/${buildId}`).then((response)=>{
+        console.log(response);
+        const status=response.data;
+        setBuildStatus(status);
+        }).catch((error)=>{
+            console.log(error);
+        })
+    }
 
     return(
         <Box  pad={{left:"large",right:"large"}} style={{alignItems:"center"}}>
