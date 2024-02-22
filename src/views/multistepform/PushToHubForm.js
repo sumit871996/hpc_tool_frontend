@@ -1,4 +1,4 @@
-import {ReactComponent as dockerLogo} from "../../assets/docker_logo.svg"
+import  dockerLogo from "../../assets/docker_logo.svg"
 import {
   Avatar,
   Box,
@@ -6,7 +6,11 @@ import {
   FormField,
   Header,
   Heading,
+  Image,
+  Layer,
   Notification,
+  Spinner,
+  Text,
   TextInput,
 } from "grommet";
 import { useContext, useState } from "react";
@@ -18,6 +22,7 @@ export const PushToHubForm = () => {
   const [notificationMessage,setNotificationMessage]=useState("");
   const [notificationStatus,setNotificationStatus]=useState("");
   const [showNotification,setShowNotification]=useState(false);
+  const [showSpinner,setShowSpinner]=useState(false)
   const { formValues, setFormValues, setDockerCommands, dockerCommands,dockerIntelMPIFile,dockerMPICHFile,dockerOpenMPIFile,buildCommand,dockerfilename,baseimagename,baseimagetag,basebuildcommand,basedockerfilename,dockerUser, setDockerUser,dockerPass,setDockerPass,buildId, setBuildId,finalDockerfile,setDockerfile,dockerBuildAppCommand, setDockerBuildAppCommand} =
     useContext(WizardContext); 
   const [filename, setFilename] = useState("");
@@ -36,6 +41,7 @@ export const PushToHubForm = () => {
 
   const uploadToDocker = (e) => {
     e.preventDefault();
+    setShowSpinner(true)
     console.log("Upload Image")
     let data;
     setDockerUser(dockerData.docker_username)
@@ -105,6 +111,7 @@ export const PushToHubForm = () => {
         setNotificationStatus("normal");
         setNotificationTitle("Upload To Docker");
         setNotificationMessage("Image is uploaded to docker successfully")
+        setShowSpinner(false)
         setShowNotification(true)
       })
       .catch((error) => {
@@ -112,6 +119,7 @@ export const PushToHubForm = () => {
         setNotificationStatus("critical");
         setNotificationTitle("Upload To Docker");
         setNotificationMessage("Failed to upload image to docker")
+        setShowSpinner(false)
         setShowNotification(true)
       });
   };
@@ -161,10 +169,13 @@ export const PushToHubForm = () => {
           label="Application Source Code"
           defaultValue=""
         ></FormField>
-        <Avatar background="orange" onClick={uploadToDocker} width={"50px"} >
-          <img src={dockerLogo} width={"20px"} height={"20px"}/>
-        </Avatar>
-      </Box>{showNotification &&
+        {/* <Avatar background="orange" onClick={uploadToDocker} width={"50px"} > */}
+        <Box width={"xxsmall"} height={"xxsmall"} background={"red"} style={{borderRadius:"50%"}} onClick={uploadToDocker}>
+          <Image src={dockerLogo} style={{borderRadius:"50%"}}/>
+          </Box>
+        {/* </Avatar> */}
+      </Box>
+      {showNotification &&
       <Notification
             toast
             title={notificationTitle}
@@ -173,6 +184,20 @@ export const PushToHubForm = () => {
             time={5000}
             onClose={()=>{setShowNotification(false)}}
             />}
+    {showSpinner === true && (
+        <Layer>
+          <Box
+            align="center"
+            justify="center"
+            direction="row"
+            alignSelf="center"
+            pad="medium"
+          >
+            <Spinner />
+            <Text margin='10px'>Pushing TO Docker...</Text>
+          </Box>
+        </Layer>
+      )}
     </Box>
   );
 };

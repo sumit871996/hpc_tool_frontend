@@ -11,6 +11,7 @@ import { DockerFileView } from "./DockerFileView";
 import { defaultFormValues } from "./defaultValues";
 import { PushToHubForm } from "./PushToHubForm";
 import ReviewView from "./ReviewView";
+import { useNavigate } from "react-router-dom";
 
 export const steps = [
     {
@@ -43,6 +44,7 @@ export const MultiStepFormView =()=>{
     const [dockerCommands, setDockerCommands]= useState("");
     const [buildCommand, setBuildCommand] = useState();
     const [dockerfilename, setDockerFileName] = useState();
+    const navigate=useNavigate()
     const [dockerIntelMPIFile, setDockerIntelMPIFile] = useState([
       "FROM centos:8.4.2105 AS base",
       "    ",
@@ -295,9 +297,10 @@ export const MultiStepFormView =()=>{
         }),[activeIndex,activeStep,formValues]
     )
 
-    const handleRequest =()=>{
+    const handleRequest =(e)=>{
+      e.preventDefault();
     console.log("Step's submit procedure is done")
-
+      navigate("/")
     }
 
     return(
