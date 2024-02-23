@@ -169,11 +169,9 @@ export const PushToHubForm = () => {
           label="Application Source Code"
           defaultValue=""
         ></FormField>
-        {/* <Avatar background="orange" onClick={uploadToDocker} width={"50px"} > */}
         <Box width={"xxsmall"} height={"xxsmall"} background={"red"} style={{borderRadius:"50%"}} onClick={uploadToDocker}>
           <Image src={dockerLogo} style={{borderRadius:"50%"}}/>
           </Box>
-        {/* </Avatar> */}
       </Box>
       {showNotification &&
       <Notification

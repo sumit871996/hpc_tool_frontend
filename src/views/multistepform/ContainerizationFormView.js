@@ -6,6 +6,7 @@ import {
   Header,
   Heading,
   Select,
+  Text,
   TextInput,
 } from "grommet";
 import { Code } from "grommet-icons";
@@ -43,7 +44,7 @@ export const ContainerizationFormView = () => {
   },[errorAIN])
   // const [formValues,setFormValues]=useState(defaultFormValues);
   const [finalfile, setFinalFile] = useState("");
-  const [selectedMajorVersion, setSelectedMajorVersion] = useState("v4.0")
+  const [selectedMajorVersion, setSelectedMajorVersion] = useState("")
   const [formData, setFormData] = useState({
     mpi_type: "",
     imagename: "",
@@ -166,6 +167,13 @@ export const ContainerizationFormView = () => {
     setFormValues({...formValues, [name]:value});
   }
 
+  const handleOpenVersionChange=(e)=>{
+    const {name,value}=e.target;
+    setFormValues({...formValues,[name]:value})
+
+    setSelectedMajorVersion(e.target.value)
+  }
+
   useEffect(()=>{
     setDockerCommands(finalfile)
   },[finalfile])
@@ -249,15 +257,14 @@ export const ContainerizationFormView = () => {
           id="mpi_type"
           name="mpi_type"
           options={MPI_Options}
-          defaultValue={MPI_Options[0]}
+          placeholder="Select MPI Type "
           onChange={handleFormValueChange}
         />
       </Box>
+      {formValues.mpi_type !=="" ? 
       <Box pad={"small"} fill align="center">
-        {/* <Form onSubmit={handleSubmit}> */}
           <Box gap="medium">
             <Box direction="row" gap="medium">
-              {/* For Intel MPI */}
               {formValues.mpi_type === "IntelMPI" && (
                 <Box gap="medium">
                   <FormField
@@ -270,7 +277,7 @@ export const ContainerizationFormView = () => {
                       id="intel_mpi_devel_version"
                       name="intel_mpi_devel_version"
                       options={intel_mpi_devel_versions}
-                      defaultValue={intel_mpi_devel_versions[0]}
+                      placeholder="Select Version"
                       onChange={handleFormValueChange}
                     />
                   </FormField>
@@ -285,7 +292,7 @@ export const ContainerizationFormView = () => {
                       id="intel_mkl_version"
                       name="intel_mkl_version"
                       options={intel_mkl_version}
-                      defaultValue={intel_mkl_version[0]}
+                      placeholder="Select Version"
                       onChange={handleFormValueChange}
                     />
                   </FormField>
@@ -300,7 +307,7 @@ export const ContainerizationFormView = () => {
                       id="intel_icc_version"
                       name="intel_icc_version"
                       options={intel_icc_versions}
-                      defaultValue={intel_icc_versions[0]}
+                      placeholder="Select Version"
                       onChange={handleFormValueChange}
                     />
                   </FormField>
@@ -315,7 +322,7 @@ export const ContainerizationFormView = () => {
                       id="intel_tbb_version"
                       name="intel_tbb_version"
                       options={intel_tbb_versions}
-                      defaultValue={intel_tbb_versions[0]}
+                      placeholder="Select Version"
                       onChange={handleFormValueChange}
                     />
                   </FormField>
@@ -332,32 +339,33 @@ export const ContainerizationFormView = () => {
                       name="openMPI_Major_Version"
                       label="OpenMPI Major Version"
                       required={formValues.mpi_type === "OpenMPI"}
-                      // error={"This Field is required"}
+                     
                     >
                       <Select
                         id="openMPI_Major_Version"
                         name="openMPI_Major_Version"
                         options={open_mpi_major_versions}
-                        // defaultValue={open_mpi_major_versions[0]}
-                        onChange={handleFormValueChange}
+                        placeholder="Select Version"
+                        onChange={handleOpenVersionChange}
                       />
                     </FormField>
 
+                    {selectedMajorVersion!==""&&
                     <FormField
                       // required
                       htmlFor="openMPI_Version"
                       name="openMPI_Version"
-                      label="OPenMPI Version"
+                      label="OpenMPI Version"
                       required={formValues.mpi_type === "OpenMPI"}
                     >
                       <Select
                         id="openMPI_Version"
                         name="openMPI_Version"
-                        options={open_mpi_major_versions}
-                        defaultValue={open_mpi_version[selectedMajorVersion][0]}
+                        options={open_mpi_version[selectedMajorVersion]}
+                        placeholder="Select OpenMPI Version"
                         onChange={handleFormValueChange}
                       />
-                    </FormField>
+                    </FormField>}
                     <FormField
                       htmlFor="mpi_configure_options"
                       name="mpi_configure_options"
@@ -401,7 +409,7 @@ export const ContainerizationFormView = () => {
                         id="mpi_ch_Version"
                         name="mpi_ch_Version"
                         options={mpi_ch_version}
-                        defaultValue={mpi_ch_version[0]}
+                        placeholder="Select MPICH Version"
                         onChange={handleFormValueChange}
                       />
                     </FormField>
@@ -505,13 +513,10 @@ export const ContainerizationFormView = () => {
                 label="Write docker commands for running the applications"
               >
                 <Editor
-                  // required
                   id="dockerCommands"
                   name="dockerCommands"
                   value={finalfile}
-                  // onChange={handleFormValueChange}
                   onValueChange={(code) => setFinalFile(code)}
-                  // onValueChange={handleFormValueChange}
                   placeholder="Enter docker commands"
                   highlight={(code) => highlight(code, languages.dockerfile)}
                   padding={10}
@@ -521,9 +526,8 @@ export const ContainerizationFormView = () => {
               <FormField
                 htmlFor="finalimagename"
                 name="finalimagename"
-                label="Application Image Name*"
+                label="Application Image Name"
                 required
-                // error={errorAIN ?"This Field is required":""}
               >
                 <TextInput
                   id="finalimagename"
@@ -537,9 +541,6 @@ export const ContainerizationFormView = () => {
                 htmlFor="finalimagetag"
                 name="finalimagetag"
                 label="Application Image Tag"
-                messages={{
-                  required: "This is a required field.",
-                }}
                 required
               >
                 <TextInput
@@ -569,7 +570,8 @@ export const ContainerizationFormView = () => {
            
           </Box>
         {/* </Form> */}
-      </Box>
+      </Box>:<Box style={{alignItems:"center"}} >
+        <Text>Please Select The MPI Type To View Containerization Form </Text></Box>}
     </Box>
   );
 };
