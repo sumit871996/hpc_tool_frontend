@@ -27,33 +27,48 @@ import { useLocation, useNavigate } from "react-router-dom";
 
 export const ImageForm = (props) => {
   const location = useLocation();
-  const [showLoading, setShowLoading]=useState(false);
-  const [showNotification,setShowNotification]=useState(true);
-  const [notificationTitle,setNotificationTitle]=useState("Error");
-  const [notificationMessage,setNotificationMessage]=useState("Error Message");
-  const [notificationStatus,setNotificationStatus]=useState("critical")
-  const navigate = useNavigate();
-  const navigatefunction = (data) => {
-    setShowLoading(true)
-    console.log(data);
-    axios.post("http://localhost:8081/home/buildandpush", data).then((res)=>{
-      if(res.status==200){
-        setNotificationTitle("Successful")
-        setNotificationMessage("SucessFully Stored to docker file")
-        setNotificationStatus("normal")
-        setShowLoading(false)
-        setShowNotification(true)
-        console.log(res.data)
-      }
-    }).catch((error)=>{
-      setNotificationTitle("Error")
-      setNotificationMessage("Failed to store docker file")
-      setNotificationStatus("critical")
-      setShowLoading(false)
-      setShowNotification(true)
-      console.log(error)
+  const [fileZip, setFileZip] = useState(null);
 
-    });
+  const navigate = useNavigate();
+  const getBuildStatus = () => {
+    const buildId = sessionStorage.getItem("buildId");
+    axios
+      .get(`http://localhost:8081/home/getStatus/${buildId}`)
+      .then((response) => {
+        console.log(response);
+        const buildStatus = response.data;
+        console.log(`Jenkins Build Status: ${buildStatus}`);
+
+        // Implement your logic to handle the build status (e.g., success, failure, in-progress)
+      })
+      .catch((error) => {
+        console.error("Error fetching Jenkins build status:", error);
+      });
+  };
+  const navigatefunction = (dataip) => {
+    // console.log(data);
+    const formData = new FormData();
+
+    formData.append("inputData", JSON.stringify(data));
+    formData.append("file", fileZip);
+
+    console.log(data);
+
+    axios
+      .post("http://localhost:8081/home/buildandpush", formData)
+      .then((response) => {
+        console.log(response);
+        // Handle the immediate response and extract the build ID
+        const buildId = response.data.buildId;
+        sessionStorage.setItem("buildId", buildId);
+        console.log(`Immediate Jenkins Build ID: ${buildId}`);
+
+        // Use the build ID to poll Jenkins for the build status
+        getBuildStatus();
+      })
+      .catch((error) => {
+        console.error("Error triggering Jenkins build:", error);
+      });
   };
   const onFormChange = (value) => {
     setFormValues(value);
@@ -64,10 +79,13 @@ export const ImageForm = (props) => {
   };
   const handleFileChange = (e) => {
     const file = e.target.files[0];
-    setFormValues((prevValues) => ({
-      ...prevValues,
-      zipFile: file,
-    }));
+    // setFormValues((prevValues) => ({
+    //   ...prevValues,
+    //   zipFile: file,
+    // }));
+
+    setFileZip(file);
+
     setFilename(file.name);
   };
 
@@ -81,46 +99,70 @@ export const ImageForm = (props) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // const formData = new FormData();
 
-    // formData.append("dockerhubusername", formValues.dockerhubusername);
-    // formData.append("dockerhubpassword", formValues.dockerhubpassword);
-    // formData.append("zipFile", formValues.zipFile);
     // Handle form submission here, including the zip file
     console.log(formValues);
   };
 
   const [filename, setFilename] = useState("");
   const [data, setData] = useState({
+    dockeruser: "",
+    dockerpassword: "",
+
     imagename: location.state.imagename,
     imagetag: location.state.imagetag,
     dockerfile: location.state.dockerfile,
     buildcommand: location.state.dockerbuildcommand,
-    dockeruser: "",
-    dockerpassword: "",
     dockerfilename: location.state.dockerfilename,
+
+    baseimagename: location.state.baseimagename,
+    baseimagetag: location.state.baseimagetag,
+    basedockerfile: location.state.basedockerfile,
+    basebuildcommand: location.state.basedockerbuildcommand,
+    basedockerfilename: location.state.basedockerfilename,
   });
 
   const sendData = (data) => {
     setData({
       imagename: location.state.imagename,
       imagetag: location.state.imagetag,
-      buildcommand: location.state.dockerpushbuildcommand,
-      dockerfile: location.state.dockerfile,
+      buildcommand: location.state.dockerbuildcommand.replace(
+        `-t ${location.state.imagename}`,
+        `-t ${formValues.dockerhubusername}/${location.state.imagename}`
+      ),
+      dockerfile: (() => {
+        const finaldockerfile = location.state.dockerfile;
+        finaldockerfile[0] = location.state.dockerfile[0].replace(
+          `FROM ${location.state.imagename}`,
+          `FROM ${formValues.dockerhubusername}/${location.state.imagename}`
+        );
+        return finaldockerfile;
+      })(),
       dockeruser: formValues.dockerhubusername,
       dockerpassword: formValues.dockerhubpassword,
       dockerfilename: location.state.dockerfilename,
+
+      baseimagename: location.state.baseimagename,
+      baseimagetag: location.state.baseimagetag,
+      basedockerfile: location.state.basedockerfile,
+      basebuildcommand: location.state.basedockerbuildcommand.replace(
+        `-t ${location.state.baseimagename}`,
+        `-t ${formValues.dockerhubusername}/${location.state.baseimagename}`
+      ),
+      basedockerfilename: location.state.basedockerfilename,
     });
   };
 
   const [formValues, setFormValues] = React.useState({
     dockerhubusername: "",
     dockerhubpassword: "",
+    // zipFile: null,
   });
 
   return (
-    <Box gap="medium" width="large" pad={{bottom:"small"}} style={{minHeight:"80vh"}}>
-      <Box>{JSON.stringify(data)}</Box>
+    <Box gap="medium" width="large" pad={{ bottom: "small" }}>
+      {/* <Box>{JSON.stringify(data)}</Box> */}
+      {/* {JSON.stringify(data)} */}
       <Header
         direction="column"
         align="start"
@@ -170,6 +212,7 @@ export const ImageForm = (props) => {
           <Box direction="row-responsive" gap="medium" pad={{ top: "medium" }}>
             <Button label="Submit" primary type="submit" onClick={sendData} />
             <Button label="Reset" type="reset" />
+            <Button label="Check status" onClick={getBuildStatus} />
           </Box>
         </Form>
       </Box>

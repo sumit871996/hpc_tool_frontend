@@ -24,6 +24,12 @@ const ConsoleView = (props) => {
         dockerbuildcommand: props.buildcommand,
         dockerfilename: props.dockerfilename,
         dockerpushbuildcommand: props.dockerpushbuildcommand,
+
+        baseimagename: props.baseimagename,
+        baseimagetag: props.baseimagetag,
+        basedockerfile: props.basedockerfile,
+        basedockerbuildcommand: props.basedockerbuildcommand,
+        basedockerfilename: props.basedockerfilename,
       },
     });
   };
@@ -75,6 +81,7 @@ const ConsoleView = (props) => {
   return (
     <Box>
       <Box>
+        {/* {JSON.stringify(props)} */}
         <Box
           direction="row"
           style={{

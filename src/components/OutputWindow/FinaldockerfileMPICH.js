@@ -83,23 +83,31 @@ const FinaldockerfileMPICH = (props) => {
     `singularity shell ${inputdata.singularityimagename}.sif`,
   ];
   return (
-    <Box margin={{ left: "5%", right: "5%", top: "5%" }} pad={{bottom:"small"}}>
+    <Box
+      margin={{ left: "5%", right: "5%", top: "5%" }}
+      pad={{ bottom: "small" }}
+    >
       <Text weight="bold">Note: </Text>
       <Text margin={{ bottom: "20px" }}>
         Clone <a>https://github.hpe.com/sumit-bharat-mandlik/mpich-test.git</a>{" "}
         in your directory where dockerfile exists
       </Text>
       <ConsoleView
-        buildcommand={buildcommand}
+        buildcommand={buildappcommand}
         dockerfile={dockerfile}
-        dockerfilename={dockerfilename}
+        dockerfilename={finaldockerfilename}
         finaldockerfile={finaldockerfile}
         finaldockerfilename={finaldockerfilename}
         buildappcommand={buildappcommand}
         singularitycommands={singularitycommands}
-        imagename={inputdata.imagename}
-        imagetag={inputdata.imagetag}
-        dockerpushbuildcommand={dockerpushbuildcommand}
+        imagename={inputdata.finalimagename}
+        imagetag={inputdata.finalimagetag}
+        dockerpushbuildcommand={buildappcommand}
+        baseimagename={inputdata.imagename}
+        baseimagetag={inputdata.imagetag}
+        basedockerfile={dockerfile}
+        basedockerbuildcommand={buildcommand}
+        basedockerfilename={dockerfilename}
       ></ConsoleView>
     </Box>
   );
