@@ -70,7 +70,7 @@ function HomePageView() {
       description:
         "Windows 10, Catalina 10.15, Mojave 10.14, or High Sierra 10.13",
       footerlable: "Start Containerization",
-      path: "/form",
+      path: "/multistage",
     },
   ];
 

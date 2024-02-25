@@ -54,9 +54,7 @@ export const StepFooter = ({previousId,nextId, ...rest})=>{
               label={activeIndex === steps.length - 1 ? 'Finish' : 'Next'}
               form={`${id}-form`}
               type='submit'
-              // type={(activeIndex== 0|| activeIndex==steps.length) ?`submit`:'button'}
-              // onClick={(activeIndex!==0|| activeIndex==steps.length) ?() => checkNextStep():undefined}
-            //   disabled={!validFlag && activeIndex!==0}
+         
             />
           </Footer>
         </Box>

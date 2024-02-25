@@ -1,4 +1,4 @@
-// FilterExample.js
+
 import axios from "axios";
 import React, { useState } from "react";
 import Editor from "react-simple-code-editor";
@@ -19,12 +19,14 @@ import {
   Select,
   TextInput,
   TextArea,
+  Spinner,
+  Layer,
+  Notification,
 } from "grommet";
 import { useLocation, useNavigate } from "react-router-dom";
 
 export const ImageForm = (props) => {
   const location = useLocation();
-
   const [fileZip, setFileZip] = useState(null);
 
   const navigate = useNavigate();
@@ -214,6 +216,22 @@ export const ImageForm = (props) => {
           </Box>
         </Form>
       </Box>
+      {showLoading && 
+      <Layer>
+        <Box style={{justifyContent:"center"}}>
+          <Box fill style={{justifyContent:"center"}}><Spinner/></Box>
+        <Text>Pushing Image To Docker</Text></Box>
+      </Layer>
+      }
+      {showNotification && 
+      <Notification 
+      toast
+      title={notificationTitle}
+      message={notificationMessage}
+      status={notificationStatus}
+      onClose={()=>setShowNotification(false)}
+      time={5000}
+      />}
     </Box>
   );
 };
