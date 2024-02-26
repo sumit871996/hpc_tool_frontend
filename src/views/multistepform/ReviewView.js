@@ -14,6 +14,7 @@ import {
   Text,
 } from "grommet";
 import {
+    RotateRight,
   StatusCritical,
   StatusCriticalSmall,
   StatusGoodSmall,
@@ -134,10 +135,7 @@ const ReviewView = () => {
                     <StatusUnknown color="grey" /> <Text>Unstable</Text>
                   </Box>
                 )}
-                <Button
-                onClick={statusCall}
-                label="Check Status"
-                />
+                <RotateRight onClick={statusCall}/>
               </Box>
             </TableCell>
           </TableRow>
