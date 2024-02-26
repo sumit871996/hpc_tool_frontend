@@ -16,8 +16,8 @@ const ReviewView=()=>{
     const {dockerUser, setDockerUser,dockerPass,setDockerPass,buildId, setBuildId} =
     useContext(WizardContext); 
     useEffect(()=>{
-        // setBuildStatus("UNSTABLE")
-      statusCall()
+        setBuildStatus("failed")
+    //   statusCall()
     },[]);
 
     const statusCall=()=>{

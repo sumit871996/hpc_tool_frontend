@@ -447,6 +447,7 @@ export const ContainerizationFormView = () => {
                 </Box>
               )}
 
+              {/* For IntelMPI */}
               {formValues.mpi_type !== "IntelMPI" && (
                 <Box gap="medium">
                   <FormField 
