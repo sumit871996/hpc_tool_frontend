@@ -110,7 +110,7 @@ export const PushToHubForm = () => {
         setBuildId(res.data.buildId);
         setNotificationStatus("normal");
         setNotificationTitle("Upload To Docker");
-        setNotificationMessage("Image is uploaded to docker successfully")
+        setNotificationMessage("Build Id Created Successfully")
         setShowSpinner(false)
         setShowNotification(true)
       })
