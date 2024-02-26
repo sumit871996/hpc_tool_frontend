@@ -1,4 +1,4 @@
-import  dockerLogo from "../../assets/docker_logo.svg"
+import dockerLogo from "../../assets/docker_logo.svg";
 import {
   Avatar,
   Box,
@@ -18,13 +18,36 @@ import { WizardContext } from "./WizardContext";
 import axios from "axios";
 
 export const PushToHubForm = () => {
-  const [notificationTitle,setNotificationTitle]=useState("");
-  const [notificationMessage,setNotificationMessage]=useState("");
-  const [notificationStatus,setNotificationStatus]=useState("");
-  const [showNotification,setShowNotification]=useState(false);
-  const [showSpinner,setShowSpinner]=useState(false)
-  const { formValues, setFormValues, setDockerCommands, dockerCommands,dockerIntelMPIFile,dockerMPICHFile,dockerOpenMPIFile,buildCommand,dockerfilename,baseimagename,baseimagetag,basebuildcommand,basedockerfilename,dockerUser, setDockerUser,dockerPass,setDockerPass,buildId, setBuildId,finalDockerfile,setDockerfile,dockerBuildAppCommand, setDockerBuildAppCommand} =
-    useContext(WizardContext); 
+  const [notificationTitle, setNotificationTitle] = useState("");
+  const [notificationMessage, setNotificationMessage] = useState("");
+  const [notificationStatus, setNotificationStatus] = useState("");
+  const [showNotification, setShowNotification] = useState(false);
+  const [showSpinner, setShowSpinner] = useState(false);
+  const {
+    formValues,
+    setFormValues,
+    setDockerCommands,
+    dockerCommands,
+    dockerIntelMPIFile,
+    dockerMPICHFile,
+    dockerOpenMPIFile,
+    buildCommand,
+    dockerfilename,
+    baseimagename,
+    baseimagetag,
+    basebuildcommand,
+    basedockerfilename,
+    dockerUser,
+    setDockerUser,
+    dockerPass,
+    setDockerPass,
+    buildId,
+    setBuildId,
+    finalDockerfile,
+    setDockerfile,
+    dockerBuildAppCommand,
+    setDockerBuildAppCommand,
+  } = useContext(WizardContext);
   const [filename, setFilename] = useState("");
   const [dockerData, setDockerData] = useState({
     docker_username: "",
@@ -41,97 +64,159 @@ export const PushToHubForm = () => {
 
   const uploadToDocker = (e) => {
     e.preventDefault();
-    setShowSpinner(true)
-    console.log("Upload Image")
+    setShowSpinner(true);
+    console.log("Upload Image");
     let data;
-    setDockerUser(dockerData.docker_username)
-    setDockerPass(dockerData.docker_password)
+
+    setDockerUser(dockerData.docker_username);
+    setDockerPass(dockerData.docker_password);
     if (formValues.mpi_type == "IntelMPI") {
       data = {
         imagename: formValues.finalimagename,
         imagetag: formValues.finalimagetag,
         dockeruser: dockerData.docker_username,
         dockerpassword: dockerData.docker_password,
-        dockerfile: dockerfilename,
-        buildcommand:dockerBuildAppCommand,
-        dockerfilename:`DockerFile${formValues.finalimagename}`,
+        dockerfile: (() => {
+          const finaldockerfile = dockerfilename;
+          finaldockerfile[0] = dockerfilename[0].replace(
+            `FROM ${formValues.imagename}`,
+            `FROM ${dockerData.docker_username}/${formValues.imagename}`
+          );
+          return finaldockerfile;
+        })(),
+        buildcommand: dockerBuildAppCommand.replace(
+          `-t ${formValues.finalimagename}`,
+          `-t ${dockerData.docker_username}/${formValues.finalimagename}`
+        ),
+        dockerfilename: `DockerFile${formValues.finalimagename}`,
 
-        baseimagename:formValues.imagename,
-        baseimagetag:formValues.imagetag,
-        basedockerfile:dockerIntelMPIFile,
-        basebuildcommand:buildCommand,
-        basedockerfilename:basedockerfilename
+        baseimagename: formValues.imagename,
+        baseimagetag: formValues.imagetag,
+        basedockerfile: (() => {
+          const finaldockerfile = dockerIntelMPIFile;
+          finaldockerfile[0] = dockerIntelMPIFile[0].replace(
+            `FROM ${formValues.imagename}`,
+            `FROM ${dockerData.docker_username}/${formValues.imagename}`
+          );
+          return finaldockerfile;
+        })(),
+        basebuildcommand: buildCommand.replace(
+          `-t ${formValues.imagename}`,
+          `-t ${dockerData.docker_username}/${formValues.imagename}`
+        ),
+        basedockerfilename: basedockerfilename,
       };
-    }
-    else if (formValues.mpi_type == "MPICH") {
+    } else if (formValues.mpi_type == "MPICH") {
       data = {
         imagename: formValues.finalimagename,
         imagetag: formValues.finalimagetag,
         dockeruser: dockerData.docker_username,
         dockerpassword: dockerData.docker_password,
-        dockerfile: dockerfilename,
-        buildcommand:dockerBuildAppCommand,
-        dockerfilename:`DockerFile${formValues.finalimagename}`,
+        dockerfile: (() => {
+          const finaldockerfile = dockerfilename;
+          finaldockerfile[0] = dockerfilename[0].replace(
+            `FROM ${formValues.imagename}`,
+            `FROM ${dockerData.docker_username}/${formValues.imagename}`
+          );
+          return finaldockerfile;
+        })(),
+        buildcommand: dockerBuildAppCommand.replace(
+          `-t ${formValues.finalimagename}`,
+          `-t ${dockerData.docker_username}/${formValues.finalimagename}`
+        ),
+        dockerfilename: `DockerFile${formValues.finalimagename}`,
 
-        baseimagename:formValues.imagename,
-        baseimagetag:formValues.imagetag,
-        basedockerfile:dockerMPICHFile,
-        basebuildcommand:buildCommand,
-        basedockerfilename:basedockerfilename
+        baseimagename: formValues.imagename,
+        baseimagetag: formValues.imagetag,
+        basedockerfile: (() => {
+          const finaldockerfile = dockerMPICHFile;
+          finaldockerfile[0] = dockerMPICHFile[0].replace(
+            `FROM ${formValues.imagename}`,
+            `FROM ${dockerData.docker_username}/${formValues.imagename}`
+          );
+          return finaldockerfile;
+        })(),
+        basebuildcommand: buildCommand.replace(
+          `-t ${formValues.imagename}`,
+          `-t ${dockerData.docker_username}/${formValues.imagename}`
+        ),
+        basedockerfilename: basedockerfilename,
       };
-    }
-    else if (formValues.mpi_type == "OpenMPI") {
+    } else if (formValues.mpi_type == "OpenMPI") {
       data = {
         imagename: formValues.finalimagename,
         imagetag: formValues.finalimagetag,
         dockeruser: dockerData.docker_username,
         dockerpassword: dockerData.docker_password,
-        dockerfile: dockerfilename,
-        buildcommand:dockerBuildAppCommand,
-        dockerfilename:`DockerFile${formValues.finalimagename}`,
+        dockerfile: (() => {
+          const finaldockerfile = dockerfilename;
+          finaldockerfile[0] = dockerfilename[0].replace(
+            `FROM ${formValues.imagename}`,
+            `FROM ${dockerData.docker_username}/${formValues.imagename}`
+          );
+          return finaldockerfile;
+        })(),
+        buildcommand: dockerBuildAppCommand.replace(
+          `-t ${formValues.finalimagename}`,
+          `-t ${dockerData.docker_username}/${formValues.finalimagename}`
+        ),
+        dockerfilename: `DockerFile${formValues.finalimagename}`,
 
-        baseimagename:formValues.imagename,
-        baseimagetag:formValues.imagetag,
-        basedockerfile:dockerOpenMPIFile,
-        basebuildcommand:buildCommand,
-        basedockerfilename:basedockerfilename
+        baseimagename: formValues.imagename,
+        baseimagetag: formValues.imagetag,
+        basedockerfile: (() => {
+          const finaldockerfile = dockerOpenMPIFile;
+          finaldockerfile[0] = dockerOpenMPIFile[0].replace(
+            `FROM ${formValues.imagename}`,
+            `FROM ${dockerData.docker_username}/${formValues.imagename}`
+          );
+          return finaldockerfile;
+        })(),
+        basebuildcommand: buildCommand.replace(
+          `-t ${formValues.imagename}`,
+          `-t ${dockerData.docker_username}/${formValues.imagename}`
+        ),
+        basedockerfilename: basedockerfilename,
       };
     }
 
-     const formData=new FormData();
-     formData.append("inputData",JSON.stringify(data));
-     formData.append("file",dockerData.zipFile);
+    const formData = new FormData();
+    formData.append("inputData", JSON.stringify(data));
+    formData.append("file", dockerData.zipFile);
 
-   
     axios
-      .post("http://localhost:8081/home/buildandpush",formData)
+      .post("http://localhost:8081/home/buildandpush", formData)
       .then((res) => {
-        console.log(res.data)
+        console.log(res.data);
         setBuildId(res.data.buildId);
         setNotificationStatus("normal");
         setNotificationTitle("Upload To Docker");
-        setNotificationMessage("Build Id Created Successfully")
-        setShowSpinner(false)
-        setShowNotification(true)
+        setNotificationMessage("Build Id Created Successfully");
+        setShowSpinner(false);
+        setShowNotification(true);
       })
       .catch((error) => {
         console.log(error);
         setNotificationStatus("critical");
         setNotificationTitle("Upload To Docker");
-        setNotificationMessage("Failed to upload image to docker")
-        setShowSpinner(false)
-        setShowNotification(true)
+        setNotificationMessage("Failed to upload image to docker");
+        setShowSpinner(false);
+        setShowNotification(true);
       });
   };
 
-  const handleChange=(e)=>{
-    const {name,value}=e.target;
-    setDockerData({...dockerData,[name]:value});
-  }
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setDockerData({ ...dockerData, [name]: value });
+  };
 
   return (
-    <Box style={{justifyContent:"center",alignItems:"center"}} gap="medium" height={"100%"}>
-      <Box gap="small" fill align="center" >
+    <Box
+      style={{ justifyContent: "center", alignItems: "center" }}
+      gap="medium"
+      height={"100%"}
+    >
+      <Box gap="small" fill align="center">
         <FormField
           htmlFor="docker_username"
           name="docker_username"
@@ -156,6 +241,7 @@ export const PushToHubForm = () => {
             name="docker_password"
             placeholder="Docker Password"
             onChange={handleChange}
+            type="password"
           />
         </FormField>
         <FormField
@@ -169,20 +255,29 @@ export const PushToHubForm = () => {
           label="Application Source Code"
           defaultValue=""
         ></FormField>
-        <Box width={"xxsmall"} height={"xxsmall"} background={"red"} style={{borderRadius:"50%"}} onClick={uploadToDocker}>
-          <Image src={dockerLogo} style={{borderRadius:"50%"}}/>
-          </Box>
+        <Box
+          width={"xxsmall"}
+          height={"xxsmall"}
+          background={"red"}
+          style={{ borderRadius: "50%" }}
+          onClick={uploadToDocker}
+        >
+          <Image src={dockerLogo} style={{ borderRadius: "50%" }} />
+        </Box>
       </Box>
-      {showNotification &&
-      <Notification
-            toast
-            title={notificationTitle}
-            message={notificationMessage}
-            status={notificationStatus}
-            time={5000}
-            onClose={()=>{setShowNotification(false)}}
-            />}
-    {showSpinner === true && (
+      {showNotification && (
+        <Notification
+          toast
+          title={notificationTitle}
+          message={notificationMessage}
+          status={notificationStatus}
+          time={5000}
+          onClose={() => {
+            setShowNotification(false);
+          }}
+        />
+      )}
+      {showSpinner === true && (
         <Layer>
           <Box
             align="center"
@@ -192,7 +287,7 @@ export const PushToHubForm = () => {
             pad="medium"
           >
             <Spinner />
-            <Text margin='10px'>Pushing TO Docker...</Text>
+            <Text margin="10px">Pushing TO Docker...</Text>
           </Box>
         </Layer>
       )}
