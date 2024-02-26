@@ -16,8 +16,7 @@ const ReviewView=()=>{
     const {dockerUser, setDockerUser,dockerPass,setDockerPass,buildId, setBuildId} =
     useContext(WizardContext); 
     useEffect(()=>{
-        setBuildStatus("failed")
-    //   statusCall()
+      statusCall()
     },[]);
 
     const statusCall=()=>{
@@ -63,7 +62,7 @@ const ReviewView=()=>{
                                 <StatusGoodSmall color="green"/> <Text>Success</Text>
                             </Box>
                             }
-                            {buildStatus.toLowerCase()==="failed".toLowerCase()&&
+                            {buildStatus.toLowerCase()==="failure".toLowerCase()&&
                                 <Box direction="row" gap="1%" style={{alignItems:"center"}} >
                                 <StatusCriticalSmall color="red"/> <Text>Failed</Text>
                             </Box>
