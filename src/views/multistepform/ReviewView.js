@@ -47,7 +47,6 @@ const ReviewView = () => {
   }, []);
 
   const statusCall = (e) => {
-    e.preventDefault();
     axios
       .get(`http://localhost:8081/home/getStatus/${buildId}`)
       .then((response) => {

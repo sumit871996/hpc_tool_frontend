@@ -66,11 +66,6 @@ export const ContainerizationFormView = () => {
     workdir: "",
   });
 
-  const [MPIchFormData, setMPIchFormData] = useState({
-    mpi_ch_Version: "",
-    mpi_configure_options: "",
-    mpi_make_options: "",
-  });
 
   const [intelMPIFormData, setIntelMPIFormData] = useState({
     intel_mpi_devel_version: "",
@@ -400,14 +395,14 @@ export const ContainerizationFormView = () => {
                 <Box>
                   <Box gap="medium">
                     <FormField
-                      htmlFor="mpi_ch_Version"
-                      name="mpi_ch_Version"
+                      htmlFor="mpi_ch_version"
+                      name="mpi_ch_version"
                       label="MPICH Version"
                       required={formValues.mpi_type === "MPICH"}
                     >
                       <Select
-                        id="mpi_ch_Version"
-                        name="mpi_ch_Version"
+                        id="mpi_ch_version"
+                        name="mpi_ch_version"
                         options={mpi_ch_version}
                         placeholder="Select MPICH Version"
                         onChange={handleFormValueChange}
