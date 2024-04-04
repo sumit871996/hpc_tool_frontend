@@ -180,10 +180,12 @@ export const PushToHubForm = () => {
       };
     }
 
+    console.log("inside upload");
     const formData = new FormData();
     formData.append("inputData", JSON.stringify(data));
     formData.append("file", dockerData.zipFile);
 
+    console.log(data);
     axios
       .post("http://localhost:8081/home/buildandpush", formData)
       .then((res) => {

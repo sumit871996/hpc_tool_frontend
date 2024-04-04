@@ -22,29 +22,41 @@ import { OpenMPIForm } from "../../components/MPIForms/OpenMPIForm";
 import { defaultFormValues } from "./defaultValues";
 import { WizardContext } from "./WizardContext";
 
-
 export const ContainerizationFormView = () => {
-  const {formValues, setFormValues,dockerCommands,setDockerCommands, 
-    errorMPIVersion,setErrorMPIVersion,
-    errorICCVersion, setErrorICCVersion,
-    errorTBBVersion,setErrorTBBVersion,
+  const {
+    formValues,
+    setFormValues,
+    dockerCommands,
+    setDockerCommands,
+    errorMPIVersion,
+    setErrorMPIVersion,
+    errorICCVersion,
+    setErrorICCVersion,
+    errorTBBVersion,
+    setErrorTBBVersion,
 
-    errorUser,setErrorUser,
-    errorWorkDir,setErrorWorkDir,
+    errorUser,
+    setErrorUser,
+    errorWorkDir,
+    setErrorWorkDir,
 
-    errorImageName,setErrorImageName,
-    errorImageTag, setErrorImageTag,
-    errorAIN,setErrorAIN,
-    errorAIT,setErrorAIT,
-    errorASIN, setErrorASIN} = useContext(WizardContext);
+    errorImageName,
+    setErrorImageName,
+    errorImageTag,
+    setErrorImageTag,
+    errorAIN,
+    setErrorAIN,
+    errorAIT,
+    setErrorAIT,
+    errorASIN,
+    setErrorASIN,
+  } = useContext(WizardContext);
   const navigate = useNavigate();
 
-  useEffect(()=>{
-
-  },[errorAIN])
+  useEffect(() => {}, [errorAIN]);
   // const [formValues,setFormValues]=useState(defaultFormValues);
   const [finalfile, setFinalFile] = useState("");
-  const [selectedMajorVersion, setSelectedMajorVersion] = useState("")
+  const [selectedMajorVersion, setSelectedMajorVersion] = useState("");
   const [formData, setFormData] = useState({
     mpi_type: "",
     imagename: "",
@@ -65,7 +77,6 @@ export const ContainerizationFormView = () => {
     user: "",
     workdir: "",
   });
-
 
   const [intelMPIFormData, setIntelMPIFormData] = useState({
     intel_mpi_devel_version: "",
@@ -157,21 +168,21 @@ export const ContainerizationFormView = () => {
 
   const MPI_Options = ["OpenMPI", "MPICH", "IntelMPI"];
 
-  const handleFormValueChange=(e)=>{
-    const {name,value} = e.target;
-    setFormValues({...formValues, [name]:value});
-  }
+  const handleFormValueChange = (e) => {
+    const { name, value } = e.target;
+    setFormValues({ ...formValues, [name]: value });
+  };
 
-  const handleOpenVersionChange=(e)=>{
-    const {name,value}=e.target;
-    setFormValues({...formValues,[name]:value})
+  const handleOpenVersionChange = (e) => {
+    const { name, value } = e.target;
+    setFormValues({ ...formValues, [name]: value });
 
-    setSelectedMajorVersion(e.target.value)
-  }
+    setSelectedMajorVersion(e.target.value);
+  };
 
-  useEffect(()=>{
-    setDockerCommands(finalfile)
-  },[finalfile])
+  useEffect(() => {
+    setDockerCommands(finalfile);
+  }, [finalfile]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -226,7 +237,7 @@ export const ContainerizationFormView = () => {
       // setFormValues(...data);
     }
     console.log(data);
-    console.log(typeof(finalfile));
+    console.log(typeof finalfile);
     if (formValues.mpi_type === "IntelMPI") {
       navigate("/dockerfileIntelMPI/show", {
         state: { data: { ...data, dockercommands: finalfile } },
@@ -235,18 +246,21 @@ export const ContainerizationFormView = () => {
       navigate("/dockerfileMPICH/show", {
         state: { data: { ...data, dockercommands: finalfile } },
       });
-    }else if (formValues.mpi_type === "OpenMPI") {
-        navigate("/dockerfileOpenMPI/show", {
-          state: { data: { ...data, dockercommands: finalfile } },
-        });
-      }
+    } else if (formValues.mpi_type === "OpenMPI") {
+      navigate("/dockerfileOpenMPI/show", {
+        state: { data: { ...data, dockercommands: finalfile } },
+      });
+    }
   };
 
   return (
     <Box fill gap="medium">
       <Box align="center" gap="medium">
         <Header>
-          <Heading weight={"bold"} level={3}>MPI Selection</Heading></Header>
+          <Heading weight={"bold"} level={3}>
+            MPI Selection
+          </Heading>
+        </Header>
         <Select
           required
           id="mpi_type"
@@ -256,8 +270,8 @@ export const ContainerizationFormView = () => {
           onChange={handleFormValueChange}
         />
       </Box>
-      {formValues.mpi_type !=="" ? 
-      <Box pad={"small"} fill align="center">
+      {formValues.mpi_type !== "" ? (
+        <Box pad={"small"} fill align="center">
           <Box gap="medium">
             <Box direction="row" gap="medium">
               {formValues.mpi_type === "IntelMPI" && (
@@ -334,7 +348,6 @@ export const ContainerizationFormView = () => {
                       name="openMPI_Major_Version"
                       label="OpenMPI Major Version"
                       required={formValues.mpi_type === "OpenMPI"}
-                     
                     >
                       <Select
                         id="openMPI_Major_Version"
@@ -345,22 +358,23 @@ export const ContainerizationFormView = () => {
                       />
                     </FormField>
 
-                    {selectedMajorVersion!==""&&
-                    <FormField
-                      // required
-                      htmlFor="openMPI_Version"
-                      name="openMPI_Version"
-                      label="OpenMPI Version"
-                      required={formValues.mpi_type === "OpenMPI"}
-                    >
-                      <Select
-                        id="openMPI_Version"
+                    {selectedMajorVersion !== "" && (
+                      <FormField
+                        // required
+                        htmlFor="openMPI_Version"
                         name="openMPI_Version"
-                        options={open_mpi_version[selectedMajorVersion]}
-                        placeholder="Select OpenMPI Version"
-                        onChange={handleFormValueChange}
-                      />
-                    </FormField>}
+                        label="OpenMPI Version"
+                        required={formValues.mpi_type === "OpenMPI"}
+                      >
+                        <Select
+                          id="openMPI_Version"
+                          name="openMPI_Version"
+                          options={open_mpi_version[selectedMajorVersion]}
+                          placeholder="Select OpenMPI Version"
+                          onChange={handleFormValueChange}
+                        />
+                      </FormField>
+                    )}
                     <FormField
                       htmlFor="mpi_configure_options"
                       name="mpi_configure_options"
@@ -445,13 +459,16 @@ export const ContainerizationFormView = () => {
               {/* For IntelMPI */}
               {formValues.mpi_type !== "IntelMPI" && (
                 <Box gap="medium">
-                  <FormField 
-                  htmlFor="user" name="user" label="User" required={formValues.mpi_type !== "intelMPI"} >
+                  <FormField
+                    htmlFor="user"
+                    name="user"
+                    label="User"
+                    required={formValues.mpi_type !== "intelMPI"}
+                  >
                     <TextInput
                       id="user"
                       name="user"
                       placeholder="Enter a user name"
-                      
                       onChange={handleFormValueChange}
                     />
                   </FormField>
@@ -562,12 +579,14 @@ export const ContainerizationFormView = () => {
               </FormField>
             </Box>
           </Box>
-          <Box>
-           
-          </Box>
-        {/* </Form> */}
-      </Box>:<Box style={{alignItems:"center"}} >
-        <Text>Please Select The MPI Type To View Containerization Form </Text></Box>}
+          <Box></Box>
+          {/* </Form> */}
+        </Box>
+      ) : (
+        <Box style={{ alignItems: "center" }}>
+          <Text>Please Select The MPI Type To View Containerization Form </Text>
+        </Box>
+      )}
     </Box>
   );
 };
