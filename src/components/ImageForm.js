@@ -1,4 +1,3 @@
-
 import axios from "axios";
 import React, { useState } from "react";
 import Editor from "react-simple-code-editor";
@@ -27,48 +26,36 @@ import { useLocation, useNavigate } from "react-router-dom";
 
 export const ImageForm = (props) => {
   const location = useLocation();
+  const [showLoading, setShowLoading] = useState(false);
+  const [showNotification, setShowNotification] = useState(true);
+  const [notificationTitle, setNotificationTitle] = useState("Error");
+  const [notificationMessage, setNotificationMessage] =
+    useState("Error Message");
+  const [notificationStatus, setNotificationStatus] = useState("critical");
   const [fileZip, setFileZip] = useState(null);
 
   const navigate = useNavigate();
-  const getBuildStatus = () => {
-    const buildId = sessionStorage.getItem("buildId");
-    axios
-      .get(`http://localhost:8081/home/getStatus/${buildId}`)
-      .then((response) => {
-        console.log(response);
-        const buildStatus = response.data;
-        console.log(`Jenkins Build Status: ${buildStatus}`);
-
-        // Implement your logic to handle the build status (e.g., success, failure, in-progress)
-      })
-      .catch((error) => {
-        console.error("Error fetching Jenkins build status:", error);
-      });
-  };
-  const navigatefunction = (dataip) => {
-    // console.log(data);
-    const formData = new FormData();
-
-    formData.append("inputData", JSON.stringify(data));
-    formData.append("file", fileZip);
-
+  const navigatefunction = (data) => {
+    // setShowLoading(true);
     console.log(data);
+    // axios.post("http://localhost:8081/home/buildandpush", data).then((res)=>{
+    //   if(res.status==200){
+    //     setNotificationTitle("Successful")
+    //     setNotificationMessage("SucessFully Stored to docker file")
+    //     setNotificationStatus("normal")
+    //     setShowLoading(false)
+    //     setShowNotification(true)
+    //     console.log(res.data)
+    //   }
+    // }).catch((error)=>{
+    //   setNotificationTitle("Error")
+    //   setNotificationMessage("Failed to store docker file")
+    //   setNotificationStatus("critical")
+    //   setShowLoading(false)
+    //   setShowNotification(true)
+    //   console.log(error)
 
-    axios
-      .post("http://localhost:8081/home/buildandpush", formData)
-      .then((response) => {
-        console.log(response);
-        // Handle the immediate response and extract the build ID
-        const buildId = response.data.buildId;
-        sessionStorage.setItem("buildId", buildId);
-        console.log(`Immediate Jenkins Build ID: ${buildId}`);
-
-        // Use the build ID to poll Jenkins for the build status
-        getBuildStatus();
-      })
-      .catch((error) => {
-        console.error("Error triggering Jenkins build:", error);
-      });
+    // });
   };
   const onFormChange = (value) => {
     setFormValues(value);
@@ -160,9 +147,13 @@ export const ImageForm = (props) => {
   });
 
   return (
-    <Box gap="medium" width="large" pad={{ bottom: "small" }}>
-      {/* <Box>{JSON.stringify(data)}</Box> */}
-      {/* {JSON.stringify(data)} */}
+    <Box
+      gap="medium"
+      width="large"
+      pad={{ bottom: "small" }}
+      style={{ minHeight: "80vh" }}
+    >
+      <Box>{JSON.stringify(data)}</Box>
       <Header
         direction="column"
         align="start"
@@ -216,22 +207,26 @@ export const ImageForm = (props) => {
           </Box>
         </Form>
       </Box>
-      {showLoading && 
-      <Layer>
-        <Box style={{justifyContent:"center"}}>
-          <Box fill style={{justifyContent:"center"}}><Spinner/></Box>
-        <Text>Pushing Image To Docker</Text></Box>
-      </Layer>
-      }
-      {showNotification && 
-      <Notification 
-      toast
-      title={notificationTitle}
-      message={notificationMessage}
-      status={notificationStatus}
-      onClose={()=>setShowNotification(false)}
-      time={5000}
-      />}
+      {showLoading && (
+        <Layer>
+          <Box style={{ justifyContent: "center" }}>
+            <Box fill style={{ justifyContent: "center" }}>
+              <Spinner />
+            </Box>
+            <Text>Pushing Image To Docker</Text>
+          </Box>
+        </Layer>
+      )}
+      {showNotification && (
+        <Notification
+          toast
+          title={notificationTitle}
+          message={notificationMessage}
+          status={notificationStatus}
+          onClose={() => setShowNotification(false)}
+          time={5000}
+        />
+      )}
     </Box>
   );
 };

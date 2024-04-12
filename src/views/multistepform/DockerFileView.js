@@ -17,9 +17,12 @@ export const DockerFileView = (e) => {
     setBuildCommand,
     dockerfilename,
     setDockerFileName,
-    finalDockerfile,setDockerfile,
-    basedockerfilename,setBasedockerfilename,
-    dockerBuildAppCommand, setDockerBuildAppCommand
+    finalDockerfile,
+    setDockerfile,
+    basedockerfilename,
+    setBasedockerfilename,
+    dockerBuildAppCommand,
+    setDockerBuildAppCommand,
   } = useContext(WizardContext);
   const docker_commands = dockerCommands;
   const elementsArray = docker_commands.split("\n");
@@ -30,18 +33,35 @@ export const DockerFileView = (e) => {
 
   const finaldockerfile = [
     `FROM ${formValues.imagename}:${formValues.imagetag}`,
+    `RUN sudo apt-get update && sudo apt-get install unzip`,
+    "#### ADD DEFAULT USER ####",
+    "ARG USER",
+    "ENV USER ${USER}",
+    "RUN useradd -m ${USER} && chown -R ${USER}:${USER} /home/${USER} || true",
+    "#### CREATE WORKING DIRECTORY FOR USER ####",
+    "ARG WORKDIR",
+    "ENV WORKDIR ${WORKDIR}",
+    "RUN mkdir -p ${WORKDIR} && chown -R ${USER}:${USER} ${WORKDIR}",
+    "ENV OPAL_PREFIX=/usr/local",
+    "WORKDIR ${WORKDIR}",
+    "USER ${USER}",
+    "COPY ./application.zip .",
+    "ARG c_file",
+    "RUN unzip -u application.zip && c_file=$(find . -type f -name *.c -print -quit) && mpicc ${c_file} -o application.exe",
+    `CMD ["sh", "-c", "./application.exe 1>&2 & tail -f /dev/null"]`,
     ...elementsArray,
   ];
   setDockerFileName(finaldockerfile);
-  
 
   // const [dockerfilename, setDockerFileName] = useState();
   const [finalDockerfilename, setFinalDockerfilename] = useState();
- const [dockerPushBuildCommand, setDockerPushBuildCommand] = useState();
-  
+  const [dockerPushBuildCommand, setDockerPushBuildCommand] = useState();
+
   // const [buildCommand, setBuildCommand] = useState();
   const [singularityCommands, setSingularityCommands] = useState([]);
-  const [intelCode, setIntelCode] = React.useState(dockerIntelMPIFile.join("\n"));
+  const [intelCode, setIntelCode] = React.useState(
+    dockerIntelMPIFile.join("\n")
+  );
   const [MPICode, setMPICode] = React.useState(dockerMPICHFile.join("\n"));
   const [OpenCode, setOpenCode] = React.useState(dockerOpenMPIFile.join("\n"));
 
@@ -72,13 +92,13 @@ export const DockerFileView = (e) => {
       setBasedockerfilename(docfilename);
       fdockerfilename = `DockerFile${formValues.finalimagename}`;
       setDockerPushBuildCommand(
-        `docker image build -t ${formValues.imagename}:${formValues.imagetag} --build-arg MPI_VERSION=${formValues.mpich_Version} --build-arg MPI_CONFIGURE_OPTIONS="${formValues.mpi_configure_options}" --build-arg USER=${formValues.user} --build-arg WORKDIR=${formValues.workdir}`
+        `docker image build -t ${formValues.imagename}:${formValues.imagetag} --build-arg MPI_VERSION=${formValues.mpi_ch_version} --build-arg MPI_CONFIGURE_OPTIONS="${formValues.mpi_configure_options}" --build-arg USER=${formValues.user} --build-arg WORKDIR=${formValues.workdir}`
       );
       setBuildCommand(
-        `docker image build -t ${formValues.imagename}:${formValues.imagetag} --build-arg MPI_VERSION=${formValues.mpich_Version} --build-arg MPI_CONFIGURE_OPTIONS="${formValues.mpi_configure_options}" --build-arg USER=${formValues.user} --build-arg WORKDIR=${formValues.workdir} . -f ${docfilename}`
+        `docker image build -t ${formValues.imagename}:${formValues.imagetag} --build-arg MPI_VERSION=${formValues.mpi_ch_version} --build-arg MPI_CONFIGURE_OPTIONS="${formValues.mpi_configure_options}" --build-arg USER=${formValues.user} --build-arg WORKDIR=${formValues.workdir} . -f ${docfilename}`
       );
       setDockerBuildAppCommand(
-        `docker image build -t ${formValues.finalimagename}:${formValues.finalimagetag} . -f ${fdockerfilename}`
+        `docker image build -t ${formValues.finalimagename}:${formValues.finalimagetag} --build-arg USER=${formValues.user} --build-arg WORKDIR=${formValues.workdir} . -f ${fdockerfilename}`
       );
       setSingularityCommands([
         `singularity build ${formValues.singularityimagename}.sif docker-daemon://${formValues.finalimagename}:${formValues.finalimagetag}`,
@@ -111,7 +131,7 @@ export const DockerFileView = (e) => {
   );
 
   const copyToClipboard = () => {
-    let modifiedData=""
+    let modifiedData = "";
     if (formValues.mpi_type == "IntelMPI") {
       modifiedData = dockerIntelMPIFile.join("\n").toString();
     } else if (formValues.mpi_type == "MPICH") {
@@ -133,15 +153,15 @@ export const DockerFileView = (e) => {
   };
 
   const downloadLogs = () => {
-    let modifiedData=""
+    let modifiedData = "";
     if (formValues.mpi_type == "IntelMPI") {
-        modifiedData = dockerIntelMPIFile.toString().replaceAll(",", "\n");
-      } else if (formValues.mpi_type == "MPICH") {
-        modifiedData = dockerMPICHFile.toString().replaceAll(",", "\n");
-      } else if (formValues.mpi_type=="OpenMPI") {
-        modifiedData = dockerOpenMPIFile.toString().replaceAll(",", "\n");
-      }
-    
+      modifiedData = dockerIntelMPIFile.toString().replaceAll(",", "\n");
+    } else if (formValues.mpi_type == "MPICH") {
+      modifiedData = dockerMPICHFile.toString().replaceAll(",", "\n");
+    } else if (formValues.mpi_type == "OpenMPI") {
+      modifiedData = dockerOpenMPIFile.toString().replaceAll(",", "\n");
+    }
+
     JSON.stringify(modifiedData);
     const txtFile = new Blob([modifiedData], { type: "text/file" });
     const url = URL.createObjectURL(txtFile);
@@ -238,39 +258,42 @@ export const DockerFileView = (e) => {
                 margin: "3px 15px 2px",
               }}
             >
-                {formValues.mpi_type=="IntelMPI" &&
-              <Editor
-                value={intelCode}
-                // onValueChange={code => setCode(code)}
-                highlight={(code) => highlight(code, languages.dockerfile)}
-                padding={10}
-                style={{
-                  fontFamily: '"Fira code", "Fira Mono", monospace',
-                  fontSize: 12,
-                }}
-              />}
-              {formValues.mpi_type=="MPICH" &&
-              <Editor
-                value={MPICode}
-                // onValueChange={code => setCode(code)}
-                highlight={(code) => highlight(code, languages.dockerfile)}
-                padding={10}
-                style={{
-                  fontFamily: '"Fira code", "Fira Mono", monospace',
-                  fontSize: 12,
-                }}
-              />}
-              {formValues.mpi_type=="OpenMPI" &&
-              <Editor
-                value={OpenCode}
-                // onValueChange={code => setCode(code)}
-                highlight={(code) => highlight(code, languages.dockerfile)}
-                padding={10}
-                style={{
-                  fontFamily: '"Fira code", "Fira Mono", monospace',
-                  fontSize: 12,
-                }}
-              />}
+              {formValues.mpi_type == "IntelMPI" && (
+                <Editor
+                  value={intelCode}
+                  // onValueChange={code => setCode(code)}
+                  highlight={(code) => highlight(code, languages.dockerfile)}
+                  padding={10}
+                  style={{
+                    fontFamily: '"Fira code", "Fira Mono", monospace',
+                    fontSize: 12,
+                  }}
+                />
+              )}
+              {formValues.mpi_type == "MPICH" && (
+                <Editor
+                  value={MPICode}
+                  // onValueChange={code => setCode(code)}
+                  highlight={(code) => highlight(code, languages.dockerfile)}
+                  padding={10}
+                  style={{
+                    fontFamily: '"Fira code", "Fira Mono", monospace',
+                    fontSize: 12,
+                  }}
+                />
+              )}
+              {formValues.mpi_type == "OpenMPI" && (
+                <Editor
+                  value={OpenCode}
+                  // onValueChange={code => setCode(code)}
+                  highlight={(code) => highlight(code, languages.dockerfile)}
+                  padding={10}
+                  style={{
+                    fontFamily: '"Fira code", "Fira Mono", monospace',
+                    fontSize: 12,
+                  }}
+                />
+              )}
             </Text>
           </Box>
         </Box>
