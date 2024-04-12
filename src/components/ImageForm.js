@@ -66,10 +66,10 @@ export const ImageForm = (props) => {
   };
   const handleFileChange = (e) => {
     const file = e.target.files[0];
-    // setFormValues((prevValues) => ({
-    //   ...prevValues,
-    //   zipFile: file,
-    // }));
+    setFormValues((prevValues) => ({
+      ...prevValues,
+      zipFile: file,
+    }));
 
     setFileZip(file);
 
@@ -203,7 +203,6 @@ export const ImageForm = (props) => {
           <Box direction="row-responsive" gap="medium" pad={{ top: "medium" }}>
             <Button label="Submit" primary type="submit" onClick={sendData} />
             <Button label="Reset" type="reset" />
-            <Button label="Check status" onClick={getBuildStatus} />
           </Box>
         </Form>
       </Box>
