@@ -11,6 +11,8 @@ const AppFooter = () => {
     { label: 'Security' },
     { label: 'Feedback' },
   ];
+  if(
+    window.location.pathname !== "/"){
   return (
     <Footer 
     
@@ -40,7 +42,9 @@ const AppFooter = () => {
         ))}
       </Box>
     </Footer>
-  );
+  );} else{
+    return
+  }
 };
 
 

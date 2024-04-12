@@ -58,10 +58,10 @@ ul{
     position: absolute;
     display: inline;
     top: 21px;
-    left: 53%;
+    left: 50%;
     transform: translate(-50%);
     /* max-width: 42rem; */
-    width: 92%;
+    width: 87%;
     height: 2px;
     z-index: 0;
 }

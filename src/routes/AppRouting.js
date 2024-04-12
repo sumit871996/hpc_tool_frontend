@@ -14,6 +14,8 @@ import { DockerFileView } from "../views/multistepform/DockerFileView";
 import { MultiStepFormView } from "../views/multistepform/MultiStepFormView";
 import { PushToHubForm } from "../views/multistepform/PushToHubForm";
 import ReviewView from "../views/multistepform/ReviewView";
+import DashboardReview from "../views/DashboardReview";
+import { LoginView } from "../views/LoginView";
 
 const AppRouting = () => {
   return (
@@ -33,12 +35,14 @@ const AppRouting = () => {
         path="/dockerfileIntelMPI/show"
         element={<FinaldockerfileIntelMPI />}
       />
-      <Route path="/" element={<HomePageView/>}/>
+      <Route path="/home" element={<HomePageView/>}/>
       <Route path="/formPage" element={<ContainerizationFormView/>} />
       <Route path="/displayDockerFile" element={<DockerFileView/>}/>
       <Route path="/multistage" element={<MultiStepFormView/>}/>
       <Route path="/dockerlogin" element={<PushToHubForm />}/>
       <Route path="/review" element={<ReviewView/>}/>
+      <Route path="/builds" element={<DashboardReview/>}/>
+      <Route path="/" element={<LoginView/>}/>
     </Routes>
   );
 };

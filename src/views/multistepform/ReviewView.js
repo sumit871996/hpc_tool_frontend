@@ -12,6 +12,7 @@ import {
   TableCell,
   TableRow,
   Text,
+  TextInput,
 } from "grommet";
 import {
     RotateRight,
@@ -23,35 +24,40 @@ import {
 import { useContext, useEffect, useState } from "react";
 import { WizardContext } from "./WizardContext";
 import axios from "axios";
+import { useLocation } from "react-router-dom";
 
 const ReviewView = () => {
+  const location = useLocation()
   const [buildStatus, setBuildStatus] = useState("-");
-  const [showSpinner, setShowSpinner] = useState(true);
+  const [buildLogs, setBuildLogs] = useState("-");
+  const [showSpinner, setShowSpinner] = useState(false);
   const [showNotification, setShowNotification] = useState(false);
+  const [dockerPass,setDockerPass]=useState();
+  const [dockerUser,setDockerUser]=useState();
   const [toastTitle, setToastTitle] = useState("Review Status");
   const [toastStatus, setToastStatus] = useState("critical");
   const [toastMessage, setToastMessage] = useState(
     "Failed To Load Status Of Build"
   );
+  const {buildId}= location.state;
 
-  const {
-    dockerUser,
-    setDockerUser,
-    dockerPass,
-    setDockerPass,
-    buildId,
-    setBuildId,
-  } = useContext(WizardContext);
   useEffect(() => {
     statusCall();
   }, []);
 
   const statusCall = (e) => {
     axios
-      .get(`http://localhost:8081/home/getStatus/${buildId}`)
+      .get(`http://localhost:8081/home/getStatus/${buildId}`,
+      {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("auth_token")}`,
+        },
+      })
       .then((response) => {
         console.log(response);
-        const status = response.data;
+        const status = response.data.status;
+        const logs= response.data.logs;
+        setBuildLogs(logs);
         setBuildStatus(status);
         setShowSpinner(false);
       })
@@ -69,36 +75,29 @@ const ReviewView = () => {
 
   return (
     <Box
-      pad={{ left: "large", right: "large" }}
-      style={{ alignItems: "center" }}
+      pad="large"
+      style={{ alignItems: "center",justifyContent:"center"}}
+      fill
+     
     >
-      <Table style={{ width: "50%", justifyContent: "center" }}>
-        <TableBody>
-          <TableRow style={{ alignItems: "center" }}>
-            <TableCell>
+      <Heading>Review Page</Heading>
+      <Box fill pad={"large"}>
+      <Table style={{  justifyContent: "center" }}>
+        <TableBody >
+          <TableRow style={{padding:"10px" }} >
+            <TableCell style={{minWidth:"100px"}}>
               <strong>Build Id :</strong>
             </TableCell>
             <TableCell>{buildId}</TableCell>
           </TableRow>
           <TableRow>
             <TableCell>
-              <strong>Docker User :</strong>
-            </TableCell>
-            <TableCell>{dockerUser}</TableCell>
-          </TableRow>
-          <TableRow>
-            <TableCell>
-              <strong>Docker Password :</strong>
-            </TableCell>
-            <TableCell>{dockerPass}</TableCell>
-          </TableRow>
-          <TableRow>
-            <TableCell>
               <strong>Build Status :</strong>
             </TableCell>
             <TableCell>
+           
               <Box gap="small" direction="row">
-                {buildStatus.toLowerCase() === "success".toLowerCase() && (
+                {buildStatus === "success".toLowerCase() && (
                   <Box
                     direction="row"
                     gap="1%"
@@ -138,9 +137,15 @@ const ReviewView = () => {
               </Box>
             </TableCell>
           </TableRow>
+          <TableRow style={{ alignItems: "center" }}>
+            <TableCell>
+              <strong>Build Log:</strong>
+            </TableCell>
+            <TableCell><Box style={{maxHeight:"200px"}}><div style={{overflowY:"scroll"}}>{buildLogs}</div></Box></TableCell>
+          </TableRow>
         </TableBody>
       </Table>
-
+      </Box>
       {showSpinner === true && (
         <Layer>
           <Box

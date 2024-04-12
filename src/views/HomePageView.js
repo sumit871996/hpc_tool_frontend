@@ -23,6 +23,7 @@ import {
   ContactInfo,
   System,
   CircleInformation,
+  Task,
 } from "grommet-icons";
 import backgroundImg from "../assets/dashBackgroundImage.svg";
 import { backgrounds } from "grommet-theme-hpe";
@@ -58,11 +59,11 @@ function HomePageView() {
       path: "/contact",
     },
     {
-      logo: <ContactInfo size="50px" color="rgb(23, 235, 160)" />,
-      title: "Signup",
-      description: "Sign up for free account",
-      footerlable: "Signup",
-      path: "/signup",
+      logo: <Task size="50px" color="rgb(23, 235, 160)" />,
+      title: "Dashboard",
+      description: "Dashboard for view builds list",
+      footerlable: "Dashboard",
+      path: "/builds",
     },
     {
       logo: <System size="50px" color="rgb(247, 64, 255)" />,
@@ -266,7 +267,7 @@ function HomePageView() {
       >
         {/* 2nd section A*/}
         <Box fill>
-          <Text size="36px" weight="500" margin={{ left: "medium" }}>
+          <Text size="36px"  margin={{ left: "medium" }}>
             About HPC Containerization
           </Text>
         </Box>
@@ -386,7 +387,7 @@ function HomePageView() {
         gap="medium"
       >
         <Box fill style={{ width: "100%" }}>
-          <Text size="36px" weight="500" margin={{ left: "medium" }}>
+          <Text size="36px"  margin={{ left: "medium" }}>
             Step to Containerization
           </Text>
         </Box>
@@ -396,8 +397,8 @@ function HomePageView() {
           style={{ justifyContent: "center" }}
           fill
         >
-          {cardDetails.map((card) => (
-            <Card width={"30%"}>
+          {cardDetails.map((card,index) => (
+            <Card key={index} width={"30%"}>
               <CardBody gap="small">
                 <Box>{card.logo}</Box>
                 <Box>
@@ -436,14 +437,14 @@ function HomePageView() {
         background={"rgb(255, 255, 255)"}
       >
         <Box fill pad={"small"}>
-          <Text size="36px" weight="500" margin={{ left: "medium" }}>
+          <Text size="36px" margin={{ left: "medium" }}>
             Frequently Asked Questions
           </Text>
         </Box>
         <Box fill pad={{ left: "5%" }}>
           <Accordion>
-            {faq.map((qna) => (
-              <AccordionPanel label={qna.question}>
+            {faq.map((qna,index) => (
+              <AccordionPanel key={index} label={qna.question}>
                 <Box pad="medium" background="light-2">
                   <Text>{qna.answer}</Text>
                 </Box>
