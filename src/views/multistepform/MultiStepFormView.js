@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { StepContent } from "./StepContent";
 import { WizardContext } from "./WizardContext";
-import { Box, Notification } from "grommet";
+import { Box, Layer, Notification, Spinner, Text } from "grommet";
 import { StepFooter } from "./StepFooter";
 import HomeView from "../HomeView";
 import FinaldockerfileIntelMPI from "../../components/OutputWindow/FinaldockerfileIntelMPI";
@@ -12,6 +12,8 @@ import { defaultFormValues } from "./defaultValues";
 import { PushToHubForm } from "./PushToHubForm";
 import ReviewView from "./ReviewView";
 import { useNavigate } from "react-router-dom";
+
+import axios from "axios";
 
 export const steps = [
   {
@@ -29,11 +31,13 @@ export const steps = [
     input: <PushToHubForm />,
     title: "Upload to Docker",
   },
-  {
-    description: "Review the details of build details",
-    input: <ReviewView />,
-    title: "Review Details",
-  },
+
+  // {
+  //   description: "Review the details of build details",
+  //   input: <ReviewView/>,
+  //   title: "Review Details"
+  // }
+
 ];
 
 export const MultiStepFormView = () => {
@@ -236,8 +240,18 @@ export const MultiStepFormView = () => {
 
   const [dockerUser, setDockerUser] = useState("");
   const [dockerPass, setDockerPass] = useState("");
-  const [buildId, setBuildId] = useState(0);
+
+  const [dockerFormData, setDockerFormData] = useState({
+    docker_username: "",
+    docker_password: "",
+  });
+
   const [dockerBuildAppCommand, setDockerBuildAppCommand] = useState("");
+  const [showSpinner, setShowSpinner] = useState(false);
+  const [notificationTitle, setNotificationTitle] = useState("");
+  const [notificationMessage, setNotificationMessage] = useState("");
+  const [notificationStatus, setNotificationStatus] = useState("");
+  const [showNotification, setShowNotification] = useState(false);
 
   useEffect(() => {
     setActiveStep(activeIndex + 1);
@@ -303,26 +317,146 @@ export const MultiStepFormView = () => {
       setDockerUser,
       dockerPass,
       setDockerPass,
-      buildId,
-      setBuildId,
       dockerBuildAppCommand,
       setDockerBuildAppCommand,
+      dockerFormData,
+      setDockerFormData,
     }),
-    [activeIndex, activeStep, formValues]
+    [activeIndex, activeStep, formValues, dockerFormData]
   );
 
   const handleRequest = (e) => {
     e.preventDefault();
-    console.log("Step's submit procedure is done");
-    navigate("/");
-  };
 
+    console.log("Step's submit procedure is done");
+    uploadToDocker();
+    
+  };
+  const uploadToDocker = (e) => {
+    setShowSpinner(true);
+    console.log("Spinner Started");
+    console.log("Upload Image");
+    let data;
+    if (formValues.mpi_type == "IntelMPI") {
+      data = {
+        imagename: formValues.finalimagename,
+        imagetag: formValues.finalimagetag,
+        dockeruser: dockerFormData.docker_username,
+        dockerpassword: dockerFormData.docker_password,
+        dockerfile: dockerfilename,
+        buildcommand: dockerBuildAppCommand,
+        dockerfilename: `DockerFile${formValues.finalimagename}`,
+
+        baseimagename: formValues.imagename,
+        baseimagetag: formValues.imagetag,
+        basedockerfile: dockerIntelMPIFile,
+        basebuildcommand: buildCommand,
+        basedockerfilename: basedockerfilename,
+      };
+    } else if (formValues.mpi_type == "MPICH") {
+      data = {
+        imagename: formValues.finalimagename,
+        imagetag: formValues.finalimagetag,
+        dockeruser: dockerFormData.docker_username,
+        dockerpassword: dockerFormData.docker_password,
+        dockerfile: dockerfilename,
+        buildcommand: dockerBuildAppCommand,
+        dockerfilename: `DockerFile${formValues.finalimagename}`,
+
+        baseimagename: formValues.imagename,
+        baseimagetag: formValues.imagetag,
+        basedockerfile: dockerMPICHFile,
+        basebuildcommand: buildCommand,
+        basedockerfilename: basedockerfilename,
+      };
+    } else if (formValues.mpi_type == "OpenMPI") {
+      data = {
+        imagename: formValues.finalimagename,
+        imagetag: formValues.finalimagetag,
+        dockeruser: dockerFormData.docker_username,
+        dockerpassword: dockerFormData.docker_password,
+        dockerfile: dockerfilename,
+        buildcommand: dockerBuildAppCommand,
+        dockerfilename: `DockerFile${formValues.finalimagename}`,
+
+        baseimagename: formValues.imagename,
+        baseimagetag: formValues.imagetag,
+        basedockerfile: dockerOpenMPIFile,
+        basebuildcommand: buildCommand,
+        basedockerfilename: basedockerfilename,
+      };
+    }
+
+    const formData = new FormData();
+    formData.append("inputData", JSON.stringify(data));
+    formData.append("file", dockerFormData.zipFile);
+
+    axios
+      .post(
+        `http://localhost:8081/home/buildandpush/${localStorage.getItem(
+          "user_id"
+        )}`,
+        formData,
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("auth_token")}`,
+          },
+        }
+      )
+      .then((res) => {
+        console.log(res.data);
+        const buildId=res.data.buildId
+        setNotificationStatus("normal");
+        setNotificationTitle("Upload To Docker");
+        setNotificationMessage("Build Id Created Successfully");
+        setShowSpinner(false);
+        console.log("Spinner Ended");
+        setShowNotification(true);
+        navigate("/review", {state:{buildId}})
+      })
+      .catch((error) => {
+        console.log(error);
+        setNotificationStatus("critical");
+        setNotificationTitle("Upload To Docker");
+        setNotificationMessage("Failed to upload image to docker");
+        setShowSpinner(false);
+        console.log("Spinner Ended");
+        setShowNotification(true);
+      });
+  };
   return (
     <WizardContext.Provider value={contextValue}>
       <Box fill>
         <StepContent onSubmit={(e) => handleRequest(e)} />
         <StepFooter />
+        {showSpinner && (
+          <Layer>
+            <Box
+              align="center"
+              justify="center"
+              direction="row"
+              alignSelf="center"
+              pad="medium"
+            >
+              <Spinner />
+              <Text margin="10px">Pushing To Docker...</Text>
+            </Box>
+          </Layer>
+        )}
+        {showNotification && (
+          <Notification
+            toast
+            title={notificationTitle}
+            message={notificationMessage}
+            status={notificationStatus}
+            time={5000}
+            onClose={() => {
+              setShowNotification(false);
+            }}
+          />
+        )}
       </Box>
     </WizardContext.Provider>
   );
 };
+

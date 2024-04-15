@@ -35,6 +35,8 @@ const AppHeader = () => {
     navigate("/");
   };
 
+  if(
+  window.location.pathname !== "/"){
   return (
     <Header pad={"small"} background="black">
       <Box direction="row" gap="small" align="center">
@@ -100,7 +102,9 @@ const AppHeader = () => {
         )}
       </Box>
     </Header>
-  );
+  );} else{
+    return
+  }
 };
 
 export default AppHeader;

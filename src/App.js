@@ -41,6 +41,7 @@ class App extends Component {
         <ResponsiveContext.Consumer>
           {(size) => (
             <Box background={"rgb(247, 247, 247)"} fill>
+              
               <AppHeader />
               <Box fill align="start" justify="start" >
                 <AppRouting />

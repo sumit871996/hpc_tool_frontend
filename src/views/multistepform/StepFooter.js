@@ -1,12 +1,12 @@
-import { Box, Button, Footer, ResponsiveContext } from "grommet";
-import { useContext } from "react";
-import { WizardContext } from "./WizardContext";
-import { LinkNext, LinkPrevious } from "grommet-icons";
+import { Box, Button, Footer, Image, ResponsiveContext, Text } from "grommet"
+import { useContext } from "react"
+import { WizardContext } from "./WizardContext"
+import { LinkNext, LinkPrevious } from "grommet-icons"
+import dockerLogo from "../../assets/docker_logo.svg";
+export const StepFooter = ({previousId,nextId, ...rest})=>{
+    const size = useContext(ResponsiveContext)
+    const {activeIndex, setActiveIndex, activeStep, id, steps}= useContext(WizardContext)
 
-export const StepFooter = ({ previousId, nextId, ...rest }) => {
-  const size = useContext(ResponsiveContext);
-  const { activeIndex, setActiveIndex, activeStep, id, steps } =
-    useContext(WizardContext);
 
   const checkPreviousStep = () => {
     setActiveIndex(activeIndex - 1);
@@ -41,10 +41,49 @@ export const StepFooter = ({ previousId, nextId, ...rest }) => {
                   `Step ${activeStep - 1} title`
                 : undefined
             }
-            icon={<LinkPrevious />}
-            onClick={() => checkPreviousStep()}
-          />
-        )}
+
+            alignSelf="center"
+          >
+    
+    {activeStep > 1 && (
+                <Button
+                  id={previousId}
+                  label={
+                    !['xsmall', 'small'].includes(size)
+                      ? (steps[activeIndex - 1] && steps[activeIndex - 1].title) ||
+                        `Step ${activeStep - 1} title`
+                      : undefined
+                  }
+                  icon={<LinkPrevious />}
+                  onClick={() => checkPreviousStep()}
+                />
+              )}
+    
+    { activeIndex<steps.length-1 ?
+            <Button
+              id={nextId}
+              icon={<LinkNext />}
+              primary
+              reverse
+              label={activeIndex === steps.length - 1 ? 'Finish' : 'Next'}
+              form={`${id}-form`}
+              type='submit'
+            />:
+            <Button type="submit">
+            <Button form={`${id}-form`} type="submit" style={{background:"rgb(1, 155, 120)",borderRadius: "2em",padding:"6px 18px", cursor:"pointer",border:"none"}} >
+              <Box direction="row" style={{justifyContent:"center",alignItems:"center"}} gap="small"> 
+                <Text size="small" color={"rgb(255, 255, 255)"} weight={"bold"}>Push To Docker</Text>
+              <Image width={"25px"} src={dockerLogo} style={{ borderRadius: "50%" }} /></Box>
+            </Button>
+            </Button>
+    }
+          </Footer>
+        </Box>
+      );
+
+}
+
+
 
         <Button
           id={nextId}
