@@ -1,4 +1,3 @@
-
 import axios from "axios";
 import React, { useState } from "react";
 import Editor from "react-simple-code-editor";
@@ -27,33 +26,36 @@ import { useLocation, useNavigate } from "react-router-dom";
 
 export const ImageForm = (props) => {
   const location = useLocation();
-  const [showLoading, setShowLoading]=useState(false);
-  const [showNotification,setShowNotification]=useState(true);
-  const [notificationTitle,setNotificationTitle]=useState("Error");
-  const [notificationMessage,setNotificationMessage]=useState("Error Message");
-  const [notificationStatus,setNotificationStatus]=useState("critical")
+  const [showLoading, setShowLoading] = useState(false);
+  const [showNotification, setShowNotification] = useState(true);
+  const [notificationTitle, setNotificationTitle] = useState("Error");
+  const [notificationMessage, setNotificationMessage] =
+    useState("Error Message");
+  const [notificationStatus, setNotificationStatus] = useState("critical");
+  const [fileZip, setFileZip] = useState(null);
+
   const navigate = useNavigate();
   const navigatefunction = (data) => {
-    setShowLoading(true)
+    // setShowLoading(true);
     console.log(data);
-    axios.post("http://localhost:8081/home/buildandpush", data).then((res)=>{
-      if(res.status==200){
-        setNotificationTitle("Successful")
-        setNotificationMessage("SucessFully Stored to docker file")
-        setNotificationStatus("normal")
-        setShowLoading(false)
-        setShowNotification(true)
-        console.log(res.data)
-      }
-    }).catch((error)=>{
-      setNotificationTitle("Error")
-      setNotificationMessage("Failed to store docker file")
-      setNotificationStatus("critical")
-      setShowLoading(false)
-      setShowNotification(true)
-      console.log(error)
+    // axios.post("http://localhost:8081/home/buildandpush", data).then((res)=>{
+    //   if(res.status==200){
+    //     setNotificationTitle("Successful")
+    //     setNotificationMessage("SucessFully Stored to docker file")
+    //     setNotificationStatus("normal")
+    //     setShowLoading(false)
+    //     setShowNotification(true)
+    //     console.log(res.data)
+    //   }
+    // }).catch((error)=>{
+    //   setNotificationTitle("Error")
+    //   setNotificationMessage("Failed to store docker file")
+    //   setNotificationStatus("critical")
+    //   setShowLoading(false)
+    //   setShowNotification(true)
+    //   console.log(error)
 
-    });
+    // });
   };
   const onFormChange = (value) => {
     setFormValues(value);
@@ -68,6 +70,9 @@ export const ImageForm = (props) => {
       ...prevValues,
       zipFile: file,
     }));
+
+    setFileZip(file);
+
     setFilename(file.name);
   };
 
@@ -81,45 +86,73 @@ export const ImageForm = (props) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // const formData = new FormData();
 
-    // formData.append("dockerhubusername", formValues.dockerhubusername);
-    // formData.append("dockerhubpassword", formValues.dockerhubpassword);
-    // formData.append("zipFile", formValues.zipFile);
     // Handle form submission here, including the zip file
     console.log(formValues);
   };
 
   const [filename, setFilename] = useState("");
   const [data, setData] = useState({
+    dockeruser: "",
+    dockerpassword: "",
+
     imagename: location.state.imagename,
     imagetag: location.state.imagetag,
     dockerfile: location.state.dockerfile,
     buildcommand: location.state.dockerbuildcommand,
-    dockeruser: "",
-    dockerpassword: "",
     dockerfilename: location.state.dockerfilename,
+
+    baseimagename: location.state.baseimagename,
+    baseimagetag: location.state.baseimagetag,
+    basedockerfile: location.state.basedockerfile,
+    basebuildcommand: location.state.basedockerbuildcommand,
+    basedockerfilename: location.state.basedockerfilename,
   });
 
   const sendData = (data) => {
     setData({
       imagename: location.state.imagename,
       imagetag: location.state.imagetag,
-      buildcommand: location.state.dockerpushbuildcommand,
-      dockerfile: location.state.dockerfile,
+      buildcommand: location.state.dockerbuildcommand.replace(
+        `-t ${location.state.imagename}`,
+        `-t ${formValues.dockerhubusername}/${location.state.imagename}`
+      ),
+      dockerfile: (() => {
+        const finaldockerfile = location.state.dockerfile;
+        finaldockerfile[0] = location.state.dockerfile[0].replace(
+          `FROM ${location.state.imagename}`,
+          `FROM ${formValues.dockerhubusername}/${location.state.imagename}`
+        );
+        return finaldockerfile;
+      })(),
       dockeruser: formValues.dockerhubusername,
       dockerpassword: formValues.dockerhubpassword,
       dockerfilename: location.state.dockerfilename,
+
+      baseimagename: location.state.baseimagename,
+      baseimagetag: location.state.baseimagetag,
+      basedockerfile: location.state.basedockerfile,
+      basebuildcommand: location.state.basedockerbuildcommand.replace(
+        `-t ${location.state.baseimagename}`,
+        `-t ${formValues.dockerhubusername}/${location.state.baseimagename}`
+      ),
+      basedockerfilename: location.state.basedockerfilename,
     });
   };
 
   const [formValues, setFormValues] = React.useState({
     dockerhubusername: "",
     dockerhubpassword: "",
+    // zipFile: null,
   });
 
   return (
-    <Box gap="medium" width="large" pad={{bottom:"small"}} style={{minHeight:"80vh"}}>
+    <Box
+      gap="medium"
+      width="large"
+      pad={{ bottom: "small" }}
+      style={{ minHeight: "80vh" }}
+    >
       <Box>{JSON.stringify(data)}</Box>
       <Header
         direction="column"
@@ -173,22 +206,26 @@ export const ImageForm = (props) => {
           </Box>
         </Form>
       </Box>
-      {showLoading && 
-      <Layer>
-        <Box style={{justifyContent:"center"}}>
-          <Box fill style={{justifyContent:"center"}}><Spinner/></Box>
-        <Text>Pushing Image To Docker</Text></Box>
-      </Layer>
-      }
-      {showNotification && 
-      <Notification 
-      toast
-      title={notificationTitle}
-      message={notificationMessage}
-      status={notificationStatus}
-      onClose={()=>setShowNotification(false)}
-      time={5000}
-      />}
+      {showLoading && (
+        <Layer>
+          <Box style={{ justifyContent: "center" }}>
+            <Box fill style={{ justifyContent: "center" }}>
+              <Spinner />
+            </Box>
+            <Text>Pushing Image To Docker</Text>
+          </Box>
+        </Layer>
+      )}
+      {showNotification && (
+        <Notification
+          toast
+          title={notificationTitle}
+          message={notificationMessage}
+          status={notificationStatus}
+          onClose={() => setShowNotification(false)}
+          time={5000}
+        />
+      )}
     </Box>
   );
 };

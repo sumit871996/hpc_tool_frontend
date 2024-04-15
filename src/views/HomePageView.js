@@ -318,7 +318,7 @@ function HomePageView() {
             />
           </Box>
           <Box gap="small" fill pad={{ left: "3%" }}>
-            <Box style={{display:"inline-block"}}>
+            <Box style={{ display: "inline-block" }}>
               <Text
                 size="large"
                 weight="bold"
@@ -351,26 +351,26 @@ function HomePageView() {
                 ))}
               </Box>
             )}
-            {showService && <Box gap="small">
+            {showService && (
+              <Box gap="small">
                 {service.description_A}
 
                 <Grid
-                rows={['auto','auto']}
-                columns={['auto','auto','auto']}
-                gap={"small"}
+                  rows={["auto", "auto"]}
+                  columns={["auto", "auto", "auto"]}
+                  gap={"small"}
                 >
-                {service.description_B.map((item)=>(
+                  {service.description_B.map((item) => (
                     <Card>
-                    <CardBody>
+                      <CardBody>
                         <Text weight={"bold"}>{item.title}</Text>
                         <Paragraph>{item.description}</Paragraph>
-                        
-                    </CardBody>
-                </Card>
-                ))}
+                      </CardBody>
+                    </Card>
+                  ))}
                 </Grid>
-                
-                </Box>}
+              </Box>
+            )}
           </Box>
         </Box>
       </Box>

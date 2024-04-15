@@ -31,11 +31,13 @@ export const steps = [
     input: <PushToHubForm />,
     title: "Upload to Docker",
   },
+
   // {
   //   description: "Review the details of build details",
   //   input: <ReviewView/>,
   //   title: "Review Details"
   // }
+
 ];
 
 export const MultiStepFormView = () => {
@@ -127,7 +129,7 @@ export const MultiStepFormView = () => {
     "RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y wget && \\",
     "    mkdir /tmp/mpich-src && \\",
     "    cd /tmp/mpich-src && \\",
-    "    wget http://www.mpich.org/static/downloads/${MPI_VERSION}/mpich-${MPI_VERSION}.tar.gz && \\",
+    "    wget http://www.mpich.org/static/downloads/${MPI_VERSION}/mpich-${MPI_VERSION}.tar.gz --no-check-certificate && \\",
     "    tar xfz mpich-${MPI_VERSION}.tar.gz && \\",
     "    cd mpich-${MPI_VERSION} && \\",
     "    ./configure ${MPI_CONFIGURE_OPTIONS} && \\",
@@ -238,6 +240,7 @@ export const MultiStepFormView = () => {
 
   const [dockerUser, setDockerUser] = useState("");
   const [dockerPass, setDockerPass] = useState("");
+
   const [dockerFormData, setDockerFormData] = useState({
     docker_username: "",
     docker_password: "",
@@ -421,7 +424,6 @@ export const MultiStepFormView = () => {
         setShowNotification(true);
       });
   };
-
   return (
     <WizardContext.Provider value={contextValue}>
       <Box fill>
@@ -457,3 +459,4 @@ export const MultiStepFormView = () => {
     </WizardContext.Provider>
   );
 };
+

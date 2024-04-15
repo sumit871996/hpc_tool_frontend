@@ -48,6 +48,7 @@ export const PushToHubForm = () => {
     dockerBuildAppCommand,
     setDockerBuildAppCommand,
     dockerFormData,setDockerFormData,
+
   } = useContext(WizardContext);
   const [filename, setFilename] = useState("");
   const [dockerData, setDockerData] = useState({
@@ -62,6 +63,7 @@ export const PushToHubForm = () => {
     }));
     setFilename(file.name);
   };
+
 
   
 
@@ -103,6 +105,7 @@ export const PushToHubForm = () => {
             placeholder="Docker Password"
             value={dockerFormData.docker_password}
             onChange={handleChange}
+            type="password"
           />
         </FormField>
         <FormField
@@ -116,7 +119,9 @@ export const PushToHubForm = () => {
           label="Application Source Code"
           defaultValue=""
         ></FormField>
+
         {/* <Box
+
           width={"xxsmall"}
           height={"xxsmall"}
           background={"red"}
@@ -124,9 +129,9 @@ export const PushToHubForm = () => {
           onClick={uploadToDocker}
         >
           <Image src={dockerLogo} style={{ borderRadius: "50%" }} />
+
         </Box> */}
       </Box>
-      
       
     </Box>
   );
