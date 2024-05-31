@@ -36,26 +36,26 @@ export const ImageForm = (props) => {
 
   const navigate = useNavigate();
   const navigatefunction = (data) => {
-    // setShowLoading(true);
+    setShowLoading(true);
     console.log(data);
-    // axios.post("http://localhost:8081/home/buildandpush", data).then((res)=>{
-    //   if(res.status==200){
-    //     setNotificationTitle("Successful")
-    //     setNotificationMessage("SucessFully Stored to docker file")
-    //     setNotificationStatus("normal")
-    //     setShowLoading(false)
-    //     setShowNotification(true)
-    //     console.log(res.data)
-    //   }
-    // }).catch((error)=>{
-    //   setNotificationTitle("Error")
-    //   setNotificationMessage("Failed to store docker file")
-    //   setNotificationStatus("critical")
-    //   setShowLoading(false)
-    //   setShowNotification(true)
-    //   console.log(error)
+    axios.post("http://localhost:8081/home/buildandpush", data).then((res)=>{
+      if(res.status==200){
+        setNotificationTitle("Successfull")
+        setNotificationMessage("SucessFully Stored to docker file")
+        setNotificationStatus("normal")
+        setShowLoading(false)
+        setShowNotification(true)
+        console.log(res.data)
+      }
+    }).catch((error)=>{
+      setNotificationTitle("Error")
+      setNotificationMessage("Failed to store docker file")
+      setNotificationStatus("critical")
+      setShowLoading(false)
+      setShowNotification(true)
+      console.log(error)
 
-    // });
+    });
   };
   const onFormChange = (value) => {
     setFormValues(value);

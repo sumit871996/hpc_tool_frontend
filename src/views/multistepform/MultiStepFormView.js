@@ -359,14 +359,27 @@ export const MultiStepFormView = () => {
         imagetag: formValues.finalimagetag,
         dockeruser: dockerFormData.docker_username,
         dockerpassword: dockerFormData.docker_password,
-        dockerfile: dockerfilename,
-        buildcommand: dockerBuildAppCommand,
+        dockerfile: (() => {
+          const finaldockerfile = dockerfilename;
+          finaldockerfile[0] = dockerfilename[0].replace(
+            `FROM ${formValues.imagename}`,
+            `FROM ${dockerFormData.docker_username}/${formValues.imagename}`
+          );
+          return finaldockerfile;
+        })(),
+        buildcommand: dockerBuildAppCommand.replace(
+          `-t ${formValues.finalimagename}`,
+          `-t ${dockerFormData.docker_username}/${formValues.finalimagename}`
+        ),
         dockerfilename: `DockerFile${formValues.finalimagename}`,
 
         baseimagename: formValues.imagename,
         baseimagetag: formValues.imagetag,
         basedockerfile: dockerMPICHFile,
-        basebuildcommand: buildCommand,
+        basebuildcommand: buildCommand.replace(
+          `-t ${formValues.imagename}`,
+          `-t ${dockerFormData.docker_username}/${formValues.imagename}`
+        ),
         basedockerfilename: basedockerfilename,
       };
     } else if (formValues.mpi_type == "OpenMPI") {
