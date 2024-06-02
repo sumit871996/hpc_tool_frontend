@@ -13,12 +13,7 @@ import { Hpe } from "grommet-icons";
 import { useNavigate } from "react-router-dom";
 
 const items = [
-  { label: "Home", path: "/" },
-  // { label: 'About', path: '/about' },
-  // { label: 'Signup', path: '/signup' },
-  // { label: 'Products', path: '/products' },
-  // { label: "Solution", path: "/solution" },
-  // { label: "Technologies", path: "/technologies" },
+  { label: "Home", path: "/home" },
 ];
 
 const endItems = [
@@ -45,7 +40,7 @@ const AppHeader = () => {
           gap="small"
           style={{ cursor: "pointer", alignItems: "center", boxShadow: "none" }}
           onClick={() => {
-            navigate("/");
+            navigate("/home");
           }}
         >
           <Hpe size="xlarge" color="plain" />
