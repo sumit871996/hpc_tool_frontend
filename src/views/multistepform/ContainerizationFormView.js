@@ -9,7 +9,6 @@ import {
   Text,
   TextInput,
 } from "grommet";
-import { Code } from "grommet-icons";
 import { highlight, languages } from "prismjs/components/prism-core";
 import "prismjs/components/prism-clike";
 import "prismjs/components/prism-javascript";
@@ -18,8 +17,6 @@ import "prismjs/themes/prism.css";
 import { useContext, useEffect, useState } from "react";
 import Editor from "react-simple-code-editor";
 import { useNavigate } from "react-router-dom";
-import { OpenMPIForm } from "../../components/MPIForms/OpenMPIForm";
-import { defaultFormValues } from "./defaultValues";
 import { WizardContext } from "./WizardContext";
 
 export const ContainerizationFormView = () => {
@@ -183,75 +180,6 @@ export const ContainerizationFormView = () => {
   useEffect(() => {
     setDockerCommands(finalfile);
   }, [finalfile]);
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    console.log(formValues.mpi_type);
-    // console.log(intelMPIFormData)
-    let data = {};
-    if (formValues.mpi_type === "IntelMPI") {
-      data = {
-        mpi_type: formValues.mpi_type,
-        intel_mpi_devel_version: formValues.intel_mpi_devel_version,
-        intel_mkl_version: formValues.intel_mkl_version,
-        intel_icc_version: formValues.intel_icc_version,
-        intel_tbb_version: formValues.intel_tbb_version,
-        singularityimagename: formValues.finalimagename,
-        imagename: formValues.imagename,
-        imagetag: formValues.imagetag,
-        finalimagename: formValues.finalimagename,
-        finalimagetag: formValues.finalimagetag,
-        sourcecode: null,
-      };
-      // setFormValues(...data);
-    } else if (formValues.mpi_type === "MPICH") {
-      data = {
-        mpi_type: formValues.mpi_type,
-        mpi_ch_version: formValues.mpi_ch_Version,
-        mpi_configure_options: formValues.mpi_configure_options,
-        mpi_make_options: formValues.mpi_make_options,
-        user: formValues.user,
-        workdir: formValues.workdir,
-        imagename: formValues.imagename,
-        imagetag: formValues.imagetag,
-        singularityimagename: formValues.singularityimagename,
-        finalimagename: formValues.finalimagename,
-        finalimagetag: formValues.finalimagetag,
-      };
-      // setFormValues(...data);
-    } else if (formValues.mpi_type === "OpenMPI") {
-      data = {
-        mpi_type: formValues.mpi_type,
-        openMPI_Major_Version: formValues.openMPI_Major_Version,
-        openMPI_Version: formValues.openMPI_Version,
-        mpi_configure_options: formValues.mpi_configure_options,
-        mpi_make_options: formValues.mpi_make_options,
-        user: formValues.user,
-        workdir: formValues.workdir,
-        imagename: formValues.imagename,
-        imagetag: formValues.imagetag,
-        singularityimagename: formValues.singularityimagename,
-        finalimagename: formValues.finalimagename,
-        finalimagetag: formValues.finalimagetag,
-      };
-      // setFormValues(...data);
-    }
-    console.log(data);
-    console.log(typeof finalfile);
-    if (formValues.mpi_type === "IntelMPI") {
-      navigate("/dockerfileIntelMPI/show", {
-        state: { data: { ...data, dockercommands: finalfile } },
-      });
-    } else if (formValues.mpi_type === "MPICH") {
-      navigate("/dockerfileMPICH/show", {
-        state: { data: { ...data, dockercommands: finalfile } },
-      });
-    } else if (formValues.mpi_type === "OpenMPI") {
-      navigate("/dockerfileOpenMPI/show", {
-        state: { data: { ...data, dockercommands: finalfile } },
-      });
-    }
-  };
 
   return (
     <Box fill gap="medium">
@@ -579,7 +507,7 @@ export const ContainerizationFormView = () => {
               </FormField>
             </Box>
           </Box>
-          <Box></Box>
+          
           {/* </Form> */}
         </Box>
       ) : (

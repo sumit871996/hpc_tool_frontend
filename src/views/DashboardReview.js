@@ -1,6 +1,6 @@
 import axios from "axios";
 import { Box, DataTable, Heading, Text } from "grommet";
-import { CircleInformation, FormView, StatusCriticalSmall, StatusGoodSmall } from "grommet-icons";
+import { CircleInformation, FormView, StatusCriticalSmall, StatusGoodSmall, StatusUnknown } from "grommet-icons";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
@@ -22,40 +22,6 @@ const DashboardReview = () => {
     e.preventDefault();
     navigate("/review" , {state:{buildId}})
   }
-
-  const formatData = (dataSet) =>
-    dataSet.map((datum) => {
-      const adjustedDatum = { ...datum };
-      
-      switch (datum["finalBuildStatus"]) {
-        case "SUCCESS":
-          adjustedDatum.Status = {
-            label: "Success",
-            icon: StatusGoodSmall,
-            color: "status-ok",
-          };
-          break;
-        case "FAILED":
-          adjustedDatum.Status = {
-            label: "Failed",
-            icon: StatusCriticalSmall,
-            color: "status-critical",
-          };
-          break;
-          case "INPROGRESS":
-          adjustedDatum.Status = {
-            label: "In Progess ",
-            icon: StatusCriticalSmall,
-            color: "status-warning",
-          };
-          break;
-        default:
-          adjustedDatum.Status = {
-            label: datum[""],
-          };
-      }
-      return adjustedDatum;
-    });
 
   const formatedDate=(unformattedDate)=>{
     const date = new Date(unformattedDate);
@@ -86,9 +52,45 @@ const DashboardReview = () => {
       property: "status",
       header: "Status",
       render: (datum) => (
-        <Text color={"555555"}>
-          {datum.finalBuildStatus}
-        </Text>
+        
+          <>
+          {datum.finalBuildStatus.toLowerCase() === "success".toLowerCase() && (
+            <Box
+              direction="row"
+              gap="1%"
+              style={{ alignItems: "center" }}
+            >
+              <StatusGoodSmall color="green" /> <Text>Success</Text>
+            </Box>
+          )}
+          {datum.finalBuildStatus.toLowerCase() === "failure".toLowerCase() && (
+            <Box
+              direction="row"
+              gap="1%"
+              style={{ alignItems: "center" }}
+            >
+              <StatusCriticalSmall color="red" /> <Text>Failed</Text>
+            </Box>
+          )}
+          {datum.finalBuildStatus.toLowerCase() === "inprogress".toLowerCase() && (
+            <Box
+              direction="row"
+              gap="1%"
+              style={{ alignItems: "center" }}
+            >
+              <StatusGoodSmall color="orange" /> <Text>In Progress</Text>
+            </Box>
+          )}
+          {datum.finalBuildStatus.toLowerCase() === "unstable".toLowerCase() && (
+            <Box
+              direction="row"
+              gap="1%"
+              style={{ alignItems: "center" }}
+            >
+              <StatusUnknown color="grey" /> <Text>Unstable</Text>
+            </Box>
+          )}
+          </>
       ),
     },
     {
