@@ -1,7 +1,8 @@
 
 import React from "react";
-import Form from "@rjsf/core";
+// import Form from "@rjsf/core";
 import { withTheme } from "@rjsf/core";
+import Form from "@rjsf/antd";
 import { Theme as AntDTheme } from "@rjsf/antd";
 import validator from '@rjsf/validator-ajv8';
 import './MPIform.css';
@@ -182,8 +183,8 @@ const onSubmit = (({ formData }) => {
 const MPIform = () => {
     return (
         <div className="form-layout">
-            <AntDForm
-                schema={schema} onSubmit={onSubmit} validator={validator} uiSchema={uiSchema}
+            <Form
+                schema={schema} onSubmit={onSubmit} validator={validator} 
             />
         </div>
     );

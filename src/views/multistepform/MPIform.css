@@ -8,16 +8,14 @@
     margin-left: 30%;
     margin-right: 20%;
     border: none;
-    /* background-color: white; */
-    /* flex-direction: row; */
+
 }
 
 
 .form-row {
     display: flex;
     flex-wrap: wrap;
-    gap: 16px; /* Adjust the gap between fields */
-    /* background-color: white; */
+    gap: 16px; /* Adjust the gap between fields */  
     flex-direction: row;
   }
   
