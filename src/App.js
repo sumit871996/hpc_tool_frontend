@@ -15,6 +15,7 @@ import { hpe } from "grommet-theme-hpe";
 import AppHeader from "./components/UI/AppHeader";
 import AppFooter from "./components/UI/AppFooter";
 import AppRouting from "./routes/AppRouting";
+import "antd/dist/reset.css";
 
 const AppBar = (props) => (
   <Box

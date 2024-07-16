@@ -168,6 +168,7 @@ export const ContainerizationFormView = () => {
   const handleFormValueChange = (e) => {
     const { name, value } = e.target;
     setFormValues({ ...formValues, [name]: value });
+    console.log(e.target.value)
   };
 
   const handleOpenVersionChange = (e) => {
@@ -175,6 +176,7 @@ export const ContainerizationFormView = () => {
     setFormValues({ ...formValues, [name]: value });
 
     setSelectedMajorVersion(e.target.value);
+   
   };
 
   useEffect(() => {
