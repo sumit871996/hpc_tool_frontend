@@ -183,8 +183,8 @@ const onSubmit = (({ formData }) => {
 const MPIform = () => {
     return (
         <div className="form-layout">
-            <Form
-                schema={schema} onSubmit={onSubmit} validator={validator} 
+            <AntDForm
+                schema={schema} onSubmit={onSubmit} validator={validator}
             />
         </div>
     );

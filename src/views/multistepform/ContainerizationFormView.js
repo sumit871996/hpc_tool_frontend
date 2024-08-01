@@ -1,17 +1,10 @@
-import {
-  Box,
-  Button,
-  Header,
-  Heading,
-  Select,
-  Text,
-} from "grommet";
+import { Box, Button, Header, Heading, Select, Text } from "grommet";
 import "prismjs/components/prism-clike";
 import "prismjs/components/prism-javascript";
 import "prismjs/components/prism-docker";
 import "prismjs/themes/prism.css";
 import { useContext, useEffect, useRef, useState } from "react";
-
+import 'antd/dist/reset.css';
 import { WizardContext } from "./WizardContext";
 import axios from "axios";
 import validator from "@rjsf/validator-ajv8";
@@ -19,35 +12,14 @@ import Form from "@rjsf/antd";
 
 export const ContainerizationFormView = () => {
   const {
-    formValues,
-    setFormValues,
-    dockerCommands,
     setDockerCommands,
-    errorMPIVersion,
-    setErrorMPIVersion,
-    errorICCVersion,
-    setErrorICCVersion,
-    errorTBBVersion,
-    setErrorTBBVersion,
 
-    errorUser,
-    setErrorUser,
-    errorWorkDir,
-    setErrorWorkDir,
-
-    errorImageName,
-    setErrorImageName,
-    errorImageTag,
-    setErrorImageTag,
     errorAIN,
-    setErrorAIN,
-    errorAIT,
-    setErrorAIT,
-    errorASIN,
-    setErrorASIN,
+    activeIndex,
+    setActiveIndex,
   } = useContext(WizardContext);
 
-  useEffect(() => { }, [errorAIN]);
+  useEffect(() => {}, [errorAIN]);
   // const [formValues,setFormValues]=useState(defaultFormValues);
   const [finalfile, setFinalFile] = useState("");
 
@@ -59,7 +31,6 @@ export const ContainerizationFormView = () => {
   const [MPIValue, setMPIValue] = useState("");
   const [errors, setErrors] = useState("");
   const formRef = useRef(null);
-
 
   const handleFormValueChange = (e) => {
     const selectedOption = e.value;
@@ -109,20 +80,15 @@ export const ContainerizationFormView = () => {
 
   const handleOnChange = ({ formData: newFormData }) => {
     setFormData((prev) => ({ ...prev, ...newFormData }));
-   
   };
 
   const handleSubmit = (e, formData) => {
     e.preventDefault();
+
     if (formRef.current.validateForm()) {
-      alert('Form is valid');
-      setCurrentStep(currentStep + 1);
       console.log("Form submitted:", formData);
-    } else{
-      console.log(formRef.current.validateForm());
-      console.log("Form submitted:", formData);
+      setActiveIndex(activeIndex + 1);
     }
-    
   };
 
   const handlePrev = (e) => {
@@ -133,20 +99,13 @@ export const ContainerizationFormView = () => {
   const handleNext = (e) => {
     e.preventDefault();
     if (formRef.current.validateForm()) {
-      alert('Form is valid');
       setCurrentStep(currentStep + 1);
-    } else{
-      console.log(formRef.current.validateForm());
     }
-    // setCurrentStep(currentStep + 1);
-    //write code for validation
-
-
   };
 
-  const handleError = (error)=>{
-    setErrors(error)
-  }
+  const handleError = (error) => {
+    setErrors(error);
+  };
 
   return (
     <Box fill gap="medium">
@@ -173,10 +132,9 @@ export const ContainerizationFormView = () => {
             schema={getCurrentSchema()}
             formData={formData}
             onChange={handleOnChange}
-            // onSubmit={handleSubmit}
             onError={handleError}
             validator={validator}
-            // liveValidate 
+            // liveValidate
             children={
               <Box direction="row" gap="large">
                 <Button
@@ -200,7 +158,6 @@ export const ContainerizationFormView = () => {
                   />
                 )}
               </Box>
-              //add validation with Next button using ref
             }
           />
         </Box>
