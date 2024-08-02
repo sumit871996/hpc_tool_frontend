@@ -57,11 +57,11 @@ ul{
     background: var(--border);
     position: absolute;
     display: inline;
-    top: 21px;
+    top: 18px;
     left: 50%;
     transform: translate(-50%);
     /* max-width: 42rem; */
-    width: 87%;
+    width: 90%;
     height: 2px;
     z-index: 0;
 }

@@ -13,14 +13,13 @@ import Form from "@rjsf/antd";
 export const ContainerizationFormView = () => {
   const {
     setDockerCommands,
-
     errorAIN,
     activeIndex,
     setActiveIndex,
   } = useContext(WizardContext);
 
   useEffect(() => {}, [errorAIN]);
-  // const [formValues,setFormValues]=useState(defaultFormValues);
+
   const [finalfile, setFinalFile] = useState("");
 
   const [useCasesList, setUseCasesList] = useState({});
