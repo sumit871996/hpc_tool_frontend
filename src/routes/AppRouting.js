@@ -16,6 +16,8 @@ import { PushToHubForm } from "../views/multistepform/PushToHubForm";
 import ReviewView from "../views/multistepform/ReviewView";
 import DashboardReview from "../views/DashboardReview";
 import { LoginView } from "../views/LoginView";
+import MPIform from "../views/multistepform/MPIform";
+
 
 const AppRouting = () => {
   return (
@@ -43,6 +45,7 @@ const AppRouting = () => {
       <Route path="/review" element={<ReviewView/>}/>
       <Route path="/builds" element={<DashboardReview/>}/>
       <Route path="/" element={<LoginView/>}/>
+      <Route path="/schemaForm" element={<MPIform/>}/>
     </Routes>
   );
 };

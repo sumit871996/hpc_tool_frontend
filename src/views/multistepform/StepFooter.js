@@ -46,6 +46,7 @@ export const StepFooter = ({ previousId, nextId, ...rest }) => {
           />
         )}
         {activeIndex < steps.length - 1 ? (
+          activeStep > 1 ? (
           <Button
             id={nextId}
             icon={<LinkNext />}
@@ -55,6 +56,7 @@ export const StepFooter = ({ previousId, nextId, ...rest }) => {
             form={`${id}-form`}
             type="submit"
           />
+        ):(<></>)
         ) : (
           <Button type="submit">
             <Button

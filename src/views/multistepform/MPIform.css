@@ -1,0 +1,31 @@
+.custom-mpich_version, .custom-mpi_configure_options, .custom-mpi_make_options,
+.custom-user, .custom-work_dir, .custom-base_image_name, .custom-base_image_tag  {
+    width: 250px;
+    font-size: 50px;
+}
+
+.form-layout{
+    margin-left: 30%;
+    margin-right: 20%;
+    border: none;
+
+}
+
+
+.form-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px; /* Adjust the gap between fields */  
+    flex-direction: row;
+  }
+  
+  .form-field {
+    flex: 1;
+  }
+  
+  .half-width {
+    flex: 0 0 48%; /* Adjust width as needed */
+    max-width: 48%;
+  }
+
+

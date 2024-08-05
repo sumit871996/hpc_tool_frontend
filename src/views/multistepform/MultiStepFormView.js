@@ -3,14 +3,10 @@ import { StepContent } from "./StepContent";
 import { WizardContext } from "./WizardContext";
 import { Box, Layer, Notification, Spinner, Text } from "grommet";
 import { StepFooter } from "./StepFooter";
-import HomeView from "../HomeView";
-import FinaldockerfileIntelMPI from "../../components/OutputWindow/FinaldockerfileIntelMPI";
-import { ImageForm } from "../../components/ImageForm";
 import { ContainerizationFormView } from "./ContainerizationFormView";
 import { DockerFileView } from "./DockerFileView";
 import { defaultFormValues } from "./defaultValues";
 import { PushToHubForm } from "./PushToHubForm";
-import ReviewView from "./ReviewView";
 import { useNavigate } from "react-router-dom";
 
 import axios from "axios";
