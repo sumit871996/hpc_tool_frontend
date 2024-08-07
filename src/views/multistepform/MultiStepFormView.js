@@ -43,6 +43,7 @@ export const MultiStepFormView = () => {
   const [dockerCommands, setDockerCommands] = useState("");
   const [buildCommand, setBuildCommand] = useState();
   const [dockerfilename, setDockerFileName] = useState();
+  const [currentStep, setCurrentStep] = useState(0);
   const navigate = useNavigate();
   const [dockerIntelMPIFile, setDockerIntelMPIFile] = useState([
     "FROM centos:8.4.2105 AS base",
@@ -248,6 +249,7 @@ export const MultiStepFormView = () => {
   const [notificationMessage, setNotificationMessage] = useState("");
   const [notificationStatus, setNotificationStatus] = useState("");
   const [showNotification, setShowNotification] = useState(false);
+  const [stages, setStages] = useState([]);
 
   useEffect(() => {
     setActiveStep(activeIndex + 1);
@@ -317,8 +319,10 @@ export const MultiStepFormView = () => {
       setDockerBuildAppCommand,
       dockerFormData,
       setDockerFormData,
+      currentStep, setCurrentStep,
+      stages, setStages
     }),
-    [activeIndex, activeStep, formValues, dockerFormData]
+    [activeIndex, activeStep, formValues, dockerFormData, currentStep, setCurrentStep,stages, setStages]
   );
 
   const handleRequest = (e) => {

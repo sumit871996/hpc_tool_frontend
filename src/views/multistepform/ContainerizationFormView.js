@@ -16,6 +16,8 @@ export const ContainerizationFormView = () => {
     errorAIN,
     activeIndex,
     setActiveIndex,
+    currentStep, setCurrentStep,
+    stages, setStages
   } = useContext(WizardContext);
 
   useEffect(() => {}, [errorAIN]);
@@ -24,8 +26,7 @@ export const ContainerizationFormView = () => {
 
   const [useCasesList, setUseCasesList] = useState({});
   const [useCaseArray, setUseCaseArray] = useState([]);
-  const [stages, setStages] = useState([]);
-  const [currentStep, setCurrentStep] = useState(0);
+  // const [currentStep, setCurrentStep] = useState(0);
   const [formData, setFormData] = useState({});
   const [MPIValue, setMPIValue] = useState("");
   const [errors, setErrors] = useState("");

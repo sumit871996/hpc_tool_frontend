@@ -5,11 +5,23 @@ import { LinkNext, LinkPrevious } from "grommet-icons";
 import dockerLogo from "../../assets/docker_logo.svg";
 export const StepFooter = ({ previousId, nextId, ...rest }) => {
   const size = useContext(ResponsiveContext);
-  const { activeIndex, setActiveIndex, activeStep, id, steps } =
+  const { activeIndex, setActiveIndex, activeStep, id, steps, currentStep, setCurrentStep, stages, setStages } =
     useContext(WizardContext);
 
   const checkPreviousStep = () => {
     setActiveIndex(activeIndex - 1);
+  };
+
+  const handlePrev = (e) => {
+    e.preventDefault();
+    setCurrentStep(currentStep - 1);
+  };
+
+  const handleNext = (e) => {
+    e.preventDefault();
+    // if (formRef.current.validateForm()) {
+    setCurrentStep(currentStep + 1);
+    // }
   };
 
   return (
@@ -38,25 +50,25 @@ export const StepFooter = ({ previousId, nextId, ...rest }) => {
             label={
               !["xsmall", "small"].includes(size)
                 ? (steps[activeIndex - 1] && steps[activeIndex - 1].title) ||
-                  `Step ${activeStep - 1} title`
+                `Step ${activeStep - 1} title`
                 : undefined
             }
             icon={<LinkPrevious />}
             onClick={() => checkPreviousStep()}
           />
         )}
-        {activeIndex < steps.length - 1 ? (
-          activeStep > 1 ? (
-          <Button
-            id={nextId}
-            icon={<LinkNext />}
-            primary
-            reverse
-            label={activeIndex === steps.length - 1 ? "Finish" : "Next"}
-            form={`${id}-form`}
-            type="submit"
-          />
-        ):(<></>)
+        
+        {/* {activeIndex < steps.length - 1 ? (
+        
+            <Button
+              id={nextId}
+              icon={<LinkNext />}
+              primary
+              reverse
+              label={activeIndex === steps.length - 1 ? "Finish" : "Next"}
+              form={`${id}-form`}
+              type="submit"
+            />
         ) : (
           <Button type="submit">
             <Button
@@ -86,7 +98,60 @@ export const StepFooter = ({ previousId, nextId, ...rest }) => {
               </Box>
             </Button>
           </Button>
-        )}
+        )} */}
+
+        {activeIndex == 0 &&
+          <Button
+            id={nextId}
+            icon={<LinkNext />}
+            primary
+            reverse
+            label={currentStep=== stages.length-1 ? "submit":"Next"}
+            form={`${id}-form`}
+            onClick={ handleNext}
+          />}
+        {(activeIndex < steps.length - 1 && activeIndex > 1) &&
+          <Button
+            id={nextId}
+            icon={<LinkNext />}
+            primary
+            reverse
+            label={activeIndex === steps.length - 1 ? "Finish" : "Next"}
+            form={`${id}-form`}
+            type="submit"
+          />}
+
+        {activeIndex == steps.length - 1 &&
+          <Button type="submit">
+            <Button
+              form={`${id}-form`}
+              type="submit"
+              style={{
+                background: "rgb(1, 155, 120)",
+                borderRadius: "2em",
+                padding: "6px 18px",
+                cursor: "pointer",
+                border: "none",
+              }}
+            >
+              <Box
+                direction="row"
+                style={{ justifyContent: "center", alignItems: "center" }}
+                gap="small"
+              >
+                <Text size="small" color={"rgb(255, 255, 255)"} weight={"bold"}>
+                  Push To Docker
+                </Text>
+                <Image
+                  width={"25px"}
+                  src={dockerLogo}
+                  style={{ borderRadius: "50%" }}
+                />
+              </Box>
+            </Button>
+          </Button>}
+
+
       </Footer>
     </Box>
   );
