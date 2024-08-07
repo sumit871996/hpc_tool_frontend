@@ -16,62 +16,31 @@ export const ContainerizationFormView = () => {
     errorAIN,
     activeIndex,
     setActiveIndex,
+    MPIValue,selectedOption
   } = useContext(WizardContext);
 
-  useEffect(() => {}, [errorAIN]);
 
-  const [finalfile, setFinalFile] = useState("");
-
-  const [useCasesList, setUseCasesList] = useState({});
-  const [useCaseArray, setUseCaseArray] = useState([]);
   const [stages, setStages] = useState([]);
   const [currentStep, setCurrentStep] = useState(0);
   const [formData, setFormData] = useState({});
-  const [MPIValue, setMPIValue] = useState("");
+
   const [errors, setErrors] = useState("");
   const formRef = useRef(null);
+  console.log('MPIValue',MPIValue);
+  console.log('selectedOption',selectedOption);
+    useEffect(()=>{
+      const useCaseDetailsURL = `http://localhost:8081/form/getusecases/${selectedOption.id}`;
+      axios
+        .get(useCaseDetailsURL)
+        .then((response) => {
+          console.log("useCaseDetails", response.data);
+          setStages(response?.data?.stages);
+        })
+        .catch((error) => {
+          console.log("error", error);
+        });
+    },[MPIValue])
 
-  const handleFormValueChange = (e) => {
-    const selectedOption = e.value;
-    console.log("Selected option", selectedOption);
-    setMPIValue(selectedOption.value);
-
-    const useCaseDetailsURL = `http://localhost:8081/form/getusecases/${selectedOption.id}`;
-
-    axios
-      .get(useCaseDetailsURL)
-      .then((response) => {
-        console.log("useCaseDetails", response.data);
-        setStages(response?.data?.stages);
-      })
-      .catch((error) => {
-        console.log("error", error);
-      });
-  };
-
-  useEffect(() => {
-    setDockerCommands(finalfile);
-  }, [finalfile]);
-
-  const useCasesURL = "http://localhost:8081/form/getusecases";
-  useEffect(() => {
-    axios
-      .get(useCasesURL)
-      .then((response) => {
-        console.log("response", response.data);
-        setUseCasesList(response.data);
-        const useCaseArray = Object.entries(response.data).map(
-          ([id, value]) => {
-            return { value, id: Number(id) };
-          }
-        );
-        setUseCaseArray(useCaseArray);
-        console.log(useCaseArray);
-      })
-      .catch((error) => {
-        console.log("error", error);
-      });
-  }, []);
 
   const getCurrentSchema = () => {
     return stages[currentStep]?.rjsf_schema?.form_schema;
@@ -108,21 +77,6 @@ export const ContainerizationFormView = () => {
 
   return (
     <Box fill gap="medium">
-      <Box align="center" gap="medium">
-        <Header>
-          <Heading weight={"bold"} level={3}>
-            MPI Selection
-          </Heading>
-        </Header>
-        <Select
-          required
-          id="mpi_type"
-          name="mpi_type"
-          options={useCaseArray}
-          placeholder="Select MPI Type "
-          onChange={handleFormValueChange}
-        />
-      </Box>
       {MPIValue && stages.length > 0 ? (
         <Box margin={{ left: "32%", right: "32%" }}>
           <h2>{stages[currentStep]?.name}</h2>

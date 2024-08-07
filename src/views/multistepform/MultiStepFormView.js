@@ -8,10 +8,16 @@ import { DockerFileView } from "./DockerFileView";
 import { defaultFormValues } from "./defaultValues";
 import { PushToHubForm } from "./PushToHubForm";
 import { useNavigate } from "react-router-dom";
+import { UsecaseForm } from "./UsecaseForm";
 
 import axios from "axios";
 
 export const steps = [
+  {
+    description: `Please fill the details to create YAML file`,
+    input: <UsecaseForm />,
+    title: "Containerization Form",
+  },
   {
     description: `Please fill the details to create YAML file`,
     input: <ContainerizationFormView />,
@@ -248,6 +254,9 @@ export const MultiStepFormView = () => {
   const [notificationMessage, setNotificationMessage] = useState("");
   const [notificationStatus, setNotificationStatus] = useState("");
   const [showNotification, setShowNotification] = useState(false);
+  ////
+  const [MPIValue, setMPIValue] = useState("");
+  const [selectedOption, setSelectedOption] = useState('');
 
   useEffect(() => {
     setActiveStep(activeIndex + 1);
@@ -317,9 +326,12 @@ export const MultiStepFormView = () => {
       setDockerBuildAppCommand,
       dockerFormData,
       setDockerFormData,
+      MPIValue, setMPIValue,
+      selectedOption, setSelectedOption
     }),
-    [activeIndex, activeStep, formValues, dockerFormData]
+    [activeIndex, activeStep, formValues, dockerFormData,MPIValue]
   );
+
 
   const handleRequest = (e) => {
     e.preventDefault();
