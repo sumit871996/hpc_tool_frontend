@@ -17,7 +17,7 @@ export const ContainerizationFormView = () => {
     activeIndex,
     setActiveIndex,
     currentStep, setCurrentStep,
-    stages, setStages
+    stages, setStages,formRef
   } = useContext(WizardContext);
 
   useEffect(() => {}, [errorAIN]);
@@ -30,7 +30,7 @@ export const ContainerizationFormView = () => {
   const [formData, setFormData] = useState({});
   const [MPIValue, setMPIValue] = useState("");
   const [errors, setErrors] = useState("");
-  const formRef = useRef(null);
+  //const formRef = useRef(null);
 
   const handleFormValueChange = (e) => {
     const selectedOption = e.value;

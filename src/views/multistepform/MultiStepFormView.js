@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState,useRef } from "react";
 import { StepContent } from "./StepContent";
 import { WizardContext } from "./WizardContext";
 import { Box, Layer, Notification, Spinner, Text } from "grommet";
@@ -250,7 +250,7 @@ export const MultiStepFormView = () => {
   const [notificationStatus, setNotificationStatus] = useState("");
   const [showNotification, setShowNotification] = useState(false);
   const [stages, setStages] = useState([]);
-
+  const formRef = useRef(null);
   useEffect(() => {
     setActiveStep(activeIndex + 1);
   }, [activeIndex]);
@@ -320,7 +320,7 @@ export const MultiStepFormView = () => {
       dockerFormData,
       setDockerFormData,
       currentStep, setCurrentStep,
-      stages, setStages
+      stages, setStages,formRef
     }),
     [activeIndex, activeStep, formValues, dockerFormData, currentStep, setCurrentStep,stages, setStages]
   );

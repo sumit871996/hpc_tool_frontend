@@ -5,7 +5,7 @@ import { LinkNext, LinkPrevious } from "grommet-icons";
 import dockerLogo from "../../assets/docker_logo.svg";
 export const StepFooter = ({ previousId, nextId, ...rest }) => {
   const size = useContext(ResponsiveContext);
-  const { activeIndex, setActiveIndex, activeStep, id, steps, currentStep, setCurrentStep, stages, setStages } =
+  const { activeIndex, setActiveIndex, activeStep, id, steps, currentStep, setCurrentStep, stages, setStages,formRef } =
     useContext(WizardContext);
 
   const checkPreviousStep = () => {
@@ -19,9 +19,9 @@ export const StepFooter = ({ previousId, nextId, ...rest }) => {
 
   const handleNext = (e) => {
     e.preventDefault();
-    // if (formRef.current.validateForm()) {
+     if (formRef.current.validateForm()) {
     setCurrentStep(currentStep + 1);
-    // }
+    }
   };
 
   return (
