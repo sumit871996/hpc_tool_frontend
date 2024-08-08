@@ -15,9 +15,9 @@ import { UsecaseForm } from "./UsecaseForm";
 
 export const steps = [
   {
-    description: `Please fill the details to create YAML file`,
+    description: `Please select use case to create YAML file`,
     input: <UsecaseForm />,
-    title: "Containerization Form",
+    title: "Usecase selection",
   },
   {
     description: `Please fill the details to create YAML file`,
@@ -257,7 +257,9 @@ export const MultiStepFormView = () => {
   const [stages, setStages] = useState([]);
   const [currentStep, setCurrentStep] = useState(0);
   const [formData, setFormData] = useState({});
+  const [dockerFileData, setDockerFileData] = useState([]);
   const formRef = useRef(null);
+
 
 
   useEffect(() => {
@@ -273,43 +275,39 @@ export const MultiStepFormView = () => {
     }
   };
 
-  console.log('formData', JSON.stringify(formData));
-
   const getdockerfileURL = `/form/getdockerfile/${selectedOption.id}`
 
-  const handleSubmit = (e, formData) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
     if (formRef.current.validateForm()) {
       console.log("Form submitted:", formData);
 
+      const formInputData = formData;
+      
       let data = new FormData();
-      data.append("file", formData?.source_code ? formData?.source_code : null );
-      data.append("inputData", formData );
+      data.append("file", formData?.source_code || null);
+      data.append("inputData", JSON.stringify(formInputData));
 
-      const config = {
-        method: "post",
-        maxBodyLength: Infinity,
-        headers: {
-          "Content-Type": "multipart/json",
-        },
-        getdockerfileURL,
-        data,
-      };
       axios
-        .post(config)
+        .post(getdockerfileURL, data)
         .then((response) => {
           console.log("postResponse", response);
-
+          setDockerFileData(response.data);
+          setActiveIndex(activeIndex + 1);
         })
         .catch((error) => {
-          console.log("error", error);
+          if (error.response) {
+            console.error("Error Response:", error.response.data);
+            console.error("Status Code:", error.response.status);
+            console.error("Headers:", error.response.headers);
+          } else if (error.request) {
+            console.error("No Response:", error.request);
+          } else {
+            console.error("Error", error.message);
+          }
         });
-
-      console.log(data);
-
-
     }
-    // setActiveIndex(activeIndex + 1);
+
   };
 
 
@@ -380,9 +378,9 @@ export const MultiStepFormView = () => {
       handleNext, setSelectedOption, selectedOption,
       MPIValue, setMPIValue,
       formData, setFormData,
-      handleSubmit,
+      handleSubmit,dockerFileData
     }),
-    [activeIndex, activeStep, formValues, dockerFormData, currentStep, setCurrentStep, stages, setStages]
+    [activeIndex, activeStep, formValues, dockerFormData, currentStep, setCurrentStep, stages, setStages,formData,dockerFileData]
   );
 
   const handleRequest = (e) => {

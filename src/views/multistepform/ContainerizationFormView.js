@@ -54,14 +54,6 @@ export const ContainerizationFormView = () => {
     setFormData((prev) => ({ ...prev, ...newFormData }));
   };
 
-  // const handleSubmit = (e, formData) => {
-  //   e.preventDefault();
-
-  //   if (formRef.current.validateForm()) {
-  //     console.log("Form submitted:", formData);
-  //     setActiveIndex(activeIndex + 1);
-  //   }
-  // };
 
   const handlePrev = (e) => {
     e.preventDefault();
@@ -71,6 +63,10 @@ export const ContainerizationFormView = () => {
   const handleError = (error) => {
     setErrors(error);
   };
+
+  const getUISchema = ()=>{
+    return stages[currentStep]?.ui_schema;
+  }
 
   return (
     <Box fill gap="medium">
@@ -84,31 +80,7 @@ export const ContainerizationFormView = () => {
             onChange={handleOnChange}
             onError={handleError}
             validator={validator}
-            // liveValidate
-            // children={
-            //   <Box direction="row" gap="large">
-            //     <Button
-            //       onClick={handlePrev}
-            //       disabled={currentStep === 0}
-            //       secondary
-            //       label="Back"
-            //     />
-            //     {currentStep === stages.length - 1 ? (
-            //       <Button
-            //         onClick={(e) => handleSubmit(e, formData)}
-            //         label="Submit"
-            //         secondary
-            //       />
-            //     ) : (
-            //       <Button
-            //         onClick={handleNext}
-            //         disabled={currentStep === stages.length - 1}
-            //         label="Next"
-            //         secondary
-            //       />
-            //     )}
-            //   </Box>
-            // }
+            uiSchema={getUISchema()}
           />
         </Box>
       ) : (

@@ -22,7 +22,7 @@ export const DockerFileView = (e) => {
     basedockerfilename,
     setBasedockerfilename,
     dockerBuildAppCommand,
-    setDockerBuildAppCommand,
+    setDockerBuildAppCommand,dockerFileData
   } = useContext(WizardContext);
   const docker_commands = dockerCommands;
   const elementsArray = docker_commands.split("\n");
@@ -127,7 +127,7 @@ export const DockerFileView = (e) => {
   };
 
   const [finalfile, setFinalFile] = useState(
-    finaldockerfile.toString().replaceAll(",", "\n")
+    dockerFileData.toString().replaceAll(",", "\n")
   );
 
   const copyToClipboard = () => {
@@ -204,7 +204,7 @@ export const DockerFileView = (e) => {
       </Text>
       {/* Console View Data Style */}
       <Box>
-        <Box>
+        {/* <Box>
           <Box
             direction="row"
             style={{
@@ -296,9 +296,9 @@ export const DockerFileView = (e) => {
               )}
             </Text>
           </Box>
-        </Box>
+        </Box> */}
 
-        <Box direction="column" margin={{ top: "20px" }}>
+        {/* <Box direction="column" margin={{ top: "20px" }}>
           <Box
             direction="row"
             style={{
@@ -350,7 +350,7 @@ export const DockerFileView = (e) => {
               {buildCommand}
             </Text>
           </Box>
-        </Box>
+        </Box> */}
 
         <Box margin={{ top: "20px" }}>
           <Box
@@ -359,7 +359,7 @@ export const DockerFileView = (e) => {
               maxHeight: "40px",
               minHeight: "40px",
               backgroundColor: "grey",
-              minWidth: "550px",
+              maxWidth: "90%",
               justifyContent: "space-between",
               borderBottom: "1px solid white",
             }}
@@ -372,7 +372,7 @@ export const DockerFileView = (e) => {
                 fontWeight: "bold",
               }}
             >
-              {"2) Create Application Dockerfile"}
+              {"Dockerfile"}
             </h5>
             <Box direction="row">
               <Button
@@ -388,10 +388,10 @@ export const DockerFileView = (e) => {
             </Box>
           </Box>
           <Box
-            width="100%"
+            width="90%"
             border="all"
             style={{
-              maxHeight: "350px",
+              maxHeight: "500px",
               overflow: "auto",
               backgroundColor: "black",
               minWidth: "550px",
@@ -413,122 +413,9 @@ export const DockerFileView = (e) => {
                 padding={10}
                 style={{
                   fontFamily: '"Fira code", "Fira Mono", monospace',
-                  fontSize: 12,
+                  fontSize: 16,
                 }}
               />
-            </Text>
-          </Box>
-        </Box>
-
-        <Box direction="column" margin={{ top: "20px" }}>
-          <Box
-            direction="row"
-            style={{
-              backgroundColor: "grey",
-              minWidth: "550px",
-              height: "40px",
-              justifyContent: "space-between",
-              borderBottom: "1px solid white",
-              zIndex: "1",
-            }}
-          >
-            <Box
-              style={{
-                color: "white",
-                fontSize: "16px",
-                margin: "10px 15px 4px",
-                fontWeight: "bold",
-              }}
-            >
-              {"3) Build Application Docker Image"}
-            </Box>
-            <Box direction="row">
-              <Button
-                icon={<Copy color="white" />}
-                onClick={copyToClipboardCommand}
-                tip={"Copy"}
-              />
-            </Box>
-          </Box>
-
-          <Box
-            width="100%"
-            border="all"
-            style={{
-              overflow: "auto",
-              maxHeight: "60px",
-              backgroundColor: "black",
-              minWidth: "550px",
-            }}
-            id="dockerfile"
-          >
-            <Text
-              id="buildappcommand"
-              style={{
-                color: "white",
-                fontSize: "14px",
-                margin: "3px 15px 2px",
-              }}
-            >
-              {dockerBuildAppCommand}
-            </Text>
-          </Box>
-        </Box>
-
-        <Box direction="column" margin={{ top: "20px" }}>
-          <Box
-            direction="row"
-            style={{
-              height: "40px",
-              // maxHeight: "40px",
-              // minHeight: "40px",
-              backgroundColor: "grey",
-              minWidth: "550px",
-              justifyContent: "space-between",
-              borderBottom: "1px solid white",
-            }}
-          >
-            <Box
-              style={{
-                color: "white",
-                fontSize: "16px",
-                margin: "10px 15px 4px",
-                fontWeight: "bold",
-              }}
-            >
-              {"4) Singularity container build & run commands (Optional)"}
-            </Box>
-            <Box direction="row">
-              <Button
-                icon={<Copy color="white" />}
-                onClick={copyToClipboardRunCommand}
-                tip={"Copy"}
-              />
-            </Box>
-          </Box>
-          <Box
-            width="100%"
-            border="all"
-            style={{
-              maxHeight: "250px",
-              overflow: "auto",
-              minHeight: "6px",
-              backgroundColor: "black",
-              minWidth: "550px",
-            }}
-            id="dockerfile"
-          >
-            <Text
-              id="singularitycommands"
-              style={{
-                color: "white",
-                fontSize: "14px",
-                margin: "3px 15px 2px",
-              }}
-            >
-              {singularityCommands.map((elem, index) => {
-                return <Box key={index}>{elem}</Box>;
-              })}
             </Text>
           </Box>
         </Box>

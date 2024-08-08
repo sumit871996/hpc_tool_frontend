@@ -12,22 +12,13 @@ export const StepFooter = ({ previousId, nextId, ...rest }) => {
     id,
     steps,
     currentStep,
-    setCurrentStep,
     stages,
-    setStages,
-    formRef,
     handleNext,
     handleSubmit,
-    formData
   } = useContext(WizardContext);
 
   const checkPreviousStep = () => {
     setActiveIndex(activeIndex - 1);
-  };
-
-  const handlePrev = (e) => {
-    e.preventDefault();
-    setCurrentStep(currentStep - 1);
   };
 
   return (
@@ -74,7 +65,7 @@ export const StepFooter = ({ previousId, nextId, ...rest }) => {
               label="Next123"
               form={`${id}-form`}
               // onClick={(e)=>handleNext(e)}
-              onClick={currentStep === stages.length-1 ? (e)=>handleSubmit(e, formData) :(e)=>handleNext(e)}
+              onClick={currentStep === stages.length-1 ? (e)=>handleSubmit(e) :(e)=>handleNext(e)}
             />
           ) : (
             <Button
@@ -118,56 +109,6 @@ export const StepFooter = ({ previousId, nextId, ...rest }) => {
           </Button>
         )}
 
-        {/* {activeIndex == 0 &&
-          <Button
-            id={nextId}
-            icon={<LinkNext />}
-            primary
-            reverse
-            label={currentStep === stages.length - 1 ? "submit" : "Next"}
-            form={`${id}-form`}
-            onClick={(e) => handleNext(e)}
-          />}
-        {(activeIndex < steps.length - 1 && activeIndex > 1) &&
-          <Button
-            id={nextId}
-            icon={<LinkNext />}
-            primary
-            reverse
-            label={activeIndex === steps.length - 1 ? "Finish" : "Next"}
-            form={`${id}-form`}
-            type="submit"
-          />}
-
-        {activeIndex == steps.length - 1 &&
-          <Button type="submit">
-            <Button
-              form={`${id}-form`}
-              type="submit"
-              style={{
-                background: "rgb(1, 155, 120)",
-                borderRadius: "2em",
-                padding: "6px 18px",
-                cursor: "pointer",
-                border: "none",
-              }}
-            >
-              <Box
-                direction="row"
-                style={{ justifyContent: "center", alignItems: "center" }}
-                gap="small"
-              >
-                <Text size="small" color={"rgb(255, 255, 255)"} weight={"bold"}>
-                  Push To Docker
-                </Text>
-                <Image
-                  width={"25px"}
-                  src={dockerLogo}
-                  style={{ borderRadius: "50%" }}
-                />
-              </Box>
-            </Button>
-          </Button>} */}
       </Footer>
     </Box>
   );

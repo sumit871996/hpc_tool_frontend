@@ -12,15 +12,7 @@ export const UsecaseForm = () => {
   const [useCaseArray, setUseCaseArray] = useState([]);
   const [useCasesList, setUseCasesList] = useState([]);
 
-
-
-  const {
-  
-    id,
-    setActiveIndex,
-    activeStep,
-    setActiveStep,setSelectedOption,selectedOption,
-    MPIValue, setMPIValue
+  const {setSelectedOption, setMPIValue
   } = useContext(WizardContext);
 
   const handleFormValueChange = (e) => {
@@ -28,10 +20,6 @@ export const UsecaseForm = () => {
     setSelectedOption(e.value);
     setMPIValue(selectedOption.value);
   };
-
-  // useEffect(() => {
-  //   setActiveStep(setActiveIndex+1);
-  // }, []);
 
   const useCasesURL = "/form/getusecases";
   useEffect(() => {
@@ -56,7 +44,7 @@ export const UsecaseForm = () => {
       <Box align="center" gap="medium">
         <Header>
           <Heading weight={"bold"} level={3}>
-            MPI Selection
+            Select Use case
           </Heading>
         </Header>
         <Select
