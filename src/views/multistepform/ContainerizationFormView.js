@@ -54,26 +54,19 @@ export const ContainerizationFormView = () => {
     setFormData((prev) => ({ ...prev, ...newFormData }));
   };
 
-  const handleSubmit = (e, formData) => {
-    e.preventDefault();
+  // const handleSubmit = (e, formData) => {
+  //   e.preventDefault();
 
-    if (formRef.current.validateForm()) {
-      console.log("Form submitted:", formData);
-      setActiveIndex(activeIndex + 1);
-    }
-  };
+  //   if (formRef.current.validateForm()) {
+  //     console.log("Form submitted:", formData);
+  //     setActiveIndex(activeIndex + 1);
+  //   }
+  // };
 
   const handlePrev = (e) => {
     e.preventDefault();
     setCurrentStep(currentStep - 1);
   };
-
-  // const handleNext = (e) => {
-  //   e.preventDefault();
-  //   if (formRef.current.validateForm()) {
-  //     setCurrentStep(currentStep + 1);
-  //   }
-  // };
 
   const handleError = (error) => {
     setErrors(error);

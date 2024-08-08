@@ -274,6 +274,39 @@ export const MultiStepFormView = () => {
     }
   };
 
+  console.log('formData',formData);
+
+  const getdockerfileURL = `http://localhost:8081/form/getdockerfile/${selectedOption.id}`
+
+  const handleSubmit = (e, formData) => {
+    e.preventDefault();
+    if (formRef.current.validateForm()) {
+      console.log("Form submitted:", formData);
+
+     const data ={
+        // File: formData?.source_code ? formData?.source_code : null,
+        File: formData?.source_code ? formData?.source_code : '',
+        inputData : formData
+      }
+
+      axios
+      .post(getdockerfileURL,data)
+      .then((response) => {
+        console.log("postResponse", response);
+        
+      })
+      .catch((error) => {
+        console.log("error", error);
+      });     
+
+      console.log(data);
+      
+     
+    }
+    setActiveIndex(activeIndex + 1);
+  };
+
+
   const contextValue = useMemo(
     () => ({
       activeIndex,
@@ -340,7 +373,8 @@ export const MultiStepFormView = () => {
       stages, setStages,formRef,
       handleNext,setSelectedOption,selectedOption,
       MPIValue, setMPIValue,
-      formData, setFormData
+      formData, setFormData,
+      handleSubmit,
     }),
     [activeIndex, activeStep, formValues, dockerFormData, currentStep, setCurrentStep,stages, setStages]
   );

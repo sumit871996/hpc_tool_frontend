@@ -17,6 +17,8 @@ export const StepFooter = ({ previousId, nextId, ...rest }) => {
     setStages,
     formRef,
     handleNext,
+    handleSubmit,
+    formData
   } = useContext(WizardContext);
 
   const checkPreviousStep = () => {
@@ -27,13 +29,6 @@ export const StepFooter = ({ previousId, nextId, ...rest }) => {
     e.preventDefault();
     setCurrentStep(currentStep - 1);
   };
-
-  // const handleNext = (e) => {
-  //   e.preventDefault();
-  //    if (formRef.current.validateForm()) {
-  //   setCurrentStep(currentStep + 1);
-  //   }
-  // };
 
   return (
     <Box
@@ -78,7 +73,8 @@ export const StepFooter = ({ previousId, nextId, ...rest }) => {
               reverse
               label="Next123"
               form={`${id}-form`}
-              onClick={(e)=>handleNext(e)}
+              // onClick={(e)=>handleNext(e)}
+              onClick={currentStep === stages.length-1 ? (e)=>handleSubmit(e, formData) :(e)=>handleNext(e)}
             />
           ) : (
             <Button
