@@ -13,7 +13,7 @@ import {
 } from "react";
 import "antd/dist/reset.css";
 import { WizardContext } from "./WizardContext";
-import axios from "axios";
+import axios from "../../utils/axios";
 import validator from "@rjsf/validator-ajv8";
 import Form from "@rjsf/antd";
 
@@ -33,7 +33,7 @@ export const ContainerizationFormView = () => {
   const [errors, setErrors] = useState("");
 
   useEffect(() => {
-    const useCaseDetailsURL = `http://localhost:8081/form/getusecases/${selectedOption.id}`;
+    const useCaseDetailsURL = `/form/getusecases/${selectedOption.id}`;
     axios
       .get(useCaseDetailsURL)
       .then((response) => {

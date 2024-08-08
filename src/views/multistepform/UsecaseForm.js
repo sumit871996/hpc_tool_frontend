@@ -6,12 +6,13 @@ import "prismjs/themes/prism.css";
 import { useContext, useEffect, useRef, useState } from "react";
 import "antd/dist/reset.css";
 import { WizardContext } from "./WizardContext";
-
-import axios from "axios";
+import axios from "../../utils/axios";
 
 export const UsecaseForm = () => {
   const [useCaseArray, setUseCaseArray] = useState([]);
   const [useCasesList, setUseCasesList] = useState([]);
+
+
 
   const {
   
@@ -32,7 +33,7 @@ export const UsecaseForm = () => {
   //   setActiveStep(setActiveIndex+1);
   // }, []);
 
-  const useCasesURL = "http://localhost:8081/form/getusecases";
+  const useCasesURL = "/form/getusecases";
   useEffect(() => {
     axios
       .get(useCasesURL)

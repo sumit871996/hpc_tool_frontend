@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState,useRef } from "react";
+import { useEffect, useMemo, useState, useRef } from "react";
 import { StepContent } from "./StepContent";
 import { WizardContext } from "./WizardContext";
 import { Box, Layer, Notification, Spinner, Text } from "grommet";
@@ -8,10 +8,9 @@ import { DockerFileView } from "./DockerFileView";
 import { defaultFormValues } from "./defaultValues";
 import { PushToHubForm } from "./PushToHubForm";
 import { useNavigate } from "react-router-dom";
-import validator from "@rjsf/validator-ajv8";
-import Form from "@rjsf/antd";
+import axios from "../../utils/axios";
 
-import axios from "axios";
+
 import { UsecaseForm } from "./UsecaseForm";
 
 export const steps = [
@@ -259,7 +258,7 @@ export const MultiStepFormView = () => {
   const [currentStep, setCurrentStep] = useState(0);
   const [formData, setFormData] = useState({});
   const formRef = useRef(null);
-  
+
 
   useEffect(() => {
     setActiveStep(activeIndex + 1);
@@ -274,36 +273,43 @@ export const MultiStepFormView = () => {
     }
   };
 
-  console.log('formData',formData);
+  console.log('formData', JSON.stringify(formData));
 
-  const getdockerfileURL = `http://localhost:8081/form/getdockerfile/${selectedOption.id}`
+  const getdockerfileURL = `/form/getdockerfile/${selectedOption.id}`
 
   const handleSubmit = (e, formData) => {
     e.preventDefault();
     if (formRef.current.validateForm()) {
       console.log("Form submitted:", formData);
 
-     const data ={
-        // File: formData?.source_code ? formData?.source_code : null,
-        File: formData?.source_code ? formData?.source_code : '',
-        inputData : formData
-      }
+      let data = new FormData();
+      data.append("file", formData?.source_code ? formData?.source_code : null );
+      data.append("inputData", formData );
 
+      const config = {
+        method: "post",
+        maxBodyLength: Infinity,
+        headers: {
+          "Content-Type": "multipart/json",
+        },
+        getdockerfileURL,
+        data,
+      };
       axios
-      .post(getdockerfileURL,data)
-      .then((response) => {
-        console.log("postResponse", response);
-        
-      })
-      .catch((error) => {
-        console.log("error", error);
-      });     
+        .post(config)
+        .then((response) => {
+          console.log("postResponse", response);
+
+        })
+        .catch((error) => {
+          console.log("error", error);
+        });
 
       console.log(data);
-      
-     
+
+
     }
-    setActiveIndex(activeIndex + 1);
+    // setActiveIndex(activeIndex + 1);
   };
 
 
@@ -370,13 +376,13 @@ export const MultiStepFormView = () => {
       dockerFormData,
       setDockerFormData,
       currentStep, setCurrentStep,
-      stages, setStages,formRef,
-      handleNext,setSelectedOption,selectedOption,
+      stages, setStages, formRef,
+      handleNext, setSelectedOption, selectedOption,
       MPIValue, setMPIValue,
       formData, setFormData,
       handleSubmit,
     }),
-    [activeIndex, activeStep, formValues, dockerFormData, currentStep, setCurrentStep,stages, setStages]
+    [activeIndex, activeStep, formValues, dockerFormData, currentStep, setCurrentStep, stages, setStages]
   );
 
   const handleRequest = (e) => {
@@ -384,7 +390,7 @@ export const MultiStepFormView = () => {
 
     console.log("Step's submit procedure is done");
     uploadToDocker();
-    
+
   };
   const uploadToDocker = (e) => {
     setShowSpinner(true);
@@ -472,14 +478,14 @@ export const MultiStepFormView = () => {
       )
       .then((res) => {
         console.log(res.data);
-        const buildId=res.data.buildId
+        const buildId = res.data.buildId
         setNotificationStatus("normal");
         setNotificationTitle("Upload To Docker");
         setNotificationMessage("Build Id Created Successfully");
         setShowSpinner(false);
         console.log("Spinner Ended");
         setShowNotification(true);
-        navigate("/review", {state:{buildId}})
+        navigate("/review", { state: { buildId } })
       })
       .catch((error) => {
         console.log(error);
