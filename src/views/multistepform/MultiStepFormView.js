@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { StepContent } from "./StepContent";
 import { WizardContext } from "./WizardContext";
 import { Box, Layer, Notification, Spinner, Text } from "grommet";
@@ -257,12 +257,17 @@ export const MultiStepFormView = () => {
   ////
   const [MPIValue, setMPIValue] = useState("");
   const [selectedOption, setSelectedOption] = useState('');
-
+  const [stages, setStages] = useState([]);
+  const [currentStep, setCurrentStep] = useState(0);
+  const formRef = useRef(null);
   useEffect(() => {
     setActiveStep(activeIndex + 1);
   }, [activeIndex]);
 
   const id = "containerization-form";
+
+  const containerizationRef = useRef(null);
+  const [formData, setFormData] = useState({});
 
   const contextValue = useMemo(
     () => ({
@@ -327,11 +332,17 @@ export const MultiStepFormView = () => {
       dockerFormData,
       setDockerFormData,
       MPIValue, setMPIValue,
-      selectedOption, setSelectedOption
+      selectedOption, setSelectedOption,
+      stages, setStages,currentStep, setCurrentStep,
+      formRef,containerizationRef,formData, setFormData
     }),
-    [activeIndex, activeStep, formValues, dockerFormData,MPIValue]
+    [activeIndex, activeStep, formValues, dockerFormData,MPIValue,stages, setStages,currentStep, setCurrentStep,formData, setFormData]
   );
 
+
+  const handleNextCont = (e)=>{
+    containerizationRef.current.handleNext(e, formData);
+  }
 
   const handleRequest = (e) => {
     e.preventDefault();
@@ -449,7 +460,7 @@ export const MultiStepFormView = () => {
     <WizardContext.Provider value={contextValue}>
       <Box fill>
         <StepContent onSubmit={(e) => handleRequest(e)} />
-        <StepFooter />
+        <StepFooter handleNextCont={handleNextCont} />
         {showSpinner && (
           <Layer>
             <Box

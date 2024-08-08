@@ -1,10 +1,10 @@
 import { Box, Form, ResponsiveContext } from "grommet";
-import { useContext } from "react";
+import React,{forwardRef, useContext } from "react";
 import { WizardContext } from "./WizardContext";
 import { StepHeader } from "./StepHeader";
 import "../../css/horizontal-timeline.css";
 
-export const StepContent = ({ onSubmit }) => {
+export const StepContent =  ({onSubmit})  => {
   const size = useContext(ResponsiveContext);
 
   const { activeIndex, setActiveIndex, id, steps, formValues, setFormValues ,
@@ -19,7 +19,7 @@ export const StepContent = ({ onSubmit }) => {
     errorImageTag, setErrorImageTag,
     errorAIN,setErrorAIN,
     errorAIT,setErrorAIT,
-    errorASIN, setErrorASIN } =
+    errorASIN, setErrorASIN,containerizationRef } =
     useContext(WizardContext);
 
   const handleSubmit = (event) => {
@@ -29,6 +29,9 @@ export const StepContent = ({ onSubmit }) => {
       onSubmit(event);
     }
   };
+ // Clone the active step component and attach the ref
+ const ActiveStepComponent = steps[activeIndex].input;
+ const ActiveStepWithRef = React.cloneElement(ActiveStepComponent, { ref: containerizationRef });
 
   return (
     <Box gap="medium">
@@ -82,7 +85,7 @@ export const StepContent = ({ onSubmit }) => {
           <Form id={`${id}-form`} onSubmit={handleSubmit} messages={{
                         required: "This is a required field.",
                       }}>
-            {steps[activeIndex].input}
+            {ActiveStepWithRef}
           </Form>
         </Box>
       </Box>

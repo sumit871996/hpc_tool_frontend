@@ -3,32 +3,46 @@ import "prismjs/components/prism-clike";
 import "prismjs/components/prism-javascript";
 import "prismjs/components/prism-docker";
 import "prismjs/themes/prism.css";
-import { useContext, useEffect, useRef, useState } from "react";
-import 'antd/dist/reset.css';
+import {
+  useContext,
+  useEffect,
+  useRef,
+  useState,
+  useImperativeHandle,
+  forwardRef,
+} from "react";
+import "antd/dist/reset.css";
 import { WizardContext } from "./WizardContext";
 import axios from "axios";
 import validator from "@rjsf/validator-ajv8";
 import Form from "@rjsf/antd";
 
-export const ContainerizationFormView = () => {
-  const {
-    setDockerCommands,
-    errorAIN,
-    activeIndex,
-    setActiveIndex,
-    MPIValue,selectedOption
-  } = useContext(WizardContext);
+export const ContainerizationFormView = forwardRef(
+  (props, ref) => {
+    const {
+      setDockerCommands,
+      errorAIN,
+      activeIndex,
+      setActiveIndex,
+      MPIValue,
+      selectedOption,
+      stages,
+      setStages,
+      currentStep,
+      setCurrentStep,
+      formRef,formData,setFormData
+    } = useContext(WizardContext);
 
+    // const [formData, setFormData] = useState({});
 
-  const [stages, setStages] = useState([]);
-  const [currentStep, setCurrentStep] = useState(0);
-  const [formData, setFormData] = useState({});
+    const [errors, setErrors] = useState("");
+    useImperativeHandle(ref, () => {
+      return {
+        handleNext
+      }
+    },[]);
 
-  const [errors, setErrors] = useState("");
-  const formRef = useRef(null);
-  console.log('MPIValue',MPIValue);
-  console.log('selectedOption',selectedOption);
-    useEffect(()=>{
+    useEffect(() => {
       const useCaseDetailsURL = `http://localhost:8081/form/getusecases/${selectedOption.id}`;
       axios
         .get(useCaseDetailsURL)
@@ -39,86 +53,93 @@ export const ContainerizationFormView = () => {
         .catch((error) => {
           console.log("error", error);
         });
-    },[MPIValue])
+    }, [MPIValue]);
 
 
-  const getCurrentSchema = () => {
-    return stages[currentStep]?.rjsf_schema?.form_schema;
-  };
-
-  const handleOnChange = ({ formData: newFormData }) => {
-    setFormData((prev) => ({ ...prev, ...newFormData }));
-  };
-
-  const handleSubmit = (e, formData) => {
-    e.preventDefault();
-
-    if (formRef.current.validateForm()) {
-      console.log("Form submitted:", formData);
-      setActiveIndex(activeIndex + 1);
+    const test = ()=>{
+      alert("test")
     }
-  };
 
-  const handlePrev = (e) => {
-    e.preventDefault();
-    setCurrentStep(currentStep - 1);
-  };
+    const getCurrentSchema = () => {
+      return stages[currentStep]?.rjsf_schema?.form_schema;
+    };
 
-  const handleNext = (e) => {
-    e.preventDefault();
-    if (formRef.current.validateForm()) {
-      setCurrentStep(currentStep + 1);
-    }
-  };
+    const handleOnChange = ({ formData: newFormData }) => {
+      setFormData((prev) => ({ ...prev, ...newFormData }));
+    };
 
-  const handleError = (error) => {
-    setErrors(error);
-  };
+    const handleSubmit = (e, formData) => {
+      e.preventDefault();
 
-  return (
-    <Box fill gap="medium">
-      {MPIValue && stages.length > 0 ? (
-        <Box margin={{ left: "32%", right: "32%" }}>
-          <h2>{stages[currentStep]?.name}</h2>
-          <Form
-            ref={formRef}
-            schema={getCurrentSchema()}
-            formData={formData}
-            onChange={handleOnChange}
-            onError={handleError}
-            validator={validator}
-            // liveValidate
-            children={
-              <Box direction="row" gap="large">
-                <Button
-                  onClick={handlePrev}
-                  disabled={currentStep === 0}
-                  secondary
-                  label="Back"
-                />
-                {currentStep === stages.length - 1 ? (
+      if (formRef.current.validateForm()) {
+        console.log("Form submitted:", formData);
+        setActiveIndex(activeIndex + 1);
+      }
+    };
+
+    const handlePrev = (e) => {
+      e.preventDefault();
+      setCurrentStep(currentStep - 1);
+    };
+
+    const handleNext = (e) => {
+      e.preventDefault();
+      if (formRef.current.validateForm()) {
+        setCurrentStep(currentStep + 1);
+      }
+    };
+
+    const handleError = (error) => {
+      setErrors(error);
+    };
+
+    return (
+      <Box fill gap="medium">
+        {MPIValue && stages.length > 0 ? (
+          <Box margin={{ left: "32%", right: "32%" }}>
+            <h2>{stages[currentStep]?.name}</h2>
+            <Form
+              ref={formRef}
+              schema={getCurrentSchema()}
+              formData={formData}
+              onChange={handleOnChange}
+              onError={handleError}
+              validator={validator}
+              // liveValidate
+              children={
+                <Box direction="row" gap="large">
                   <Button
-                    onClick={(e) => handleSubmit(e, formData)}
-                    label="Submit"
+                    onClick={handlePrev}
+                    disabled={currentStep === 0}
                     secondary
+                    label="Back"
                   />
-                ) : (
-                  <Button
-                    onClick={handleNext}
-                    disabled={currentStep === stages.length - 1}
-                    label="Next"
-                    secondary
-                  />
-                )}
-              </Box>
-            }
-          />
-        </Box>
-      ) : (
-        <Box style={{ alignItems: "center" }}>
-          <Text>Please Select The MPI Type To View Containerization Form </Text>
-        </Box>
-      )}
-    </Box>
-  );
-};
+                  {currentStep === stages.length - 1 ? (
+                    <Button
+                      onClick={(e) => handleSubmit(e, formData)}
+                      label="Submit"
+                      secondary
+                    />
+                  ) : (
+                    <Button
+                      onClick={handleNext}
+                      disabled={currentStep === stages.length - 1}
+                      label="Next"
+                      secondary
+                    />
+                  )}
+                </Box>
+              }
+            />
+          </Box>
+        ) : (
+          <Box style={{ alignItems: "center" }}>
+            <Text>
+              Please Select The MPI Type To View Containerization Form{" "}
+            </Text>
+          </Box>
+        )}
+      </Box>
+    );
+  }
+);

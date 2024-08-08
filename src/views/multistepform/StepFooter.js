@@ -1,11 +1,11 @@
 import { Box, Button, Footer, Image, ResponsiveContext, Text } from "grommet";
-import { useContext } from "react";
+import { forwardRef, useContext,useImperativeHandle } from "react";
 import { WizardContext } from "./WizardContext";
 import { LinkNext, LinkPrevious } from "grommet-icons";
 import dockerLogo from "../../assets/docker_logo.svg";
-export const StepFooter = ({ previousId, nextId, ...rest }) => {
+export const StepFooter = forwardRef(({ previousId, nextId, handleNextCont, ...rest })=> {
   const size = useContext(ResponsiveContext);
-  const { activeIndex, setActiveIndex, activeStep, id, steps } =
+  const { activeIndex, setActiveIndex, activeStep, id, steps,formRef} =
     useContext(WizardContext);
 
   const checkPreviousStep = () => {
@@ -46,6 +46,18 @@ export const StepFooter = ({ previousId, nextId, ...rest }) => {
           />
         )}
         {activeIndex < steps.length - 1 ? (
+          activeStep === 2 ?(
+            <Button
+            id={nextId}
+            icon={<LinkNext />}
+            primary
+            reverse
+            label="Next123"
+            form={`${id}-form`}
+            onClick={(e)=>handleNextCont(e)}
+            //disabled = {!isFinished}
+          />
+          ) :
           <Button
             id={nextId}
             icon={<LinkNext />}
@@ -88,4 +100,4 @@ export const StepFooter = ({ previousId, nextId, ...rest }) => {
       </Footer>
     </Box>
   );
-};
+});
