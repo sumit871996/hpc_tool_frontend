@@ -5,8 +5,19 @@ import { LinkNext, LinkPrevious } from "grommet-icons";
 import dockerLogo from "../../assets/docker_logo.svg";
 export const StepFooter = ({ previousId, nextId, ...rest }) => {
   const size = useContext(ResponsiveContext);
-  const { activeIndex, setActiveIndex, activeStep, id, steps, currentStep, setCurrentStep, stages, setStages,formRef } =
-    useContext(WizardContext);
+  const {
+    activeIndex,
+    setActiveIndex,
+    activeStep,
+    id,
+    steps,
+    currentStep,
+    setCurrentStep,
+    stages,
+    setStages,
+    formRef,
+    handleNext,
+  } = useContext(WizardContext);
 
   const checkPreviousStep = () => {
     setActiveIndex(activeIndex - 1);
@@ -17,12 +28,12 @@ export const StepFooter = ({ previousId, nextId, ...rest }) => {
     setCurrentStep(currentStep - 1);
   };
 
-  const handleNext = (e) => {
-    e.preventDefault();
-     if (formRef.current.validateForm()) {
-    setCurrentStep(currentStep + 1);
-    }
-  };
+  // const handleNext = (e) => {
+  //   e.preventDefault();
+  //    if (formRef.current.validateForm()) {
+  //   setCurrentStep(currentStep + 1);
+  //   }
+  // };
 
   return (
     <Box
@@ -50,16 +61,26 @@ export const StepFooter = ({ previousId, nextId, ...rest }) => {
             label={
               !["xsmall", "small"].includes(size)
                 ? (steps[activeIndex - 1] && steps[activeIndex - 1].title) ||
-                `Step ${activeStep - 1} title`
+                  `Step ${activeStep - 1} title`
                 : undefined
             }
             icon={<LinkPrevious />}
             onClick={() => checkPreviousStep()}
           />
         )}
-        
-        {/* {activeIndex < steps.length - 1 ? (
-        
+
+        {activeIndex < steps.length - 1 ? (
+          activeStep === 2 ? (
+            <Button
+              id={nextId}
+              icon={<LinkNext />}
+              primary
+              reverse
+              label="Next123"
+              form={`${id}-form`}
+              onClick={(e)=>handleNext(e)}
+            />
+          ) : (
             <Button
               id={nextId}
               icon={<LinkNext />}
@@ -69,6 +90,7 @@ export const StepFooter = ({ previousId, nextId, ...rest }) => {
               form={`${id}-form`}
               type="submit"
             />
+          )
         ) : (
           <Button type="submit">
             <Button
@@ -98,17 +120,17 @@ export const StepFooter = ({ previousId, nextId, ...rest }) => {
               </Box>
             </Button>
           </Button>
-        )} */}
+        )}
 
-        {activeIndex == 0 &&
+        {/* {activeIndex == 0 &&
           <Button
             id={nextId}
             icon={<LinkNext />}
             primary
             reverse
-            label={currentStep=== stages.length-1 ? "submit":"Next"}
+            label={currentStep === stages.length - 1 ? "submit" : "Next"}
             form={`${id}-form`}
-            onClick={ handleNext}
+            onClick={(e) => handleNext(e)}
           />}
         {(activeIndex < steps.length - 1 && activeIndex > 1) &&
           <Button
@@ -149,9 +171,7 @@ export const StepFooter = ({ previousId, nextId, ...rest }) => {
                 />
               </Box>
             </Button>
-          </Button>}
-
-
+          </Button>} */}
       </Footer>
     </Box>
   );

@@ -8,10 +8,18 @@ import { DockerFileView } from "./DockerFileView";
 import { defaultFormValues } from "./defaultValues";
 import { PushToHubForm } from "./PushToHubForm";
 import { useNavigate } from "react-router-dom";
+import validator from "@rjsf/validator-ajv8";
+import Form from "@rjsf/antd";
 
 import axios from "axios";
+import { UsecaseForm } from "./UsecaseForm";
 
 export const steps = [
+  {
+    description: `Please fill the details to create YAML file`,
+    input: <UsecaseForm />,
+    title: "Containerization Form",
+  },
   {
     description: `Please fill the details to create YAML file`,
     input: <ContainerizationFormView />,
@@ -28,12 +36,6 @@ export const steps = [
     title: "Upload to Docker",
   },
 
-  // {
-  //   description: "Review the details of build details",
-  //   input: <ReviewView/>,
-  //   title: "Review Details"
-  // }
-
 ];
 
 export const MultiStepFormView = () => {
@@ -43,7 +45,7 @@ export const MultiStepFormView = () => {
   const [dockerCommands, setDockerCommands] = useState("");
   const [buildCommand, setBuildCommand] = useState();
   const [dockerfilename, setDockerFileName] = useState();
-  const [currentStep, setCurrentStep] = useState(0);
+
   const navigate = useNavigate();
   const [dockerIntelMPIFile, setDockerIntelMPIFile] = useState([
     "FROM centos:8.4.2105 AS base",
@@ -249,13 +251,28 @@ export const MultiStepFormView = () => {
   const [notificationMessage, setNotificationMessage] = useState("");
   const [notificationStatus, setNotificationStatus] = useState("");
   const [showNotification, setShowNotification] = useState(false);
+
+  ////
+  const [MPIValue, setMPIValue] = useState("");
+  const [selectedOption, setSelectedOption] = useState('');
   const [stages, setStages] = useState([]);
+  const [currentStep, setCurrentStep] = useState(0);
+  const [formData, setFormData] = useState({});
   const formRef = useRef(null);
+  
+
   useEffect(() => {
     setActiveStep(activeIndex + 1);
   }, [activeIndex]);
 
   const id = "containerization-form";
+
+  const handleNext = (e) => {
+    e.preventDefault();
+    if (formRef.current.validateForm()) {
+      setCurrentStep(currentStep + 1);
+    }
+  };
 
   const contextValue = useMemo(
     () => ({
@@ -320,7 +337,10 @@ export const MultiStepFormView = () => {
       dockerFormData,
       setDockerFormData,
       currentStep, setCurrentStep,
-      stages, setStages,formRef
+      stages, setStages,formRef,
+      handleNext,setSelectedOption,selectedOption,
+      MPIValue, setMPIValue,
+      formData, setFormData
     }),
     [activeIndex, activeStep, formValues, dockerFormData, currentStep, setCurrentStep,stages, setStages]
   );
