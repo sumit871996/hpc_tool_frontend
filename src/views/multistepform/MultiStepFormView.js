@@ -17,7 +17,7 @@ export const steps = [
   {
     description: `Please select use case to create YAML file`,
     input: <UsecaseForm />,
-    title: "Usecase selection",
+    title: "Use Case Selection",
   },
   {
     description: `Please fill the details to create YAML file`,

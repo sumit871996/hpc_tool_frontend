@@ -62,7 +62,7 @@ export const StepFooter = ({ previousId, nextId, ...rest }) => {
               icon={<LinkNext />}
               primary
               reverse
-              label="Next123"
+              label="Next"
               form={`${id}-form`}
               // onClick={(e)=>handleNext(e)}
               onClick={currentStep === stages.length-1 ? (e)=>handleSubmit(e) :(e)=>handleNext(e)}

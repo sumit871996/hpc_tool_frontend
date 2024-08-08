@@ -45,23 +45,23 @@ export const StepContent = ({ onSubmit }) => {
                 <div
                   className={activeIndex >= 0 ? "checkActive" : "checkCircle"}
                 ></div>
-                <p>Use case selection</p>
-              </li>
-              <li>
-                <div
-                  className={activeIndex >= 0 ? "checkActive" : "checkCircle"}
-                ></div>
-                <p>Containerization Form</p>
+                <p>Use Case Selection</p>
               </li>
               <li>
                 <div
                   className={activeIndex >= 1 ? "checkActive" : "checkCircle"}
                 ></div>
-                <p>Docker File View</p>
+                <p>Containerization Form</p>
               </li>
               <li>
                 <div
                   className={activeIndex >= 2 ? "checkActive" : "checkCircle"}
+                ></div>
+                <p>Docker File View</p>
+              </li>
+              <li>
+                <div
+                  className={activeIndex >= 3 ? "checkActive" : "checkCircle"}
                 ></div>
                 <p>Upload Docker Image</p>
               </li>

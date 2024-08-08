@@ -65,7 +65,7 @@ export const ContainerizationFormView = () => {
   };
 
   const getUISchema = ()=>{
-    return stages[currentStep]?.ui_schema;
+    return stages[currentStep]?.ui_schema;  
   }
 
   return (
@@ -81,6 +81,7 @@ export const ContainerizationFormView = () => {
             onError={handleError}
             validator={validator}
             uiSchema={getUISchema()}
+            children={true}
           />
         </Box>
       ) : (
