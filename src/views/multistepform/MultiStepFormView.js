@@ -285,7 +285,16 @@ export const MultiStepFormView = () => {
       const formInputData = formData;
       
       let data = new FormData();
-      data.append("file", formData?.source_code || null);
+      let fileClone = null;
+      if(formData?.source_code)
+      {
+        fileClone = new File([formData.source_code], formData.source_code.name, {
+          type: formData.source_code.type,
+          lastModified: formData.source_code.lastModified,
+      });
+        delete formData.source_code;    
+      }
+      data.append("file", fileClone);
       data.append("inputData", JSON.stringify(formInputData));
 
       axios
