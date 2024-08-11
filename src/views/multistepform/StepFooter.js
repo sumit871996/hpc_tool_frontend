@@ -15,6 +15,7 @@ export const StepFooter = ({ previousId, nextId, ...rest }) => {
     stages,
     handleNext,
     handleSubmit,
+    handleBackButton
   } = useContext(WizardContext);
 
   const checkPreviousStep = () => {
@@ -41,17 +42,25 @@ export const StepFooter = ({ previousId, nextId, ...rest }) => {
         }
         alignSelf="center"
       >
-        {activeStep > 1 && (
+        {(activeStep > 1)&& (
           <Button
             id={previousId}
             label={
               !["xsmall", "small"].includes(size)
                 ? (steps[activeIndex - 1] && steps[activeIndex - 1].title) ||
-                  `Step ${activeStep - 1} title`
+                `Step ${activeStep - 1} title`
                 : undefined
             }
             icon={<LinkPrevious />}
             onClick={() => checkPreviousStep()}
+          />
+        )}
+        {currentStep !== 0 && (
+          <Button
+            id={previousId}
+            label={`Stage ${currentStep}`}
+            icon={<LinkPrevious />}
+            onClick={(e) => handleBackButton(e)}
           />
         )}
 
@@ -64,8 +73,7 @@ export const StepFooter = ({ previousId, nextId, ...rest }) => {
               reverse
               label="Next"
               form={`${id}-form`}
-              // onClick={(e)=>handleNext(e)}
-              onClick={currentStep === stages.length-1 ? (e)=>handleSubmit(e) :(e)=>handleNext(e)}
+              onClick={currentStep === stages.length - 1 ? (e) => handleSubmit(e) : (e) => handleNext(e)}
             />
           ) : (
             <Button

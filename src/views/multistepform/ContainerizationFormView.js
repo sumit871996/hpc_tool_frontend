@@ -55,10 +55,6 @@ export const ContainerizationFormView = () => {
   };
 
 
-  const handlePrev = (e) => {
-    e.preventDefault();
-    setCurrentStep(currentStep - 1);
-  };
 
   const handleError = (error) => {
     setErrors(error);
