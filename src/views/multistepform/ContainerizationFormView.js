@@ -16,6 +16,8 @@ import { WizardContext } from "./WizardContext";
 import axios from "../../utils/axios";
 import validator from "@rjsf/validator-ajv8";
 import Form from "@rjsf/antd";
+import ObjectFieldTemplate from "./ObjectFieldTemplate";
+import { getFormUISchema } from "./UISchema";
 
 export const ContainerizationFormView = () => {
   const {
@@ -45,6 +47,10 @@ export const ContainerizationFormView = () => {
       });
   }, [MPIValue]);
 
+  const UiSchema = getFormUISchema(MPIValue);
+
+  console.log('UiSchema',UiSchema);
+
 
   const getCurrentSchema = () => {
     return stages[currentStep]?.rjsf_schema?.form_schema;
@@ -67,7 +73,7 @@ export const ContainerizationFormView = () => {
   return (
     <Box fill gap="medium">
       {MPIValue && stages.length > 0 ? (
-        <Box margin={{ left: "32%", right: "32%" }}>
+        <Box margin={{left:'8%',right:'8%'}}>
           <h2>{stages[currentStep]?.name}</h2>
           <Form
             ref={formRef}
@@ -76,8 +82,13 @@ export const ContainerizationFormView = () => {
             onChange={handleOnChange}
             onError={handleError}
             validator={validator}
-            uiSchema={getUISchema()}
             children={true}
+            templates={{
+              ObjectFieldTemplate: ObjectFieldTemplate,
+            }}
+            uiSchema={{
+              "ui:grid":UiSchema
+            }}
           />
         </Box>
       ) : (
