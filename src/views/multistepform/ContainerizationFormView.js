@@ -47,10 +47,9 @@ export const ContainerizationFormView = () => {
       });
   }, [MPIValue]);
 
-  const UiSchema = getFormUISchema(MPIValue);
+  const formUISchema = getFormUISchema(MPIValue);
 
-  console.log('UiSchema',UiSchema);
-
+  console.log('UiSchema',formUISchema);
 
   const getCurrentSchema = () => {
     return stages[currentStep]?.rjsf_schema?.form_schema;
@@ -60,20 +59,14 @@ export const ContainerizationFormView = () => {
     setFormData((prev) => ({ ...prev, ...newFormData }));
   };
 
-
-
   const handleError = (error) => {
     setErrors(error);
   };
 
-  const getUISchema = ()=>{
-    return stages[currentStep]?.ui_schema;  
-  }
-
   return (
     <Box fill gap="medium">
       {MPIValue && stages.length > 0 ? (
-        <Box margin={{left:'8%',right:'8%'}}>
+        <Box margin={{left:'10%',right:'10%'}}>
           <h2>{stages[currentStep]?.name}</h2>
           <Form
             ref={formRef}
@@ -87,7 +80,8 @@ export const ContainerizationFormView = () => {
               ObjectFieldTemplate: ObjectFieldTemplate,
             }}
             uiSchema={{
-              "ui:grid":UiSchema
+              "ui:grid":formUISchema.uiSchema,
+              ...formUISchema.uiWidget
             }}
           />
         </Box>

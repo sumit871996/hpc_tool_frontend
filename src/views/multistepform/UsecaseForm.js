@@ -52,7 +52,7 @@ export const UsecaseForm = () => {
           id="mpi_type"
           name="mpi_type"
           options={useCaseArray}
-          placeholder="Select MPI Type "
+          placeholder="Select use case"
           onChange={handleFormValueChange}
         />
       </Box>

@@ -61,7 +61,7 @@ ul{
     left: 50%;
     transform: translate(-50%);
     /* max-width: 42rem; */
-    width: 90%;
+    width: 91%;
     height: 2px;
     z-index: 0;
 }
