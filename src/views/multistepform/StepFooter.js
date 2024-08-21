@@ -15,11 +15,16 @@ export const StepFooter = ({ previousId, nextId, ...rest }) => {
     stages,
     handleNext,
     handleSubmit,
-    handleBackButton
+    setCurrentStep
   } = useContext(WizardContext);
 
   const checkPreviousStep = () => {
-    setActiveIndex(activeIndex - 1);
+    if (currentStep > 0) {
+      setCurrentStep(currentStep - 1);
+    } else {
+      setActiveIndex(activeIndex - 1);
+      setCurrentStep(stages.length - 1); 
+    }
   };
 
   return (
@@ -42,28 +47,29 @@ export const StepFooter = ({ previousId, nextId, ...rest }) => {
         }
         alignSelf="center"
       >
-        {(activeStep > 1)&& (
+        {/* {(activeStep > 1)&& (
           <Button
             id={previousId}
-            label={
-              !["xsmall", "small"].includes(size)
-                ? (steps[activeIndex - 1] && steps[activeIndex - 1].title) ||
-                `Step ${activeStep - 1} title`
-                : undefined
-            }
+            // label={
+            //   !["xsmall", "small"].includes(size)
+            //     ? (steps[activeIndex - 1] && steps[activeIndex - 1].title) ||
+            //     `Step ${activeStep - 1} title`
+            //     : undefined
+            // }
+            label="Previous"
+            icon={<LinkPrevious />}
+            onClick={() => checkPreviousStep()}
+          />
+        )} */}
+         {(activeStep > 1 || currentStep > 0) && (
+          <Button
+            id={previousId}
+            label="Previous"
             icon={<LinkPrevious />}
             onClick={() => checkPreviousStep()}
           />
         )}
-        {currentStep !== 0 && (
-          <Button
-            id={previousId}
-            label={`Stage ${currentStep}`}
-            icon={<LinkPrevious />}
-            onClick={(e) => handleBackButton(e)}
-          />
-        )}
-
+  
         {activeIndex < steps.length - 1 ? (
           activeStep === 2 ? (
             <Button
