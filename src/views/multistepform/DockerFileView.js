@@ -127,7 +127,7 @@ export const DockerFileView = (e) => {
   };
 
   const [finalfile, setFinalFile] = useState(
-    dockerFileData.toString().replaceAll(",", "\n")
+    dockerFileData
   );
 
   const copyToClipboard = () => {
@@ -407,7 +407,7 @@ export const DockerFileView = (e) => {
               }}
             >
               <Editor
-                value={finalfile}
+                value={finalfile.join("\n")}
                 // onValueChange={code => setCode(code)}
                 highlight={(code) => highlight(code, languages.dockerfile)}
                 padding={10}
