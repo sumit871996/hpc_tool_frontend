@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState, useRef } from "react";
 import { StepContent } from "./StepContent";
 import { WizardContext } from "./WizardContext";
 import { Box, Layer, Notification, Spinner, Text } from "grommet";
@@ -8,10 +8,17 @@ import { DockerFileView } from "./DockerFileView";
 import { defaultFormValues } from "./defaultValues";
 import { PushToHubForm } from "./PushToHubForm";
 import { useNavigate } from "react-router-dom";
+import axios from "../../utils/axios";
 
-import axios from "axios";
+
+import { UsecaseForm } from "./UsecaseForm";
 
 export const steps = [
+  {
+    description: `Please select use case to create YAML file`,
+    input: <UsecaseForm />,
+    title: "Use Case Selection",
+  },
   {
     description: `Please fill the details to create YAML file`,
     input: <ContainerizationFormView />,
@@ -28,12 +35,6 @@ export const steps = [
     title: "Upload to Docker",
   },
 
-  // {
-  //   description: "Review the details of build details",
-  //   input: <ReviewView/>,
-  //   title: "Review Details"
-  // }
-
 ];
 
 export const MultiStepFormView = () => {
@@ -43,6 +44,7 @@ export const MultiStepFormView = () => {
   const [dockerCommands, setDockerCommands] = useState("");
   const [buildCommand, setBuildCommand] = useState();
   const [dockerfilename, setDockerFileName] = useState();
+
   const navigate = useNavigate();
   const [dockerIntelMPIFile, setDockerIntelMPIFile] = useState([
     "FROM centos:8.4.2105 AS base",
@@ -249,11 +251,80 @@ export const MultiStepFormView = () => {
   const [notificationStatus, setNotificationStatus] = useState("");
   const [showNotification, setShowNotification] = useState(false);
 
+  ////
+  const [MPIValue, setMPIValue] = useState("");
+  const [selectedOption, setSelectedOption] = useState('');
+  const [stages, setStages] = useState([]);
+  const [currentStep, setCurrentStep] = useState(0);
+  const [formData, setFormData] = useState({});
+  const [dockerFileData, setDockerFileData] = useState([]);
+  const formRef = useRef(null);
+
+
+
   useEffect(() => {
     setActiveStep(activeIndex + 1);
   }, [activeIndex]);
 
   const id = "containerization-form";
+
+  const handleNext = (e) => {
+    e.preventDefault();
+    if (formRef.current.validateForm()) {
+      setCurrentStep(currentStep + 1);
+    }
+  };
+
+  const getdockerfileURL = `/form/getdockerfile/${selectedOption.id}`
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (formRef.current.validateForm()) {
+      console.log("Form submitted:", formData);
+
+      const formInputData = formData;
+      
+      let data = new FormData();
+      // data.append("file", formData?.source_code || null);
+      let fileClone = null;
+      if(formData?.source_code)
+      {
+        fileClone = new File([formData.source_code], formData.source_code.name, {
+          type: formData.source_code.type,
+          lastModified: formData.source_code.lastModified,
+      });
+        delete formData.source_code;    
+      }
+      data.append("file", fileClone);
+      data.append("inputData", JSON.stringify(formInputData));
+
+      axios
+        .post(getdockerfileURL, data)
+        .then((response) => {
+          console.log("postResponse", response);
+          setDockerFileData(response.data);
+          setActiveIndex(activeIndex + 1);
+        })
+        .catch((error) => {
+          if (error.response) {
+            console.error("Error Response:", error.response.data);
+            console.error("Status Code:", error.response.status);
+            console.error("Headers:", error.response.headers);
+          } else if (error.request) {
+            console.error("No Response:", error.request);
+          } else {
+            console.error("Error", error.message);
+          }
+        });
+    }
+
+  };
+
+  const handleBackButton = (e)=>{
+    e.preventDefault();
+    setCurrentStep(currentStep - 1)
+  }
+
 
   const contextValue = useMemo(
     () => ({
@@ -317,8 +388,15 @@ export const MultiStepFormView = () => {
       setDockerBuildAppCommand,
       dockerFormData,
       setDockerFormData,
+      currentStep, setCurrentStep,
+      stages, setStages, formRef,
+      handleNext, setSelectedOption, selectedOption,
+      MPIValue, setMPIValue,
+      formData, setFormData,
+      handleSubmit,dockerFileData,
+      handleBackButton
     }),
-    [activeIndex, activeStep, formValues, dockerFormData]
+    [activeIndex, activeStep, formValues, dockerFormData, currentStep, setCurrentStep, stages, setStages,formData,dockerFileData]
   );
 
   const handleRequest = (e) => {
@@ -326,7 +404,7 @@ export const MultiStepFormView = () => {
 
     console.log("Step's submit procedure is done");
     uploadToDocker();
-    
+
   };
   const uploadToDocker = (e) => {
     setShowSpinner(true);
@@ -414,14 +492,14 @@ export const MultiStepFormView = () => {
       )
       .then((res) => {
         console.log(res.data);
-        const buildId=res.data.buildId
+        const buildId = res.data.buildId
         setNotificationStatus("normal");
         setNotificationTitle("Upload To Docker");
         setNotificationMessage("Build Id Created Successfully");
         setShowSpinner(false);
         console.log("Spinner Ended");
         setShowNotification(true);
-        navigate("/review", {state:{buildId}})
+        navigate("/review", { state: { buildId } })
       })
       .catch((error) => {
         console.log(error);
