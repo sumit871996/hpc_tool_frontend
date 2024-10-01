@@ -372,7 +372,7 @@ export const MultiStepFormView = () => {
 
   }
 
-  const triggerJenkinsURL = `/home/buildandpush`;
+  const triggerJenkinsURL = `/form/buildandpush`;
 
 
   const handlePushToDocker = (e) => {
@@ -387,7 +387,6 @@ export const MultiStepFormView = () => {
       "dockerfile": [dockerFileData],
       "buildcommand": buildCommandHandler(formData),
       "dockerfilename": `DockerFile${selectedOption.value}`
-
     }
     let data = new FormData();
 
