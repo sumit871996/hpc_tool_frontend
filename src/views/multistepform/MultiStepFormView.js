@@ -258,6 +258,7 @@ export const MultiStepFormView = () => {
   const [currentStep, setCurrentStep] = useState(0);
   const [formData, setFormData] = useState({});
   const [dockerFileData, setDockerFileData] = useState([]);
+  const [fileInFormdata, setfileInFormdata] = useState(null)
   const formRef = useRef(null);
 
 
@@ -280,20 +281,17 @@ export const MultiStepFormView = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     if (formRef.current.validateForm()) {
-      console.log("Form submitted:", formData);
-
       const formInputData = formData;
-      
       let data = new FormData();
       // data.append("file", formData?.source_code || null);
       let fileClone = null;
-      if(formData?.source_code)
-      {
+      if (formData?.source_code) {
         fileClone = new File([formData.source_code], formData.source_code.name, {
           type: formData.source_code.type,
           lastModified: formData.source_code.lastModified,
-      });
-        delete formData.source_code;    
+        });
+        setfileInFormdata(fileClone);
+        delete formData.source_code;
       }
       data.append("file", fileClone);
       data.append("inputData", JSON.stringify(formInputData));
@@ -320,9 +318,103 @@ export const MultiStepFormView = () => {
 
   };
 
-  const handleBackButton = (e)=>{
+  const handleBackButton = (e) => {
     e.preventDefault();
     setCurrentStep(currentStep - 1)
+  }
+
+  const dockerFileName = () => {
+    const finaldockerfilename = `DockerFile${selectedOption.value}`;
+    return finaldockerfilename;
+  }
+
+  const buildCommandHandler = (formData) => {
+    switch (selectedOption.value) {
+      // case "REACT":
+      //     return {
+
+      //     }
+      // case "C":
+      // case "CPP":
+      //     return {
+      //         uiSchema: [
+      //             { gcc_version: 12 },
+      //             { app_image_name: 12, app_image_tag: 12 },
+      //             { app_docker_commands: 18 },
+      //             { dockeruser: 12, dockerpassword: 12 },
+      //             { app_sin_image_name: 12 },
+      //             { gitUrl: 18, source_code: 18 }],
+      //         uiWidget: uiWidget
+      //     }
+
+      // case "INTELMPI":
+      //     return {
+      //         uiSchema: [
+      //             { mpi_developement_version: 12, intel_icc_version: 12 },
+      //             { intel_tbb_version: 12, base_image_name: 12 },
+      //             { base_image_tag: 12 },
+      //             { app_image_name: 12, app_image_tag: 12 },
+      //             { app_docker_commands: 18 },
+      //             { dockeruser: 12, dockerpassword: 12 },
+      //             { app_sin_image_name: 12 },
+      //             { gitUrl: 18, source_code: 18 }
+      //         ],
+      //         uiWidget: uiWidget
+      //     };
+      case "MPICH":
+        return `docker image build -t ${formData.app_image_name}:${formData.app_image_tag} --build-arg MPI_VERSION=${formData.mpich_version} --build-arg MPI_CONFIGURE_OPTIONS="${formData.mpi_configure_options}" --build-arg USER=${formData.user} --build-arg WORKDIR=${formData.work_dir} . -f ${`DockerFile${selectedOption.value}`}`
+
+      case "OPENMPI":
+        return `docker image build -t ${formData.app_image_name}:${formData.app_image_tag} --build-arg MPI_MAJOR_VERSION=${formData.openmpi_major_version}  --build-arg MPI_VERSION=${formData.openmpi_version} --build-arg MPI_CONFIGURE_OPTIONS="${formData.mpi_configure_options}" --build-arg MPI_MAKE_OPTIONS=${formData.mpi_make_options} --build-arg USER=${formData.user} --build-arg WORKDIR=${formData.work_dir} . -f ${`DockerFile${selectedOption.value}`}`;
+      default:
+        return {};
+    }
+
+  }
+
+  const triggerJenkinsURL = `/home/buildandpush`;
+
+
+  const handlePushToDocker = (e) => {
+    e.preventDefault();
+    console.log("PsudhtoDocker", formData)
+    console.log("buildCommand", buildCommandHandler(formData))
+    const inputData = {
+      "dockeruser": formData.dockeruser,
+      "dockerpassword": formData.dockerpassword,
+      "imagename": formData.app_image_name,
+      "imagetag": formData.app_image_tag,
+      "dockerfile": [dockerFileData],
+      "buildcommand": buildCommandHandler(formData),
+      "dockerfilename": `DockerFile${selectedOption.value}`
+
+    }
+    let data = new FormData();
+
+    data.append("inputData", JSON.stringify(inputData));
+    data.append("file", fileInFormdata);
+
+    axios
+    .post(triggerJenkinsURL, data)
+    .then((response) => {
+      console.log('API working',)
+   
+    })
+    .catch((error) => {
+      if (error.response) {
+        console.error("Error Response:", error.response.data);
+        console.error("Status Code:", error.response.status);
+        console.error("Headers:", error.response.headers);
+      } else if (error.request) {
+        console.error("No Response:", error.request);
+      } else {
+        console.error("Error", error.message);
+      }
+    });
+
+
+
+
   }
 
 
@@ -393,10 +485,11 @@ export const MultiStepFormView = () => {
       handleNext, setSelectedOption, selectedOption,
       MPIValue, setMPIValue,
       formData, setFormData,
-      handleSubmit,dockerFileData,
-      handleBackButton
+      handleSubmit, dockerFileData,
+      handleBackButton,
+      handlePushToDocker
     }),
-    [activeIndex, activeStep, formValues, dockerFormData, currentStep, setCurrentStep, stages, setStages,formData,dockerFileData]
+    [activeIndex, activeStep, formValues, dockerFormData, currentStep, setCurrentStep, stages, setStages, formData, dockerFileData]
   );
 
   const handleRequest = (e) => {
@@ -511,6 +604,8 @@ export const MultiStepFormView = () => {
         setShowNotification(true);
       });
   };
+
+
   return (
     <WizardContext.Provider value={contextValue}>
       <Box fill>

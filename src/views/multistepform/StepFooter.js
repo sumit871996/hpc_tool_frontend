@@ -15,7 +15,7 @@ export const StepFooter = ({ previousId, nextId, ...rest }) => {
     stages,
     handleNext,
     handleSubmit,
-    setCurrentStep
+    setCurrentStep,handlePushToDocker
   } = useContext(WizardContext);
 
   const checkPreviousStep = () => {
@@ -47,20 +47,6 @@ export const StepFooter = ({ previousId, nextId, ...rest }) => {
         }
         alignSelf="center"
       >
-        {/* {(activeStep > 1)&& (
-          <Button
-            id={previousId}
-            // label={
-            //   !["xsmall", "small"].includes(size)
-            //     ? (steps[activeIndex - 1] && steps[activeIndex - 1].title) ||
-            //     `Step ${activeStep - 1} title`
-            //     : undefined
-            // }
-            label="Previous"
-            icon={<LinkPrevious />}
-            onClick={() => checkPreviousStep()}
-          />
-        )} */}
          {(activeStep > 1 || currentStep > 0) && (
           <Button
             id={previousId}
@@ -104,6 +90,7 @@ export const StepFooter = ({ previousId, nextId, ...rest }) => {
                 cursor: "pointer",
                 border: "none",
               }}
+              onClick={(e)=>handlePushToDocker(e)}
             >
               <Box
                 direction="row"
