@@ -367,7 +367,7 @@ export const MultiStepFormView = () => {
       case "OPENMPI":
         return `docker image build -t ${formData.app_image_name}:${formData.app_image_tag} --build-arg MPI_MAJOR_VERSION=${formData.openmpi_major_version}  --build-arg MPI_VERSION=${formData.openmpi_version} --build-arg MPI_CONFIGURE_OPTIONS="${formData.mpi_configure_options}" --build-arg MPI_MAKE_OPTIONS=${formData.mpi_make_options} --build-arg USER=${formData.user} --build-arg WORKDIR=${formData.work_dir} . -f ${`DockerFile${selectedOption.value}`}`;
       default:
-        return {};
+        return `docker image build -t ${formData.app_image_name}:${formData.app_image_tag} --build-arg NODE_VERSION=${formData.node_version} . -f ${`DockerFile${selectedOption.value}`}`;
     }
 
   }
