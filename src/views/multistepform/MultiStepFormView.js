@@ -384,7 +384,7 @@ export const MultiStepFormView = () => {
       "dockerpassword": formData.dockerpassword,
       "imagename": formData.app_image_name,
       "imagetag": formData.app_image_tag,
-      "dockerfile": [dockerFileData],
+      "dockerfile": dockerFileData,
       "buildcommand": buildCommandHandler(formData),
       "dockerfilename": `DockerFile${selectedOption.value}`
     }
